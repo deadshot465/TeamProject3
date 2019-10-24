@@ -23,7 +23,7 @@ namespace TeamProject3.Scene
         public bool IsBrickLoaded { get; private set; } = false;
         public Vector2 ViewportCenter { get; set; } = Vector2.Zero;
 
-        public TitleScene()
+        public TitleScene() : base()
         {
         }
 
@@ -88,7 +88,6 @@ namespace TeamProject3.Scene
                 if (_brickEntities.All(entity => entity.Enabled))
                 {
                     IsBrickLoaded = true;
-                    _brickEntities.ForEach(entity => entity.SetEnabled(false));
                 }
             }
 
@@ -99,6 +98,11 @@ namespace TeamProject3.Scene
                 _titleAppearEntity.SetEnabled(toggle ? true : false);
                 _titleDisappearEntity.SetEnabled(toggle ? false : true);
             }
+        }
+
+        public void DisableAllBricks()
+        {
+            _brickEntities.ForEach(entity => entity.SetEnabled(false));
         }
     }
 }

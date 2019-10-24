@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.Sprites;
 using Nez.Textures;
+using System;
 using TeamProject3.Scene;
 
 namespace TeamProject3
@@ -12,9 +13,12 @@ namespace TeamProject3
     {
         private TitleScene _titleScene;
         private bool _transitioned = false;
-        public Game1() : base(960, 540, windowTitle: "Team Project 2")
+        private Nez.Scene.SceneResolutionPolicy _sceneResolutionPolicy;
+
+        public Game1() : base(960, 540, windowTitle: "Team Project 2", isFullScreen: true)
         {
-            
+            _sceneResolutionPolicy = Nez.Scene.SceneResolutionPolicy.ShowAll;
+            ExitOnEscapeKeypress = true;
         }
 
         protected override void Initialize()
@@ -23,11 +27,17 @@ namespace TeamProject3
 
             // TODO: Add your initialization logic here
             _titleScene = new TitleScene();
+            _titleScene.SetDesignResolution(960, 540, _sceneResolutionPolicy);
 
             _titleScene.ViewportCenter = new Vector2(GraphicsDevice.Viewport.Width / 2,
                 GraphicsDevice.Viewport.Height / 2);
 
             Scene = _titleScene;
+        }
+
+        protected override void OnExiting(object sender, EventArgs args)
+        {
+            base.OnExiting(sender, args);
         }
 
         protected override void Update(GameTime gameTime)
@@ -38,6 +48,10 @@ namespace TeamProject3
             {
                 var transition = new TextureWipeTransition();
                 StartSceneTransition(transition);
+                transition.OnScreenObscured = () =>
+                {
+                    _titleScene.DisableAllBricks();
+                };
                 _transitioned = true;
             }
         }
