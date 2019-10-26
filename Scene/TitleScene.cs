@@ -8,6 +8,7 @@ using Nez.Textures;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using TeamProject3;
 
 namespace TeamProject3.Scene
 {
@@ -25,6 +26,7 @@ namespace TeamProject3.Scene
 
         public TitleScene() : base()
         {
+            
         }
 
         public override void Initialize()

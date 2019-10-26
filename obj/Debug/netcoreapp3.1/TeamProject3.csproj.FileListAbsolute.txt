@@ -77,3 +77,31 @@ C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Conten
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\nez\textures\textureWipeTransition\sawTooth.xnb
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\nez\textures\textureWipeTransition\spiral.xnb
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\nez\textures\textureWipeTransition\wink.xnb
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Atomic Bubble.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Blue Flame.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Blue Galaxy.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Comet.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Crazy Blue.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Electrons.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Fire.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Foam.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Giros Gratis.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\huo1.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Into The Blue.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\JasonChoi_Flash.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\JasonChoi_rising up.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\JasonChoi_Swirl01.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Leaves.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Meks Blood Spill.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Plasma Glow.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Real Popcorn.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Shooting Fireball.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Snow.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\The Sun.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Thingy.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\thingy.png
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Touch Up.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Trippy.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\Winner Stars.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle\wu1.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\Content\particle_types.txt

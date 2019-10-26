@@ -15,7 +15,7 @@ namespace TeamProject3
         private bool _transitioned = false;
         private Nez.Scene.SceneResolutionPolicy _sceneResolutionPolicy;
 
-        public Game1() : base(960, 540, windowTitle: "Team Project 2", isFullScreen: true)
+        public Game1() : base(960, 540, windowTitle: "Team Project 2", isFullScreen: false)
         {
             _sceneResolutionPolicy = Nez.Scene.SceneResolutionPolicy.ShowAll;
             ExitOnEscapeKeypress = true;
@@ -24,6 +24,7 @@ namespace TeamProject3
         protected override void Initialize()
         {
             base.Initialize();
+            ParticleSystem.Initialize();
 
             // TODO: Add your initialization logic here
             _titleScene = new TitleScene();
@@ -46,7 +47,7 @@ namespace TeamProject3
 
             if (_titleScene.IsBrickLoaded && !_transitioned)
             {
-                var transition = new TextureWipeTransition();
+                var transition = new TextureWipeTransition(() => new GameScene());
                 StartSceneTransition(transition);
                 transition.OnScreenObscured = () =>
                 {

@@ -54,6 +54,34 @@
     <None Remove="Content\nez\textures\textureWipeTransition\sawTooth.xnb" />
     <None Remove="Content\nez\textures\textureWipeTransition\spiral.xnb" />
     <None Remove="Content\nez\textures\textureWipeTransition\wink.xnb" />
+    <None Remove="Content\particle\Atomic Bubble.pex" />
+    <None Remove="Content\particle\Blue Flame.pex" />
+    <None Remove="Content\particle\Blue Galaxy.pex" />
+    <None Remove="Content\particle\Comet.pex" />
+    <None Remove="Content\particle\Crazy Blue.pex" />
+    <None Remove="Content\particle\Electrons.pex" />
+    <None Remove="Content\particle\Fire.pex" />
+    <None Remove="Content\particle\Foam.pex" />
+    <None Remove="Content\particle\Giros Gratis.pex" />
+    <None Remove="Content\particle\huo1.pex" />
+    <None Remove="Content\particle\Into The Blue.pex" />
+    <None Remove="Content\particle\JasonChoi_Flash.pex" />
+    <None Remove="Content\particle\JasonChoi_rising up.pex" />
+    <None Remove="Content\particle\JasonChoi_Swirl01.pex" />
+    <None Remove="Content\particle\Leaves.pex" />
+    <None Remove="Content\particle\Meks Blood Spill.pex" />
+    <None Remove="Content\particle\Plasma Glow.pex" />
+    <None Remove="Content\particle\Real Popcorn.pex" />
+    <None Remove="Content\particle\Shooting Fireball.pex" />
+    <None Remove="Content\particle\Snow.pex" />
+    <None Remove="Content\particle\The Sun.pex" />
+    <None Remove="Content\particle\Thingy.pex" />
+    <None Remove="Content\particle\thingy.png" />
+    <None Remove="Content\particle\Touch Up.pex" />
+    <None Remove="Content\particle\Trippy.pex" />
+    <None Remove="Content\particle\Winner Stars.pex" />
+    <None Remove="Content\particle\wu1.pex" />
+    <None Remove="Content\particle_types.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -187,6 +215,90 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\nez\textures\textureWipeTransition\wink.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Atomic Bubble.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Blue Flame.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Blue Galaxy.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Comet.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Crazy Blue.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Electrons.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Fire.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Foam.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Giros Gratis.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\huo1.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Into The Blue.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\JasonChoi_Flash.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\JasonChoi_rising up.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\JasonChoi_Swirl01.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Leaves.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Meks Blood Spill.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Plasma Glow.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Real Popcorn.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Shooting Fireball.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Snow.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\The Sun.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Thingy.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\thingy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Touch Up.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Trippy.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\Winner Stars.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\wu1.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle_types.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
