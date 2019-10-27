@@ -8,7 +8,7 @@
     ".NETCoreApp,Version=v3.1": {
       "TeamProject3/1.0.0": {
         "dependencies": {
-          "MonoGame.Content.Builder": "3.7.0.4",
+          "MonoGame.Content.Builder": "3.7.0.9",
           "MonoGame.Framework.DesktopGL.Core": "3.7.0.7",
           "Nez": "1.0.0"
         },
@@ -36,7 +36,7 @@
           }
         }
       },
-      "MonoGame.Content.Builder/3.7.0.4": {},
+      "MonoGame.Content.Builder/3.7.0.9": {},
       "MonoGame.Framework.DesktopGL.Core/3.7.0.7": {
         "runtime": {
           "lib/netstandard2.0/MonoGame.Framework.dll": {
@@ -154,12 +154,12 @@
       "path": "microsoft.win32.systemevents/4.7.0-preview1.19504.10",
       "hashPath": "microsoft.win32.systemevents.4.7.0-preview1.19504.10.nupkg.sha512"
     },
-    "MonoGame.Content.Builder/3.7.0.4": {
+    "MonoGame.Content.Builder/3.7.0.9": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-EfPrCHTWQ4O5G/XIfGqWx1J9vvI4QrUI8SjBCIT8Aeepl0y2oi1+YjvmBbxjFvJb2uGkYnLq4GCwXuquMi3TYw==",
-      "path": "monogame.content.builder/3.7.0.4",
-      "hashPath": "monogame.content.builder.3.7.0.4.nupkg.sha512"
+      "sha512": "sha512-AAt9ns5w6c9JkZFC2UC+nB8v+kTDgRP1ONaB5lLSfzBhrGULUoNwMxiRAzi7GlPVj5yynu3PHNi8kZTOUIdF9g==",
+      "path": "monogame.content.builder/3.7.0.9",
+      "hashPath": "monogame.content.builder.3.7.0.9.nupkg.sha512"
     },
     "MonoGame.Framework.DesktopGL.Core/3.7.0.7": {
       "type": "package",

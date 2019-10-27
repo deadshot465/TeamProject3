@@ -10,4 +10,11 @@
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/sample_title.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/sample_title_disappear.png</File>
   </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
 </SourceFileCollection>

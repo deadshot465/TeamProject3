@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.Particles;
 using Nez.Sprites;
 using Nez.Textures;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TeamProject3.Scene
 {
@@ -19,6 +17,7 @@ namespace TeamProject3.Scene
         private Entity _playerGuardProjectile;
         private SpriteAnimator _playerAnimator;
         private const float _animationFramerate = 20.0f;
+        private const float _projectileVelocity = 350.0f;
 
         private enum FireInput
         {
@@ -31,6 +30,7 @@ namespace TeamProject3.Scene
 
         public GameScene()
         {
+            
         }
 
         public override void Initialize()
@@ -109,7 +109,8 @@ namespace TeamProject3.Scene
                     entity.Position = _playerCharacterEntity.Position;
                     entity.AddComponent(SelectEmitterType(button));
                     entity.AddComponent(new ProjectileMover());
-                    entity.AddComponent(new ProjectileController(new Vector2(175.0f, 0.0f)));
+                    entity.AddComponent(
+                        new ProjectileController(new Vector2(_projectileVelocity, 0.0f)));
 
                     var collider = entity.AddComponent<CircleCollider>();
                     Flags.SetFlagExclusive(ref collider.CollidesWithLayers, 0);
@@ -145,11 +146,11 @@ namespace TeamProject3.Scene
             button switch
             {
                 var x when x == _playerAttackButtons[FireInput.Z] =>
-                ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.Fire),
+                ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.Sun),
                 var x when x == _playerAttackButtons[FireInput.X] =>
-                ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.Comet),
+                ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.Trippy),
                 var x when x == _playerAttackButtons[FireInput.C] =>
-                ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.BlueFlame),
+                ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.Wu1),
                 _ => ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.WinnerStars)
             };
     }

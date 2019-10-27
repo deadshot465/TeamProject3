@@ -1,11 +1,9 @@
-﻿using System;
+﻿using Nez.ParticleDesigner;
+using Nez.Particles;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using Nez;
-using Nez.ParticleDesigner;
-using Nez.Particles;
 
 namespace TeamProject3
 {

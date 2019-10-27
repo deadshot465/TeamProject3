@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Nez;
-using Nez.Sprites;
-using Nez.Textures;
 using System;
 using TeamProject3.Scene;
 

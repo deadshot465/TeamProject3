@@ -29,7 +29,7 @@
           }
         }
       },
-      "MonoGame.Content.Builder/3.7.0.4": {
+      "MonoGame.Content.Builder/3.7.0.9": {
         "type": "package",
         "build": {
           "build/MonoGame.Content.Builder.targets": {}
@@ -89,6 +89,15 @@
           }
         }
       },
+      "Nito.Collections.Deque/1.0.4": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Nito.Collections.Deque.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Nito.Collections.Deque.dll": {}
+        }
+      },
       "System.Drawing.Common/4.7.0-preview1.19504.10": {
         "type": "package",
         "dependencies": {
@@ -114,7 +123,7 @@
       },
       "Nez/1.0.0": {
         "type": "project",
-        "framework": ".NETStandard,Version=v2.0",
+        "framework": ".NETStandard,Version=v2.1",
         "dependencies": {
           "MonoGame.Framework.DesktopGL.Core": "3.7.0.7",
           "System.Drawing.Common": "4.7.0-preview1.19504.10"
@@ -175,10 +184,10 @@
         "version.txt"
       ]
     },
-    "MonoGame.Content.Builder/3.7.0.4": {
-      "sha512": "EfPrCHTWQ4O5G/XIfGqWx1J9vvI4QrUI8SjBCIT8Aeepl0y2oi1+YjvmBbxjFvJb2uGkYnLq4GCwXuquMi3TYw==",
+    "MonoGame.Content.Builder/3.7.0.9": {
+      "sha512": "AAt9ns5w6c9JkZFC2UC+nB8v+kTDgRP1ONaB5lLSfzBhrGULUoNwMxiRAzi7GlPVj5yynu3PHNi8kZTOUIdF9g==",
       "type": "package",
-      "path": "monogame.content.builder/3.7.0.4",
+      "path": "monogame.content.builder/3.7.0.9",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -188,8 +197,11 @@
         "build/MGCB/[Content_Types].xml",
         "build/MGCB/_rels/.rels",
         "build/MGCB/build/ATI.TextureConverter.dll",
+        "build/MGCB/build/ATI.TextureConverter.dll.config",
         "build/MGCB/build/Assimp64.dll",
         "build/MGCB/build/AssimpNet.dll",
+        "build/MGCB/build/AssimpNet.dll.config",
+        "build/MGCB/build/AssimpNet.pdb",
         "build/MGCB/build/CppNet.dll",
         "build/MGCB/build/FreeImage.dll",
         "build/MGCB/build/FreeImageNET.dll",
@@ -201,16 +213,26 @@
         "build/MGCB/build/MonoGame.Framework.dll",
         "build/MGCB/build/MonoGame.Framework.xml",
         "build/MGCB/build/Nvidia.TextureTools.dll",
+        "build/MGCB/build/Nvidia.TextureTools.dll.config",
         "build/MGCB/build/PVRTexLibNET.dll",
+        "build/MGCB/build/PVRTexLibNET.dll.config",
         "build/MGCB/build/PVRTexLibWrapper.dll",
         "build/MGCB/build/SharpDX.D3DCompiler.dll",
+        "build/MGCB/build/SharpDX.D3DCompiler.xml",
         "build/MGCB/build/SharpDX.DXGI.dll",
+        "build/MGCB/build/SharpDX.DXGI.xml",
         "build/MGCB/build/SharpDX.Direct2D1.dll",
+        "build/MGCB/build/SharpDX.Direct2D1.xml",
         "build/MGCB/build/SharpDX.Direct3D11.dll",
+        "build/MGCB/build/SharpDX.Direct3D11.xml",
         "build/MGCB/build/SharpDX.MediaFoundation.dll",
+        "build/MGCB/build/SharpDX.MediaFoundation.xml",
         "build/MGCB/build/SharpDX.XAudio2.dll",
+        "build/MGCB/build/SharpDX.XAudio2.xml",
         "build/MGCB/build/SharpDX.XInput.dll",
+        "build/MGCB/build/SharpDX.XInput.xml",
         "build/MGCB/build/SharpDX.dll",
+        "build/MGCB/build/SharpDX.xml",
         "build/MGCB/build/SharpFont.dll",
         "build/MGCB/build/ffmpeg.exe",
         "build/MGCB/build/ffprobe.exe",
@@ -218,16 +240,10 @@
         "build/MGCB/build/libmojoshader_64.dll",
         "build/MGCB/build/nvtt.dll",
         "build/MonoGame.Content.Builder.targets",
-        "monogame.content.builder.3.7.0.4.nupkg.sha512",
+        "monogame.content.builder.3.7.0.9.nupkg.sha512",
         "monogame.content.builder.nuspec",
-        "tasks/net46/Microsoft.Build.Framework.dll",
-        "tasks/net46/Microsoft.Build.Utilities.Core.dll",
         "tasks/net46/MonoGame.Content.Builder.dll",
-        "tasks/net46/MonoGame.Content.Builder.pdb",
-        "tasks/net46/System.Threading.Thread.dll",
-        "tasks/netstandard2.0/MonoGame.Content.Builder.deps.json",
-        "tasks/netstandard2.0/MonoGame.Content.Builder.dll",
-        "tasks/netstandard2.0/MonoGame.Content.Builder.pdb"
+        "tasks/netstandard2.0/MonoGame.Content.Builder.dll"
       ]
     },
     "MonoGame.Framework.DesktopGL.Core/3.7.0.7": {
@@ -252,6 +268,21 @@
         "runtimes/win-x64/native/libopenal.dll",
         "runtimes/win-x86/native/libSDL2-2.dll",
         "runtimes/win-x86/native/libopenal.dll"
+      ]
+    },
+    "Nito.Collections.Deque/1.0.4": {
+      "sha512": "yGDKqCQ61i97MyfEUYG6+ln5vxpx11uA5M9+VV9B7stticbFm19YMI/G9w4AFYVBj5PbPi138P8IovkMFAL0Aw==",
+      "type": "package",
+      "path": "nito.collections.deque/1.0.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard1.0/Nito.Collections.Deque.dll",
+        "lib/netstandard1.0/Nito.Collections.Deque.xml",
+        "lib/netstandard2.0/Nito.Collections.Deque.dll",
+        "lib/netstandard2.0/Nito.Collections.Deque.xml",
+        "nito.collections.deque.1.0.4.nupkg.sha512",
+        "nito.collections.deque.nuspec"
       ]
     },
     "System.Drawing.Common/4.7.0-preview1.19504.10": {
@@ -301,9 +332,10 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "MonoGame.Content.Builder >= 3.7.0.4",
+      "MonoGame.Content.Builder >= 3.7.0.9",
       "MonoGame.Framework.DesktopGL.Core >= 3.7.0.7",
-      "Nez >= 1.0.0"
+      "Nez >= 1.0.0",
+      "Nito.Collections.Deque >= 1.0.4"
     ]
   },
   "packageFolders": {
@@ -354,11 +386,15 @@
         "dependencies": {
           "MonoGame.Content.Builder": {
             "target": "Package",
-            "version": "[3.7.0.4, )"
+            "version": "[3.7.0.9, )"
           },
           "MonoGame.Framework.DesktopGL.Core": {
             "target": "Package",
             "version": "[3.7.0.7, )"
+          },
+          "Nito.Collections.Deque": {
+            "target": "Package",
+            "version": "[1.0.4, )"
           }
         },
         "imports": [

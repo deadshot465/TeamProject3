@@ -3,11 +3,11 @@
   <SourceFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/player_revised.png</SourceFile>
   <SourceTime>2019-10-10T13:44:17.673922+09:00</SourceTime>
   <DestFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/bin/DesktopGL/Content/player_revised.xnb</DestFile>
-  <DestTime>2019-10-23T17:21:03.7916209+09:00</DestTime>
+  <DestTime>2019-10-27T09:16:18.6643795+09:00</DestTime>
   <Importer>TextureImporter</Importer>
-  <ImporterTime>2018-01-13T19:18:24+09:00</ImporterTime>
+  <ImporterTime>2018-08-05T14:17:44+09:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
-  <ProcessorTime>2018-01-13T19:18:24+09:00</ProcessorTime>
+  <ProcessorTime>2018-08-05T14:17:44+09:00</ProcessorTime>
   <Parameters>
     <Key>ColorKeyColor</Key>
     <Value>250,125,250,255</Value>

@@ -3,11 +3,11 @@
   <SourceFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/sample_title_disappear.png</SourceFile>
   <SourceTime>2019-10-17T05:32:48.392788+09:00</SourceTime>
   <DestFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/bin/DesktopGL/Content/sample_title_disappear.xnb</DestFile>
-  <DestTime>2019-10-23T18:19:26.8859014+09:00</DestTime>
+  <DestTime>2019-10-27T09:16:18.8389104+09:00</DestTime>
   <Importer>TextureImporter</Importer>
-  <ImporterTime>2018-01-13T19:18:24+09:00</ImporterTime>
+  <ImporterTime>2018-08-05T14:17:44+09:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
-  <ProcessorTime>2018-01-13T19:18:24+09:00</ProcessorTime>
+  <ProcessorTime>2018-08-05T14:17:44+09:00</ProcessorTime>
   <Parameters>
     <Key>ColorKeyColor</Key>
     <Value>255,0,255,255</Value>
