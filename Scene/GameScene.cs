@@ -26,6 +26,8 @@ namespace TeamProject3.Scene
         private Dictionary<FireInput, VirtualButton> _playerAttackButtons
             = new Dictionary<FireInput, VirtualButton>();
 
+        private VirtualButton _slowMotionSwitch = new VirtualButton();
+
         private bool _guarding = false;
 
         public GameScene()
@@ -48,6 +50,8 @@ namespace TeamProject3.Scene
             _playerAttackButtons.Add(FireInput.X, new VirtualButton());
             _playerAttackButtons.Add(FireInput.C, new VirtualButton());
             _playerAttackButtons.Add(FireInput.V, new VirtualButton());
+
+            _slowMotionSwitch.Nodes.Add(new VirtualButton.KeyboardKey(Keys.A));
 
             _playerAttackButtons[FireInput.Z].AddKeyboardKey(Keys.Z);
             _playerAttackButtons[FireInput.X].AddKeyboardKey(Keys.X);
@@ -134,6 +138,15 @@ namespace TeamProject3.Scene
                 _guarding = false;
             }
 
+            if (_slowMotionSwitch.IsPressed)
+            {
+                _playerAnimator.Speed /= 4;
+                Core.Schedule(2.0f, timer =>
+                {
+                    _playerAnimator.Speed = 1;
+                });
+            }
+
             _playerProjectiles.Where(entity => entity.Position.X > 1200).ToList()
                 .ForEach(entity =>
                 {
@@ -146,12 +159,11 @@ namespace TeamProject3.Scene
             button switch
             {
                 var x when x == _playerAttackButtons[FireInput.Z] =>
-                ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.Sun),
+                ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.Comet),
                 var x when x == _playerAttackButtons[FireInput.X] =>
-                ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.Trippy),
+                ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.BlueGalaxy),
                 var x when x == _playerAttackButtons[FireInput.C] =>
-                ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.Wu1),
-                _ => ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.WinnerStars)
+                ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.IntoTheBlue)
             };
     }
 }

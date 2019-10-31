@@ -18,6 +18,7 @@ namespace TeamProject3.Scene
 
         public bool IsBrickLoaded { get; private set; } = false;
         public Vector2 ViewportCenter { get; set; } = Vector2.Zero;
+        public bool StartLoadingBricks { get; set; } = false;
 
         public TitleScene() : base()
         {
@@ -76,7 +77,7 @@ namespace TeamProject3.Scene
             _titleAppearEntity.Position = ViewportCenter;
             _titleDisappearEntity.Position = ViewportCenter;
 
-            if (_elapsedTime > 0.01f && !IsBrickLoaded)
+            if (_elapsedTime > 0.001f && !IsBrickLoaded && StartLoadingBricks)
             {
                 _brickEntities[_enabledCount].SetEnabled(true);
                 _enabledCount++;
