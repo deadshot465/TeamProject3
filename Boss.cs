@@ -1,0 +1,255 @@
+﻿using System.Collections.Generic;
+using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Nez;
+using Nez.Sprites;
+using Nez.Textures;
+using Nez.Tweens;
+
+namespace TeamProject3
+{
+    public class Boss : Component, ITriggerListener, IUpdatable
+    {
+        private SubpixelVector2 _subpixelVector = new SubpixelVector2();
+        private Vector2 _startPosition = Vector2.Zero;
+        private SpriteAnimator _spriteAnimator;
+        private Mover _mover;
+        private float _animationFramerate = 0.0f;
+        private float _elapsedTime = 0.0f;
+        private float _nextAttackDuration = 0.0f;
+        private bool _timerStarted = false;
+        private bool _attackStarted = false;
+        private BoxCollider _collider;
+        private int _currentPhase = 0;
+        private const float _projectileVelocity = -350.0f;
+
+        private enum Attacks
+        {
+            ChainAttack,
+            RangeAttack,
+            Dash,
+            JumpAttack,
+            FullscreenAttack,
+            ComboAttack
+        }
+
+        private delegate void AttackHandler();
+        private List<AttackHandler> _attackHandlers = new List<AttackHandler>();
+
+        public Vector2 Speed { get; private set; }
+
+        public Boss(Vector2 speed, float animationFramerate, Vector2 startPosition)
+        {
+            Speed = speed;
+            _animationFramerate = animationFramerate;
+            _startPosition = startPosition;
+
+            _attackHandlers.Add(ChainAttack);
+            _attackHandlers.Add(RangeAttack);
+            _attackHandlers.Add(Dash);
+            _attackHandlers.Add(JumpAttack);
+            _attackHandlers.Add(FullscreenAttack);
+            _attackHandlers.Add(ComboAttack);
+        }
+
+        void ITriggerListener.OnTriggerEnter(Collider other, Collider local)
+        {
+            
+        }
+
+        void ITriggerListener.OnTriggerExit(Collider other, Collider local)
+        {
+            
+        }
+
+        void IUpdatable.Update()
+        {
+            if (!_timerStarted)
+            {
+                _nextAttackDuration = Random.Range(3.0f, 6.0f);
+                _timerStarted = true;
+            }
+
+            if (_elapsedTime > _nextAttackDuration && !_attackStarted)
+            {
+                _attackStarted = true;
+
+                _attackHandlers[_currentPhase].Invoke();
+            }
+
+            _elapsedTime += Time.DeltaTime;
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            var texture = Entity.Scene.Content.Load<Texture2D>("monster_dknight1");
+            var spriteAtlas = Sprite.SpritesFromAtlas(texture, 94, 100);
+            _spriteAnimator = Entity.AddComponent<SpriteAnimator>();
+
+            _spriteAnimator.AddAnimation("WalkDown", new SpriteAnimation(
+                spriteAtlas.ToArray()[0..3], _animationFramerate));
+            _spriteAnimator.AddAnimation("WalkLeft", new SpriteAnimation(
+                spriteAtlas.ToArray()[3..6], _animationFramerate));
+            _spriteAnimator.AddAnimation("WalkRight", new SpriteAnimation(
+                spriteAtlas.ToArray()[6..9], _animationFramerate));
+            _spriteAnimator.AddAnimation("WalkUp", new SpriteAnimation(
+                spriteAtlas.ToArray()[9..12], _animationFramerate));
+
+            _mover = Entity.AddComponent<Mover>();
+            _collider = Entity.AddComponent<BoxCollider>();
+            Flags.SetFlagExclusive(ref _collider.CollidesWithLayers, 0);
+            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, 1);
+
+            Entity.Position = _startPosition;
+
+            _spriteAnimator.Play("WalkLeft", SpriteAnimator.LoopMode.Loop);
+        }
+
+        public override void OnRemovedFromEntity()
+        {
+            base.OnRemovedFromEntity();
+        }
+
+        private void ChainAttack()
+        {
+            var tween = Entity.TweenPositionTo(new Vector2(-350, 0), 2.0f)
+                .SetFrom(Entity.Position)
+                .SetIsRelative()
+                .SetEaseType(EaseType.Linear);
+
+            tween.SetCompletionHandler(_tween =>
+            {
+                var secondTween = Entity.TweenPositionTo(new Vector2(-100, 0), 0.5f)
+                .SetFrom(Entity.Position)
+                .SetIsRelative()
+                .SetEaseType(EaseType.Punch)
+                .SetLoops(LoopType.RestartFromBeginning, 2);
+
+                secondTween.SetCompletionHandler(_secondTween =>
+                {
+                    var thirdTween = Entity.TweenPositionTo(new Vector2(350, 0), 3.0f)
+                    .SetFrom(Entity.Position)
+                    .SetIsRelative()
+                    .SetEaseType(EaseType.Linear)
+                    .SetCompletionHandler(_thirdTween =>
+                    {
+                        MoveToNextPhase();
+                    });
+
+                    thirdTween.Start();
+                }).Start();
+
+            }).Start();
+        }
+
+        private void RangeAttack()
+        {
+            var entity = Entity.Scene.CreateEntity("projectile");
+            entity.Position = Entity.Position;
+            entity.AddComponent(ParticleSystem
+                .CreateEmitter(ParticleSystem.ParticleType.Sun));
+            entity.AddComponent<ProjectileMover>();
+            entity.AddComponent(new ProjectileController(new Vector2(_projectileVelocity, 0)));
+
+            var collider = entity.AddComponent<CircleCollider>();
+            Flags.SetFlagExclusive(ref collider.CollidesWithLayers, 0);
+            Flags.SetFlagExclusive(ref collider.PhysicsLayer, 1);
+
+            MoveToNextPhase();
+        }
+
+        private void Dash()
+        {
+            var tween = Entity.TweenPositionTo(new Vector2(-350, 0), 1.0f)
+                .SetFrom(Entity.Position)
+                .SetIsRelative()
+                .SetEaseType(EaseType.BackIn)
+                .SetCompletionHandler(_tween =>
+                {
+                    var secondTween = Entity.TweenPositionTo(new Vector2(350, 0), 3.0f)
+                    .SetFrom(Entity.Position)
+                    .SetIsRelative()
+                    .SetEaseType(EaseType.Linear)
+                    .SetCompletionHandler(_secondTween => MoveToNextPhase());
+
+                    secondTween.Start();
+                });
+
+            tween.Start();
+        }
+
+        private void JumpAttack()
+        {
+            var tween = Entity.TweenPositionTo(new Vector2(-175, -200), 1.5f)
+                .SetFrom(Entity.Position)
+                .SetIsRelative()
+                .SetEaseType(EaseType.CircIn)
+                .SetCompletionHandler(_tween =>
+                {
+                    var secondTween = Entity.TweenPositionTo(new Vector2(-175, 200), 1.0f)
+                    .SetFrom(Entity.Position)
+                    .SetIsRelative()
+                    .SetEaseType(EaseType.BackIn)
+                    .SetCompletionHandler(_secondTween => {
+
+                        var thirdTween = Entity.TweenPositionTo(new Vector2(350, 0), 2.0f)
+                        .SetFrom(Entity.Position)
+                        .SetIsRelative()
+                        .SetEaseType(EaseType.Linear)
+                        .SetCompletionHandler(_thirdTween => MoveToNextPhase());
+
+                        thirdTween.Start();
+                    });
+
+                    _spriteAnimator.Play("WalkLeft", SpriteAnimator.LoopMode.Loop);
+                    secondTween.Start();
+                });
+
+            _spriteAnimator.Play("WalkDown", SpriteAnimator.LoopMode.Loop);
+            tween.Start();
+        }
+
+        private void FullscreenAttack()
+        {
+            var leftEntity = Entity.Scene.CreateEntity("projectile");
+            leftEntity.Position = Entity.Position;
+            leftEntity.AddComponent(ParticleSystem
+                .CreateEmitter(ParticleSystem.ParticleType.BlueFlame));
+            leftEntity.AddComponent<ProjectileMover>();
+            leftEntity.AddComponent(new ProjectileController(new Vector2(_projectileVelocity, 0)));
+
+            var collider = leftEntity.AddComponent<CircleCollider>();
+            Flags.SetFlagExclusive(ref collider.CollidesWithLayers, 0);
+            Flags.SetFlagExclusive(ref collider.PhysicsLayer, 1);
+
+            var rightEntity = leftEntity.Clone();
+            rightEntity.Position = Entity.Position;
+            rightEntity.GetComponent<ProjectileController>().Velocity *= -1;
+            rightEntity.AttachToScene(Entity.Scene);
+
+            MoveToNextPhase();
+        }
+
+        private void ComboAttack()
+        {
+
+        }
+
+        private void MoveToNextPhase()
+        {
+            _attackStarted = false;
+            _timerStarted = false;
+            _elapsedTime = 0.0f;
+            _currentPhase = (_currentPhase + 1) % 5;
+        }
+    }
+}
