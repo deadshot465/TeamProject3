@@ -316,3 +316,4 @@ C:\Users\sonic\OneDrive\文件\repos\TeamProject3\obj\Debug\netcoreapp3.1\win-x6
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\obj\Debug\netcoreapp3.1\win-x64\TeamProject3.pdb
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\ecc_comp.xnb
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\splash_screen.xnb
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\monster_dknight1.xnb

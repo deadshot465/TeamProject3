@@ -16,6 +16,7 @@ namespace TeamProject3.Scene
         private List<Entity> _playerProjectiles = new List<Entity>();
         private Entity _playerGuardProjectile;
         private SpriteAnimator _playerAnimator;
+        private Entity _bossEntity;
         private const float _animationFramerate = 20.0f;
         private const float _projectileVelocity = 350.0f;
 
@@ -45,6 +46,11 @@ namespace TeamProject3.Scene
             _playerGuardProjectile.AddComponent(
                 ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.Electrons));
             _playerGuardProjectile.SetEnabled(false);
+
+            _bossEntity = CreateEntity("boss-entity");
+            _bossEntity.AddComponent(new Boss(new Vector2(150), _animationFramerate,
+                new Vector2(_playerCharacterEntity.Position.X + 400,
+                _playerCharacterEntity.Position.Y)));
 
             _playerAttackButtons.Add(FireInput.Z, new VirtualButton());
             _playerAttackButtons.Add(FireInput.X, new VirtualButton());
