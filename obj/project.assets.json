@@ -125,6 +125,16 @@
         "runtime": {
           "bin/placeholder/Nez.dll": {}
         }
+      },
+      "Nez.Persistence/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "compile": {
+          "bin/placeholder/Nez.Persistence.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Nez.Persistence.dll": {}
+        }
       }
     },
     ".NETCoreApp,Version=v3.1/win-x64": {
@@ -196,6 +206,16 @@
         },
         "runtime": {
           "bin/placeholder/Nez.dll": {}
+        }
+      },
+      "Nez.Persistence/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "compile": {
+          "bin/placeholder/Nez.Persistence.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Nez.Persistence.dll": {}
         }
       }
     }
@@ -369,13 +389,19 @@
       "type": "project",
       "path": "D:\\source\\repos\\Nez\\Nez.Portable\\Nez.csproj",
       "msbuildProject": "D:\\source\\repos\\Nez\\Nez.Portable\\Nez.csproj"
+    },
+    "Nez.Persistence/1.0.0": {
+      "type": "project",
+      "path": "D:\\source\\repos\\Nez\\Nez.Persistence\\Nez.Persistence.csproj",
+      "msbuildProject": "D:\\source\\repos\\Nez\\Nez.Persistence\\Nez.Persistence.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
       "MonoGame.Content.Builder >= 3.7.0.4",
       "MonoGame.Framework.DesktopGL.Core >= 3.7.0.7",
-      "Nez >= 1.0.0"
+      "Nez >= 1.0.0",
+      "Nez.Persistence >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -409,6 +435,9 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
+            "D:\\source\\repos\\Nez\\Nez.Persistence\\Nez.Persistence.csproj": {
+              "projectPath": "D:\\source\\repos\\Nez\\Nez.Persistence\\Nez.Persistence.csproj"
+            },
             "D:\\source\\repos\\Nez\\Nez.Portable\\Nez.csproj": {
               "projectPath": "D:\\source\\repos\\Nez\\Nez.Portable\\Nez.csproj"
             }

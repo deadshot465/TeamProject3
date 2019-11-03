@@ -63,6 +63,8 @@ namespace TeamProject3.Scene
             _playerAttackButtons[FireInput.X].AddKeyboardKey(Keys.X);
             _playerAttackButtons[FireInput.C].AddKeyboardKey(Keys.C);
             _playerAttackButtons[FireInput.V].AddKeyboardKey(Keys.V);
+
+            BossSettings.ExportBossSettings();
         }
 
         private void SetupCharacterAnimation()

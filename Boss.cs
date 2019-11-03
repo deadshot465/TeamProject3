@@ -1,15 +1,47 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.Sprites;
 using Nez.Textures;
 using Nez.Tweens;
+using System.Collections.Generic;
 
 namespace TeamProject3
 {
+    public class BossSettings
+    {
+        public readonly Vector2 Speed = new Vector2(150);
+        public readonly float AnimationFramerate = 20.0f;
+        public readonly float ProjectileVelocity = -350.0f;
+        public readonly string AnimationFileName = "monster_dknight1";
+        public readonly int AnimationFrameWidth = 94;
+        public readonly int AnimationFrameHeight = 100;
+                
+        public readonly int PunchLoops = 2;
+        public readonly float PunchDuration = 0.5f;
+                
+        public readonly EaseType DashEaseType = EaseType.BackIn;
+        public readonly float DashDuration = 1.0f;
+                
+        public readonly Vector2 FirstStepJumpOffset = new Vector2(-175, -200);
+        public readonly EaseType FirstStepJumpEaseType = EaseType.CircIn;
+        public readonly float FirstStepJumpDuration = 1.5f;
+        public readonly Vector2 SecondStepJumpOffset = new Vector2(-175, 200);
+        public readonly EaseType SecondStepJumpEaseType = EaseType.BackIn;
+        public readonly float SecondStepJumpDuration = 1.0f;
+
+        public BossSettings()
+        {
+
+        }
+
+        public static void ExportBossSettings(string fileName = "boss1_settings")
+        {
+            var settings = new BossSettings();
+            JsonExporter.WriteToJson(fileName, settings, true);
+        }
+    }
+
     public class Boss : Component, ITriggerListener, IUpdatable
     {
         private SubpixelVector2 _subpixelVector = new SubpixelVector2();

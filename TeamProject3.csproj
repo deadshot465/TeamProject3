@@ -316,6 +316,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="D:\source\repos\Nez\Nez.Persistence\Nez.Persistence.csproj" />
     <ProjectReference Include="D:\source\repos\Nez\Nez.Portable\Nez.csproj" />
   </ItemGroup>
 
