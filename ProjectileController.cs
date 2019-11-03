@@ -7,13 +7,15 @@ namespace TeamProject3
     {
         ProjectileMover _mover;
 
-        public Vector2 Velocity;
+        public Vector2 Velocity { get; set; }
 
         public ProjectileController(Vector2 velocity) => Velocity = velocity;
 
         void IUpdatable.Update()
         {
-            if (_mover.Move(Velocity * Time.DeltaTime) || Entity.Position.X > 1200)
+            if (_mover.Move(Velocity * Time.DeltaTime) ||
+                Entity.Position.X > 1200 ||
+                Entity.Position.X < -1200)
             {
                 Entity.Destroy();
             }

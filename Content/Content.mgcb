@@ -25,6 +25,18 @@
 /processorParam:TextureFormat=Color
 /build:ecc_comp.png
 
+#begin monster_dknight1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:monster_dknight1.png
+
 #begin player_revised.png
 /importer:TextureImporter
 /processor:TextureProcessor

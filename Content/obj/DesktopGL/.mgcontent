@@ -5,6 +5,7 @@
   <Config />
   <SourceFiles>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/ecc_comp.png</File>
+    <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/monster_dknight1.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/player_revised.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/sample_brick.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/sample_player.png</File>
@@ -13,6 +14,7 @@
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/splash_screen.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
