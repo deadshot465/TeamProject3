@@ -51,7 +51,7 @@
           "dependencies": {
             "MonoGame.Content.Builder": {
               "target": "Package",
-              "version": "[3.7.0.4, )"
+              "version": "[3.7.0.9, )"
             },
             "MonoGame.Framework.DesktopGL.Core": {
               "target": "Package",
@@ -196,7 +196,7 @@
             },
             "System.Drawing.Common": {
               "target": "Package",
-              "version": "[4.7.0-preview1.19504.10, )"
+              "version": "[4.7.0-preview2.19523.17, )"
             }
           },
           "imports": [

@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.1": {
-      "Microsoft.NETCore.Platforms/3.1.0-preview1.19504.10": {
+      "Microsoft.NETCore.Platforms/3.1.0-preview2.19523.17": {
         "type": "package",
         "compile": {
           "lib/netstandard1.0/_._": {}
@@ -11,10 +11,10 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-      "Microsoft.Win32.SystemEvents/4.7.0-preview1.19504.10": {
+      "Microsoft.Win32.SystemEvents/4.7.0-preview2.19523.17": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "3.1.0-preview1.19504.10"
+          "Microsoft.NETCore.Platforms": "3.1.0-preview2.19523.17"
         },
         "compile": {
           "ref/netstandard2.0/_._": {}
@@ -29,7 +29,7 @@
           }
         }
       },
-      "MonoGame.Content.Builder/3.7.0.4": {
+      "MonoGame.Content.Builder/3.7.0.9": {
         "type": "package",
         "build": {
           "build/MonoGame.Content.Builder.targets": {}
@@ -89,11 +89,11 @@
           }
         }
       },
-      "System.Drawing.Common/4.7.0-preview1.19504.10": {
+      "System.Drawing.Common/4.7.0-preview2.19523.17": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "3.1.0-preview1.19504.10",
-          "Microsoft.Win32.SystemEvents": "4.7.0-preview1.19504.10"
+          "Microsoft.NETCore.Platforms": "3.1.0-preview2.19523.17",
+          "Microsoft.Win32.SystemEvents": "4.7.0-preview2.19523.17"
         },
         "compile": {
           "ref/netcoreapp3.0/System.Drawing.Common.dll": {}
@@ -117,7 +117,7 @@
         "framework": ".NETStandard,Version=v2.1",
         "dependencies": {
           "MonoGame.Framework.DesktopGL.Core": "3.7.0.7",
-          "System.Drawing.Common": "4.7.0-preview1.19504.10"
+          "System.Drawing.Common": "4.7.0-preview2.19523.17"
         },
         "compile": {
           "bin/placeholder/Nez.dll": {}
@@ -138,7 +138,7 @@
       }
     },
     ".NETCoreApp,Version=v3.1/win-x64": {
-      "Microsoft.NETCore.Platforms/3.1.0-preview1.19504.10": {
+      "Microsoft.NETCore.Platforms/3.1.0-preview2.19523.17": {
         "type": "package",
         "compile": {
           "lib/netstandard1.0/_._": {}
@@ -147,10 +147,10 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-      "Microsoft.Win32.SystemEvents/4.7.0-preview1.19504.10": {
+      "Microsoft.Win32.SystemEvents/4.7.0-preview2.19523.17": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "3.1.0-preview1.19504.10"
+          "Microsoft.NETCore.Platforms": "3.1.0-preview2.19523.17"
         },
         "compile": {
           "ref/netstandard2.0/_._": {}
@@ -159,7 +159,7 @@
           "runtimes/win/lib/netcoreapp3.0/Microsoft.Win32.SystemEvents.dll": {}
         }
       },
-      "MonoGame.Content.Builder/3.7.0.4": {
+      "MonoGame.Content.Builder/3.7.0.9": {
         "type": "package",
         "build": {
           "build/MonoGame.Content.Builder.targets": {}
@@ -181,11 +181,11 @@
           "build/MonoGame.Framework.DesktopGL.Core.targets": {}
         }
       },
-      "System.Drawing.Common/4.7.0-preview1.19504.10": {
+      "System.Drawing.Common/4.7.0-preview2.19523.17": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "3.1.0-preview1.19504.10",
-          "Microsoft.Win32.SystemEvents": "4.7.0-preview1.19504.10"
+          "Microsoft.NETCore.Platforms": "3.1.0-preview2.19523.17",
+          "Microsoft.Win32.SystemEvents": "4.7.0-preview2.19523.17"
         },
         "compile": {
           "ref/netcoreapp3.0/System.Drawing.Common.dll": {}
@@ -199,7 +199,7 @@
         "framework": ".NETStandard,Version=v2.1",
         "dependencies": {
           "MonoGame.Framework.DesktopGL.Core": "3.7.0.7",
-          "System.Drawing.Common": "4.7.0-preview1.19504.10"
+          "System.Drawing.Common": "4.7.0-preview2.19523.17"
         },
         "compile": {
           "bin/placeholder/Nez.dll": {}
@@ -221,27 +221,27 @@
     }
   },
   "libraries": {
-    "Microsoft.NETCore.Platforms/3.1.0-preview1.19504.10": {
-      "sha512": "bS52lVUR5Mb/yuorV8cLSvsPDEOms1LTQ+bN8s3/rrdaU3VSpfvWGorRk5xftj1kyrJ7Dxlw/GADyyekoOfDnQ==",
+    "Microsoft.NETCore.Platforms/3.1.0-preview2.19523.17": {
+      "sha512": "ocQWme1012iUkbQlSbIp+fX+abp/9ho3uGrlNacnDIo7RrgKUtKyoDngZz7T243U9n7vYPgBhHSYeUOELb+lzg==",
       "type": "package",
-      "path": "microsoft.netcore.platforms/3.1.0-preview1.19504.10",
+      "path": "microsoft.netcore.platforms/3.1.0-preview2.19523.17",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
         "lib/netstandard1.0/_._",
-        "microsoft.netcore.platforms.3.1.0-preview1.19504.10.nupkg.sha512",
+        "microsoft.netcore.platforms.3.1.0-preview2.19523.17.nupkg.sha512",
         "microsoft.netcore.platforms.nuspec",
         "runtime.json",
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
     },
-    "Microsoft.Win32.SystemEvents/4.7.0-preview1.19504.10": {
-      "sha512": "fWr6+gMhfAHP2T7LRsyJSBKaepSMvciCJGXZn9sLOJTJF8ov5UEsM9F7DCDfG1p3etlgGfSYRTOQAloQrO/NTw==",
+    "Microsoft.Win32.SystemEvents/4.7.0-preview2.19523.17": {
+      "sha512": "UPvbdlGIrZI+7YXEVeK9iqlUzjGFpzSCFZJIL8CY/Chn2NVlN+GUlbfUGeNQ7mjxGy4Iuqlyp2BYDy6Z+1MBSw==",
       "type": "package",
-      "path": "microsoft.win32.systemevents/4.7.0-preview1.19504.10",
+      "path": "microsoft.win32.systemevents/4.7.0-preview2.19523.17",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -251,7 +251,7 @@
         "lib/net461/Microsoft.Win32.SystemEvents.xml",
         "lib/netstandard2.0/Microsoft.Win32.SystemEvents.dll",
         "lib/netstandard2.0/Microsoft.Win32.SystemEvents.xml",
-        "microsoft.win32.systemevents.4.7.0-preview1.19504.10.nupkg.sha512",
+        "microsoft.win32.systemevents.4.7.0-preview2.19523.17.nupkg.sha512",
         "microsoft.win32.systemevents.nuspec",
         "ref/net461/Microsoft.Win32.SystemEvents.dll",
         "ref/net461/Microsoft.Win32.SystemEvents.xml",
@@ -267,10 +267,10 @@
         "version.txt"
       ]
     },
-    "MonoGame.Content.Builder/3.7.0.4": {
-      "sha512": "EfPrCHTWQ4O5G/XIfGqWx1J9vvI4QrUI8SjBCIT8Aeepl0y2oi1+YjvmBbxjFvJb2uGkYnLq4GCwXuquMi3TYw==",
+    "MonoGame.Content.Builder/3.7.0.9": {
+      "sha512": "AAt9ns5w6c9JkZFC2UC+nB8v+kTDgRP1ONaB5lLSfzBhrGULUoNwMxiRAzi7GlPVj5yynu3PHNi8kZTOUIdF9g==",
       "type": "package",
-      "path": "monogame.content.builder/3.7.0.4",
+      "path": "monogame.content.builder/3.7.0.9",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -280,8 +280,11 @@
         "build/MGCB/[Content_Types].xml",
         "build/MGCB/_rels/.rels",
         "build/MGCB/build/ATI.TextureConverter.dll",
+        "build/MGCB/build/ATI.TextureConverter.dll.config",
         "build/MGCB/build/Assimp64.dll",
         "build/MGCB/build/AssimpNet.dll",
+        "build/MGCB/build/AssimpNet.dll.config",
+        "build/MGCB/build/AssimpNet.pdb",
         "build/MGCB/build/CppNet.dll",
         "build/MGCB/build/FreeImage.dll",
         "build/MGCB/build/FreeImageNET.dll",
@@ -293,16 +296,26 @@
         "build/MGCB/build/MonoGame.Framework.dll",
         "build/MGCB/build/MonoGame.Framework.xml",
         "build/MGCB/build/Nvidia.TextureTools.dll",
+        "build/MGCB/build/Nvidia.TextureTools.dll.config",
         "build/MGCB/build/PVRTexLibNET.dll",
+        "build/MGCB/build/PVRTexLibNET.dll.config",
         "build/MGCB/build/PVRTexLibWrapper.dll",
         "build/MGCB/build/SharpDX.D3DCompiler.dll",
+        "build/MGCB/build/SharpDX.D3DCompiler.xml",
         "build/MGCB/build/SharpDX.DXGI.dll",
+        "build/MGCB/build/SharpDX.DXGI.xml",
         "build/MGCB/build/SharpDX.Direct2D1.dll",
+        "build/MGCB/build/SharpDX.Direct2D1.xml",
         "build/MGCB/build/SharpDX.Direct3D11.dll",
+        "build/MGCB/build/SharpDX.Direct3D11.xml",
         "build/MGCB/build/SharpDX.MediaFoundation.dll",
+        "build/MGCB/build/SharpDX.MediaFoundation.xml",
         "build/MGCB/build/SharpDX.XAudio2.dll",
+        "build/MGCB/build/SharpDX.XAudio2.xml",
         "build/MGCB/build/SharpDX.XInput.dll",
+        "build/MGCB/build/SharpDX.XInput.xml",
         "build/MGCB/build/SharpDX.dll",
+        "build/MGCB/build/SharpDX.xml",
         "build/MGCB/build/SharpFont.dll",
         "build/MGCB/build/ffmpeg.exe",
         "build/MGCB/build/ffprobe.exe",
@@ -310,16 +323,10 @@
         "build/MGCB/build/libmojoshader_64.dll",
         "build/MGCB/build/nvtt.dll",
         "build/MonoGame.Content.Builder.targets",
-        "monogame.content.builder.3.7.0.4.nupkg.sha512",
+        "monogame.content.builder.3.7.0.9.nupkg.sha512",
         "monogame.content.builder.nuspec",
-        "tasks/net46/Microsoft.Build.Framework.dll",
-        "tasks/net46/Microsoft.Build.Utilities.Core.dll",
         "tasks/net46/MonoGame.Content.Builder.dll",
-        "tasks/net46/MonoGame.Content.Builder.pdb",
-        "tasks/net46/System.Threading.Thread.dll",
-        "tasks/netstandard2.0/MonoGame.Content.Builder.deps.json",
-        "tasks/netstandard2.0/MonoGame.Content.Builder.dll",
-        "tasks/netstandard2.0/MonoGame.Content.Builder.pdb"
+        "tasks/netstandard2.0/MonoGame.Content.Builder.dll"
       ]
     },
     "MonoGame.Framework.DesktopGL.Core/3.7.0.7": {
@@ -346,10 +353,10 @@
         "runtimes/win-x86/native/libopenal.dll"
       ]
     },
-    "System.Drawing.Common/4.7.0-preview1.19504.10": {
-      "sha512": "WbOy+U7/x8K4K0FmRrSzOBJgnrmUQ5jt5x8LPsqaMs4IWMAegStFgBme5z1+qcee6dAgNVGesNTMsJniRi68yA==",
+    "System.Drawing.Common/4.7.0-preview2.19523.17": {
+      "sha512": "pJb9Z5m4WGbQuuDCnPv5HumGz4+n7Wf4qOw1BH7hAE/62Z0hvZwWmOuTdoJkdMSr0gVc9El81ZUSzWddBXdwlg==",
       "type": "package",
-      "path": "system.drawing.common/4.7.0-preview1.19504.10",
+      "path": "system.drawing.common/4.7.0-preview2.19523.17",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -379,7 +386,7 @@
         "runtimes/win/lib/netcoreapp2.0/System.Drawing.Common.dll",
         "runtimes/win/lib/netcoreapp3.0/System.Drawing.Common.dll",
         "runtimes/win/lib/netcoreapp3.0/System.Drawing.Common.xml",
-        "system.drawing.common.4.7.0-preview1.19504.10.nupkg.sha512",
+        "system.drawing.common.4.7.0-preview2.19523.17.nupkg.sha512",
         "system.drawing.common.nuspec",
         "useSharedDesignerContext.txt",
         "version.txt"
@@ -398,7 +405,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "MonoGame.Content.Builder >= 3.7.0.4",
+      "MonoGame.Content.Builder >= 3.7.0.9",
       "MonoGame.Framework.DesktopGL.Core >= 3.7.0.7",
       "Nez >= 1.0.0",
       "Nez.Persistence >= 1.0.0"
@@ -455,7 +462,7 @@
         "dependencies": {
           "MonoGame.Content.Builder": {
             "target": "Package",
-            "version": "[3.7.0.4, )"
+            "version": "[3.7.0.9, )"
           },
           "MonoGame.Framework.DesktopGL.Core": {
             "target": "Package",

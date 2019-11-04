@@ -40,6 +40,11 @@ namespace TeamProject3
             var settings = new BossSettings();
             JsonExporter.WriteToJson(fileName, settings, true);
         }
+
+        public static BossSettings ImportBossSettings(string fileName = "boss1_settings")
+        {
+            return JsonExporter.ReadFromJson(fileName, true);
+        }
     }
 
     public class Boss : Component, ITriggerListener, IUpdatable
@@ -55,7 +60,9 @@ namespace TeamProject3
         private bool _attackStarted = false;
         private BoxCollider _collider;
         private int _currentPhase = 0;
-        private const float _projectileVelocity = -350.0f;
+        private readonly float _projectileVelocity;
+
+        private BossSettings _bossSettings;
 
         private enum Attacks
         {
@@ -72,11 +79,15 @@ namespace TeamProject3
 
         public Vector2 Speed { get; private set; }
 
-        public Boss(Vector2 speed, float animationFramerate, Vector2 startPosition)
+        public Boss(Vector2 startPosition, BossSettings bossSettings)
         {
-            Speed = speed;
-            _animationFramerate = animationFramerate;
+            _bossSettings = bossSettings;
+
+            Speed = _bossSettings.Speed;
+            _animationFramerate = _bossSettings.AnimationFramerate;
             _startPosition = startPosition;
+            _projectileVelocity = _bossSettings.ProjectileVelocity;
+
 
             _attackHandlers.Add(ChainAttack);
             _attackHandlers.Add(RangeAttack);
@@ -123,8 +134,9 @@ namespace TeamProject3
         {
             base.OnAddedToEntity();
 
-            var texture = Entity.Scene.Content.Load<Texture2D>("monster_dknight1");
-            var spriteAtlas = Sprite.SpritesFromAtlas(texture, 94, 100);
+            var texture = Entity.Scene.Content.Load<Texture2D>(_bossSettings.AnimationFileName);
+            var spriteAtlas = Sprite
+                .SpritesFromAtlas(texture, _bossSettings.AnimationFrameWidth, _bossSettings.AnimationFrameHeight);
             _spriteAnimator = Entity.AddComponent<SpriteAnimator>();
 
             _spriteAnimator.AddAnimation("WalkDown", new SpriteAnimation(
@@ -160,11 +172,11 @@ namespace TeamProject3
 
             tween.SetCompletionHandler(_tween =>
             {
-                var secondTween = Entity.TweenPositionTo(new Vector2(-100, 0), 0.5f)
+                var secondTween = Entity.TweenPositionTo(new Vector2(-100, 0), _bossSettings.PunchDuration)
                 .SetFrom(Entity.Position)
                 .SetIsRelative()
                 .SetEaseType(EaseType.Punch)
-                .SetLoops(LoopType.RestartFromBeginning, 2);
+                .SetLoops(LoopType.RestartFromBeginning, _bossSettings.PunchLoops);
 
                 secondTween.SetCompletionHandler(_secondTween =>
                 {
@@ -201,10 +213,10 @@ namespace TeamProject3
 
         private void Dash()
         {
-            var tween = Entity.TweenPositionTo(new Vector2(-350, 0), 1.0f)
+            var tween = Entity.TweenPositionTo(new Vector2(-350, 0), _bossSettings.DashDuration)
                 .SetFrom(Entity.Position)
                 .SetIsRelative()
-                .SetEaseType(EaseType.BackIn)
+                .SetEaseType(_bossSettings.DashEaseType)
                 .SetCompletionHandler(_tween =>
                 {
                     var secondTween = Entity.TweenPositionTo(new Vector2(350, 0), 3.0f)
@@ -221,16 +233,18 @@ namespace TeamProject3
 
         private void JumpAttack()
         {
-            var tween = Entity.TweenPositionTo(new Vector2(-175, -200), 1.5f)
+            var tween = Entity
+                .TweenPositionTo(_bossSettings.FirstStepJumpOffset, _bossSettings.FirstStepJumpDuration)
                 .SetFrom(Entity.Position)
                 .SetIsRelative()
-                .SetEaseType(EaseType.CircIn)
+                .SetEaseType(_bossSettings.FirstStepJumpEaseType)
                 .SetCompletionHandler(_tween =>
                 {
-                    var secondTween = Entity.TweenPositionTo(new Vector2(-175, 200), 1.0f)
+                    var secondTween = Entity
+                    .TweenPositionTo(_bossSettings.SecondStepJumpOffset, _bossSettings.SecondStepJumpDuration)
                     .SetFrom(Entity.Position)
                     .SetIsRelative()
-                    .SetEaseType(EaseType.BackIn)
+                    .SetEaseType(_bossSettings.SecondStepJumpEaseType)
                     .SetCompletionHandler(_secondTween => {
 
                         var thirdTween = Entity.TweenPositionTo(new Vector2(350, 0), 2.0f)

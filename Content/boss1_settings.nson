@@ -1,0 +1,31 @@
+TeamProject3.BossSettings(
+	@id: "1",
+	Speed: Microsoft.Xna.Framework.Vector2(
+		@id: "2",
+		X: 150,
+		Y: 150
+	),
+	AnimationFramerate: 20,
+	ProjectileVelocity: -350,
+	AnimationFileName: "monster_dknight1",
+	AnimationFrameWidth: 94,
+	AnimationFrameHeight: 100,
+	PunchLoops: 2,
+	PunchDuration: 0.5,
+	DashEaseType: "BackIn",
+	DashDuration: 1,
+	FirstStepJumpOffset: Microsoft.Xna.Framework.Vector2(
+		@id: "3",
+		X: -175,
+		Y: -200
+	),
+	FirstStepJumpEaseType: "CircIn",
+	FirstStepJumpDuration: 1.5,
+	SecondStepJumpOffset: Microsoft.Xna.Framework.Vector2(
+		@id: "4",
+		X: -175,
+		Y: 200
+	),
+	SecondStepJumpEaseType: "BackIn",
+	SecondStepJumpDuration: 1
+)

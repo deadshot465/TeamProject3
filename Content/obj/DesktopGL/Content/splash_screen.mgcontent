@@ -3,11 +3,11 @@
   <SourceFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/splash_screen.png</SourceFile>
   <SourceTime>2019-10-28T11:46:13.1549752+09:00</SourceTime>
   <DestFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/bin/DesktopGL/Content/splash_screen.xnb</DestFile>
-  <DestTime>2019-10-28T12:09:17.0895183+09:00</DestTime>
+  <DestTime>2019-11-03T22:16:10.7897629+09:00</DestTime>
   <Importer>TextureImporter</Importer>
-  <ImporterTime>2018-01-13T19:18:24+09:00</ImporterTime>
+  <ImporterTime>2018-08-05T14:17:44+09:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
-  <ProcessorTime>2018-01-13T19:18:24+09:00</ProcessorTime>
+  <ProcessorTime>2018-08-05T14:17:44+09:00</ProcessorTime>
   <Parameters>
     <Key>ColorKeyColor</Key>
     <Value>255,0,255,255</Value>

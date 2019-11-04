@@ -48,9 +48,8 @@ namespace TeamProject3.Scene
             _playerGuardProjectile.SetEnabled(false);
 
             _bossEntity = CreateEntity("boss-entity");
-            _bossEntity.AddComponent(new Boss(new Vector2(150), _animationFramerate,
-                new Vector2(_playerCharacterEntity.Position.X + 400,
-                _playerCharacterEntity.Position.Y)));
+            _bossEntity.AddComponent(new Boss(new Vector2(_playerCharacterEntity.Position.X + 400,
+                _playerCharacterEntity.Position.Y), BossSettings.ImportBossSettings()));
 
             _playerAttackButtons.Add(FireInput.Z, new VirtualButton());
             _playerAttackButtons.Add(FireInput.X, new VirtualButton());
