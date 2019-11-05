@@ -11,9 +11,11 @@
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/sample_player.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/sample_title.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/sample_title_disappear.png</File>
+    <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/sample_titlescreen.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/splash_screen.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

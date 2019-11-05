@@ -301,7 +301,6 @@ C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x6
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\hostfxr.dll
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\hostpolicy.dll
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\mscordaccore.dll
-C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\mscordaccore_amd64_amd64_4.700.19.50403.dll
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\mscordbi.dll
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\mscorrc.debug.dll
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\mscorrc.dll
@@ -319,3 +318,5 @@ C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x6
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\monster_dknight1.xnb
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Nez.Persistence.dll
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Nez.Persistence.pdb
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\sample_titlescreen.xnb
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\mscordaccore_amd64_amd64_4.700.19.52202.dll
