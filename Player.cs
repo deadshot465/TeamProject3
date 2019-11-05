@@ -19,16 +19,17 @@ namespace TeamProject3
         private float _animationFramerate = 0.0f;
         private BoxCollider _collider;
         private float _speed = 0.0f;
-        private const float _gravity = 9.8f;
+        private bool _isJumping = false;
+        private const float _gravity = 1000f;
 
         private enum Input
         {
-            Attack, Flee
+            Attack, Flee, Jump
         }
 
         private enum Movement
         {
-            Move, Jump
+            Move
         }
 
         private Dictionary<Input, VirtualButton> _inputKeyMappings =
@@ -51,9 +52,9 @@ namespace TeamProject3
 
             _inputKeys.Add(Input.Attack, new Tuple<Keys, Buttons>(Keys.Z, Buttons.A));
             _inputKeys.Add(Input.Flee, new Tuple<Keys, Buttons>(Keys.C, Buttons.X));
+            _inputKeys.Add(Input.Jump, new Tuple<Keys, Buttons>(Keys.X, Buttons.B));
 
             _inputMovements.Add(Movement.Move, new Tuple<Keys, Keys>(Keys.Left, Keys.Right));
-            _inputMovements.Add(Movement.Jump, new Tuple<Keys, Keys>(Keys.Up, Keys.Down));
         }
 
         public override void Initialize()
@@ -109,52 +110,66 @@ namespace TeamProject3
 
         void IUpdatable.Update()
         {
-            var moveDirection = new Vector2(_inputMovementMappings[Movement.Move].Value,
-                _inputMovementMappings[Movement.Jump].Value);
-            if (moveDirection.Y > 0) moveDirection.Y = 0;
+            var moveDirection = new Vector2(_inputMovementMappings[Movement.Move].Value, 0);
+            var velocity = Vector2.Zero;
 
-            //moveDirection.Y += _gravity;
-
-            if (moveDirection != Vector2.Zero)
+            if (moveDirection.X < 0)
             {
-                var movement = moveDirection * _speed * Time.DeltaTime;
-
-                _mover.CalculateMovement(ref movement, out var result);
-                _subpixelVector.Update(ref movement);
-                _mover.ApplyMovement(movement);
+                velocity.X = -_speed;
+                _spriteAnimator.FlipX = true;
+            }
+            else if (moveDirection.X > 0)
+            {
+                velocity.X = _speed;
+                _spriteAnimator.FlipX = false;
+            }
+            else
+            {
+                velocity.X = 0;
             }
 
+            if (_inputKeyMappings[Input.Jump].IsPressed && !_isJumping)
+            {
+                velocity.Y = -Mathf.Sqrt(2f * 100 * _gravity);
+                _isJumping = true;
+            }
+
+            velocity.Y += _gravity * Time.DeltaTime;
+
+            var movement = velocity * Time.DeltaTime;
+
+            var res = _mover.CalculateMovement(ref movement, out var result);
+            _subpixelVector.Update(ref movement);
+            _mover.ApplyMovement(movement);
+
+            Console.WriteLine(_collider.CollidesWithAny(out var collisionResult));
         }
 
         private void SetupKeyboardInputs()
         {
             _inputKeyMappings.Add(Input.Attack, new VirtualButton());
             _inputKeyMappings.Add(Input.Flee, new VirtualButton());
+            _inputKeyMappings.Add(Input.Jump, new VirtualButton());
             _inputMovementMappings.Add(Movement.Move, new VirtualIntegerAxis());
-            _inputMovementMappings.Add(Movement.Jump, new VirtualIntegerAxis());
 
-            _inputKeyMappings[Input.Attack].Nodes
-                .Add(new VirtualButton.KeyboardKey(_inputKeys[Input.Attack].Item1));
-            _inputKeyMappings[Input.Attack].Nodes
-                .Add(new VirtualButton.GamePadButton(0, _inputKeys[Input.Attack].Item2));
-
-            _inputKeyMappings[Input.Flee].Nodes
-                .Add(new VirtualButton.KeyboardKey(_inputKeys[Input.Flee].Item1));
-            _inputKeyMappings[Input.Flee].Nodes
-                .Add(new VirtualButton.GamePadButton(0, _inputKeys[Input.Flee].Item2));
+            AddInputButton(Input.Attack);
+            AddInputButton(Input.Jump);
+            AddInputButton(Input.Flee);
 
             _inputMovementMappings[Movement.Move].Nodes
                 .Add(new VirtualAxis.GamePadDpadLeftRight());
             _inputMovementMappings[Movement.Move].Nodes
                 .Add(new VirtualAxis.GamePadLeftStickX());
 
-            _inputMovementMappings[Movement.Jump].Nodes
-                .Add(new VirtualAxis.GamePadDpadUpDown());
-            _inputMovementMappings[Movement.Jump].Nodes
-                .Add(new VirtualAxis.GamePadLeftStickY());
+            AddInputAxis(Movement.Move);    
+        }
 
-            AddInputAxis(Movement.Move);
-            AddInputAxis(Movement.Jump);      
+        private void AddInputButton(Input input)
+        {
+            _inputKeyMappings[input].Nodes
+                .Add(new VirtualButton.KeyboardKey(_inputKeys[input].Item1));
+            _inputKeyMappings[input].Nodes
+                .Add(new VirtualButton.GamePadButton(0, _inputKeys[input].Item2));
         }
 
         private void AddInputAxis(Movement movement)
@@ -164,6 +179,11 @@ namespace TeamProject3
                 .KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer,
                 _inputMovements[movement].Item1,
                 _inputMovements[movement].Item2));
+        }
+
+        private void HandleInput()
+        {
+            
         }
     }
 }

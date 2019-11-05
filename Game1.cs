@@ -11,8 +11,8 @@ namespace TeamProject3
     {
         private TitleScene _titleScene;
         private SplashScene _splashScene;
-        private bool _brickDestroyed = false;
         private bool _splashScreenShown = false;
+        private bool _titleScreenShown = false;
         private Nez.Scene.SceneResolutionPolicy _sceneResolutionPolicy;
         private VirtualButton _startButton = new VirtualButton();
         private const int _screenWidth = 960;
@@ -41,6 +41,8 @@ namespace TeamProject3
             Scene = _splashScene;
 
             _startButton.Nodes.Add(new VirtualButton.KeyboardKey(Keys.Space));
+
+            Core.DebugRenderEnabled = true;
         }
 
         protected override void OnExiting(object sender, EventArgs args)
@@ -64,7 +66,7 @@ namespace TeamProject3
                     transition.FadeToColor = Color.Black;
                     transition.OnTransitionCompleted = () =>
                     {
-                        _titleScene.StartLoadingBricks = true;
+                        _titleScreenShown = true;
                     };
                     StartSceneTransition(transition);
                 });
@@ -72,30 +74,17 @@ namespace TeamProject3
                 _splashScreenShown = true;
             }
 
-            if (_splashScreenShown && _titleScene != null)
-            {
-                if (_titleScene.IsBrickLoaded && !_brickDestroyed)
-                {
-                    var transition = new TextureWipeTransition();
-                    StartSceneTransition(transition);
-                    transition.OnScreenObscured = () =>
-                    {
-                        _titleScene.DisableAllBricks();
-                    };
-                    _brickDestroyed = true;
-                }
-            }
-
             LoadGameScene();
         }
 
         private void LoadGameScene()
         {
-            if (!_brickDestroyed) return;
+            if (!_titleScreenShown) return;
 
             if (_startButton.IsPressed)
             {
-                var transition = new WindTransition(() => new GameScene());
+                var transition = new WindTransition(()
+                    => new GameScene(new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)));
                 StartSceneTransition(transition);
                 _startButton.Deregister();
             }
