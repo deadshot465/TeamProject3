@@ -1,7 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Common;
+using FarseerPhysics.Dynamics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Nez;
+using Nez.Farseer;
 using Nez.Sprites;
 using Nez.Textures;
 using System;
@@ -17,10 +21,23 @@ namespace TeamProject3
         private SpriteAnimator _spriteAnimator;
         private Mover _mover;
         private float _animationFramerate = 0.0f;
+
         private BoxCollider _collider;
+        private FSRigidBody _rigidBody;
+        private Fixture _fixture;
+
         private float _speed = 0.0f;
         private bool _isJumping = false;
-        private const float _gravity = 1000f;
+        private Vector2 _gravity;
+        private Vector2 _velocity = Vector2.Zero;
+        private float _finalVelocity;
+        private const float _jumpHeight = 300.0f;
+        private const float _scale = 2.0f;
+
+        public float Width => _spriteAnimator.Width;
+        public float Height => _spriteAnimator.Height;
+
+        public Fixture GroundFixture { get; set; }
 
         private enum Input
         {
@@ -80,13 +97,27 @@ namespace TeamProject3
             _spriteAnimator.AddAnimation("prepare",
                 new SpriteAnimation(spriteAtlas.ToArray()[12..15], _animationFramerate));
 
-            _collider = Entity.AddComponent<BoxCollider>();
-            Flags.SetFlagExclusive(ref _collider.CollidesWithLayers, 0);
-            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, 1);
+            //_collider = Entity.GetComponent<BoxCollider>();
 
             _mover = Entity.AddComponent<Mover>();
 
             Entity.Position = _startPosition;
+
+            _rigidBody = Entity.AddComponent<FSRigidBody>().SetBodyType(BodyType.Dynamic);
+            //var _collisionBox = Entity.AddComponent(new FSCollisionBox(_spriteAnimator.Width, _spriteAnimator.Height));
+            var vertices = new Vertices();
+            float x1 = FSConvert.ToSimUnits(-64);
+            float x2 = FSConvert.ToSimUnits(64);
+            float y1 = FSConvert.ToSimUnits(-64);
+            float y2 = FSConvert.ToSimUnits(64);
+            vertices.Add(new Vector2(x1, y1));
+            vertices.Add(new Vector2(x2, y1));
+            vertices.Add(new Vector2(x1, y2));
+            vertices.Add(new Vector2(x2, y2));
+            _fixture = _rigidBody.Body.CreateFixture(new PolygonShape(vertices, 1.0f));
+
+            _gravity = FSConvert.ToDisplayUnits(_rigidBody.Body.World.Gravity);
+            _finalVelocity = -Mathf.Sqrt(2.0f * _jumpHeight * _gravity.Y);
 
             _spriteAnimator.OnAnimationCompletedEvent += animationName =>
             {
@@ -111,38 +142,42 @@ namespace TeamProject3
         void IUpdatable.Update()
         {
             var moveDirection = new Vector2(_inputMovementMappings[Movement.Move].Value, 0);
-            var velocity = Vector2.Zero;
 
             if (moveDirection.X < 0)
             {
-                velocity.X = -_speed;
+                _velocity.X = -_speed;
                 _spriteAnimator.FlipX = true;
             }
             else if (moveDirection.X > 0)
             {
-                velocity.X = _speed;
+                _velocity.X = _speed;
                 _spriteAnimator.FlipX = false;
             }
             else
             {
-                velocity.X = 0;
+                _velocity.X = 0;
             }
 
             if (_inputKeyMappings[Input.Jump].IsPressed && !_isJumping)
             {
-                velocity.Y = -Mathf.Sqrt(2f * 100 * _gravity);
+                _velocity.Y = _finalVelocity;
                 _isJumping = true;
             }
 
-            velocity.Y += _gravity * Time.DeltaTime;
+            if (!_isJumping) _velocity.Y = 0;
+            else _velocity.Y += _gravity.Y * Time.DeltaTime * _scale;
 
-            var movement = velocity * Time.DeltaTime;
-
+            var movement = _velocity * Time.DeltaTime;
             var res = _mover.CalculateMovement(ref movement, out var result);
             _subpixelVector.Update(ref movement);
             _mover.ApplyMovement(movement);
 
-            Console.WriteLine(_collider.CollidesWithAny(out var collisionResult));
+            FSCollisions.CollideFixtures(_fixture, GroundFixture, out var fsResult);
+
+            if (fsResult.Normal.Y < 0)
+            {
+                _isJumping = false;
+            }
         }
 
         private void SetupKeyboardInputs()
@@ -179,11 +214,6 @@ namespace TeamProject3
                 .KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer,
                 _inputMovements[movement].Item1,
                 _inputMovements[movement].Item2));
-        }
-
-        private void HandleInput()
-        {
-            
         }
     }
 }

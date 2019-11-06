@@ -62,6 +62,7 @@ namespace TeamProject3
                     _titleScene.ViewportCenter = new Vector2(
                         GraphicsDevice.Viewport.Width / 2,
                         GraphicsDevice.Viewport.Height / 2);
+                    
                     var transition = new FadeTransition(() => _titleScene);
                     transition.FadeToColor = Color.Black;
                     transition.OnTransitionCompleted = () =>
@@ -85,8 +86,10 @@ namespace TeamProject3
             {
                 var transition = new WindTransition(()
                     => new GameScene(new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)));
+                transition.Duration = 5.0f;
                 StartSceneTransition(transition);
                 _startButton.Deregister();
+                _titleScreenShown = false;
             }
         }
     }

@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Nez;
 using Nez.Sprites;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace TeamProject3.Scene
 {
@@ -40,8 +38,9 @@ namespace TeamProject3.Scene
         public override void Update()
         {
             base.Update();
-            _titleEntity.Position = ViewportCenter;            
-        }
 
+            if (_titleEntity.Position != ViewportCenter)
+                _titleEntity.Position = ViewportCenter;
+        }
     }
 }

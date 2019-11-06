@@ -126,6 +126,20 @@
           "bin/placeholder/Nez.dll": {}
         }
       },
+      "Nez.FarseerPhysics/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "dependencies": {
+          "MonoGame.Framework.DesktopGL.Core": "3.7.0.7",
+          "Nez": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Nez.FarseerPhysics.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Nez.FarseerPhysics.dll": {}
+        }
+      },
       "Nez.Persistence/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.1",
@@ -206,6 +220,20 @@
         },
         "runtime": {
           "bin/placeholder/Nez.dll": {}
+        }
+      },
+      "Nez.FarseerPhysics/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "dependencies": {
+          "MonoGame.Framework.DesktopGL.Core": "3.7.0.7",
+          "Nez": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Nez.FarseerPhysics.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Nez.FarseerPhysics.dll": {}
         }
       },
       "Nez.Persistence/1.0.0": {
@@ -397,6 +425,11 @@
       "path": "D:\\source\\repos\\Nez\\Nez.Portable\\Nez.csproj",
       "msbuildProject": "D:\\source\\repos\\Nez\\Nez.Portable\\Nez.csproj"
     },
+    "Nez.FarseerPhysics/1.0.0": {
+      "type": "project",
+      "path": "D:\\source\\repos\\Nez\\Nez.FarseerPhysics\\Nez.FarseerPhysics.csproj",
+      "msbuildProject": "D:\\source\\repos\\Nez\\Nez.FarseerPhysics\\Nez.FarseerPhysics.csproj"
+    },
     "Nez.Persistence/1.0.0": {
       "type": "project",
       "path": "D:\\source\\repos\\Nez\\Nez.Persistence\\Nez.Persistence.csproj",
@@ -408,6 +441,7 @@
       "MonoGame.Content.Builder >= 3.7.0.9",
       "MonoGame.Framework.DesktopGL.Core >= 3.7.0.7",
       "Nez >= 1.0.0",
+      "Nez.FarseerPhysics >= 1.0.0",
       "Nez.Persistence >= 1.0.0"
     ]
   },
@@ -442,6 +476,9 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
+            "D:\\source\\repos\\Nez\\Nez.FarseerPhysics\\Nez.FarseerPhysics.csproj": {
+              "projectPath": "D:\\source\\repos\\Nez\\Nez.FarseerPhysics\\Nez.FarseerPhysics.csproj"
+            },
             "D:\\source\\repos\\Nez\\Nez.Persistence\\Nez.Persistence.csproj": {
               "projectPath": "D:\\source\\repos\\Nez\\Nez.Persistence\\Nez.Persistence.csproj"
             },

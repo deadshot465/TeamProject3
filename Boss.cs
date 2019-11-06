@@ -62,6 +62,9 @@ namespace TeamProject3
         private int _currentPhase = 0;
         private readonly float _projectileVelocity;
 
+        public float Width => _spriteAnimator.Width;
+        public float Height => _spriteAnimator.Height;
+
         private BossSettings _bossSettings;
 
         private enum Attacks
@@ -87,7 +90,6 @@ namespace TeamProject3
             _animationFramerate = _bossSettings.AnimationFramerate;
             _startPosition = startPosition;
             _projectileVelocity = _bossSettings.ProjectileVelocity;
-
 
             _attackHandlers.Add(ChainAttack);
             _attackHandlers.Add(RangeAttack);
@@ -149,9 +151,7 @@ namespace TeamProject3
                 spriteAtlas.ToArray()[9..12], _animationFramerate));
 
             _mover = Entity.AddComponent<Mover>();
-            _collider = Entity.AddComponent<BoxCollider>();
-            Flags.SetFlagExclusive(ref _collider.CollidesWithLayers, 0);
-            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, 1);
+            //_collider = Entity.GetComponent<BoxCollider>();
 
             Entity.Position = _startPosition;
 

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Nez;
 using Nez.Sprites;
-using Nez.Textures;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace TeamProject3.Scene
 {
@@ -40,7 +36,8 @@ namespace TeamProject3.Scene
         public override void Update()
         {
             base.Update();
-            _splashScreenEntity.Position = ViewportCenter;
+            if (_splashScreenEntity.Position != ViewportCenter)
+                _splashScreenEntity.Position = ViewportCenter;
         }
     }
 }

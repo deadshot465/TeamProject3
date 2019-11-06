@@ -12,6 +12,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez", "D:\source\repos\Nez\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez.Persistence", "D:\source\repos\Nez\Nez.Persistence\Nez.Persistence.csproj", "{DC817B43-7883-45D0-B769-55E11163AF37}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez.FarseerPhysics", "D:\source\repos\Nez\Nez.FarseerPhysics\Nez.FarseerPhysics.csproj", "{3AFA1B21-36F2-4849-A42F-615C43AC2D96}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{DC817B43-7883-45D0-B769-55E11163AF37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC817B43-7883-45D0-B769-55E11163AF37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC817B43-7883-45D0-B769-55E11163AF37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AFA1B21-36F2-4849-A42F-615C43AC2D96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AFA1B21-36F2-4849-A42F-615C43AC2D96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AFA1B21-36F2-4849-A42F-615C43AC2D96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AFA1B21-36F2-4849-A42F-615C43AC2D96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
