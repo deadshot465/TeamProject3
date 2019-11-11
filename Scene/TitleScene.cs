@@ -22,6 +22,8 @@ namespace TeamProject3.Scene
 
             var title = Content.Load<Texture2D>("sample_titlescreen");
             _titleEntity = CreateEntity("sample-titlescreen");
+            _titleEntity.Position =
+                new Vector2(Helper.ScreenWidth / 2, Helper.ScreenHeight / 2);
             _titleEntity.AddComponent(new SpriteRenderer(title));
         }
 
@@ -38,9 +40,6 @@ namespace TeamProject3.Scene
         public override void Update()
         {
             base.Update();
-
-            if (_titleEntity.Position != ViewportCenter)
-                _titleEntity.Position = ViewportCenter;
         }
     }
 }

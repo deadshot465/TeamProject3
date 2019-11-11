@@ -8,7 +8,6 @@ namespace TeamProject3.Scene
     public class SplashScene :Nez.Scene
     {
         private Entity _splashScreenEntity;
-        public Vector2 ViewportCenter { get; set; } = Vector2.Zero;
 
         public SplashScene()
         {
@@ -20,6 +19,8 @@ namespace TeamProject3.Scene
 
             var splashScreen = Content.Load<Texture2D>("splash_screen");
             _splashScreenEntity = CreateEntity("splash-screen");
+            _splashScreenEntity.Position =
+                new Vector2(Helper.ScreenWidth / 2, Helper.ScreenHeight / 2);
             _splashScreenEntity.AddComponent(new SpriteRenderer(splashScreen));
         }
 
@@ -36,8 +37,6 @@ namespace TeamProject3.Scene
         public override void Update()
         {
             base.Update();
-            if (_splashScreenEntity.Position != ViewportCenter)
-                _splashScreenEntity.Position = ViewportCenter;
         }
     }
 }

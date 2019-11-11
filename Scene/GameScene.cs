@@ -45,6 +45,7 @@ namespace TeamProject3.Scene
             _playerEntity
                 .AddComponent(new Player(200.0f, _startPosition, _animationFramerate));
             _followCamera = Camera.Entity.AddComponent(new FollowCamera(_playerEntity));
+            Camera.Entity.AddComponent<CameraShake>();
             //_playerCollider = _playerCharacterEntity.AddComponent<BoxCollider>();
 
             _bossEntity = CreateEntity("boss-entity");
@@ -100,6 +101,11 @@ namespace TeamProject3.Scene
                 {
                     _followCamera.Camera.ZoomIn(0.5f);
                 });
+            }
+
+            if (Input.IsKeyPressed(Keys.S))
+            {
+                Camera.Entity.GetComponent<CameraShake>().Shake();
             }
         }
 

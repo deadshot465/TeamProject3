@@ -12,7 +12,7 @@ namespace TeamProject3
     {
         public readonly Vector2 Speed = new Vector2(150);
         public readonly float AnimationFramerate = 20.0f;
-        public readonly float ProjectileVelocity = -350.0f;
+        public readonly float ProjectileVelocity = 350.0f;
         public readonly string AnimationFileName = "monster_dknight1";
         public readonly int AnimationFrameWidth = 94;
         public readonly int AnimationFrameHeight = 100;
@@ -59,26 +59,35 @@ namespace TeamProject3
         private bool _timerStarted = false;
         private bool _attackStarted = false;
         private BoxCollider _collider;
-        private int _currentPhase = 0;
+        private int _currentAttack = 0;
+        private int _currentAttackTick = 0;
         private readonly float _projectileVelocity;
+        private float _bossDirection = 0;
 
         public float Width => _spriteAnimator.Width;
         public float Height => _spriteAnimator.Height;
 
         private BossSettings _bossSettings;
 
-        private enum Attacks
+        private enum BossStage
         {
-            ChainAttack,
-            RangeAttack,
-            Dash,
-            JumpAttack,
-            FullscreenAttack,
-            ComboAttack
+            One, Two, Three
         }
+
+        private enum BossAttacks
+        {
+            ChainAttack, RangeAttack, Dash,
+            JumpAttack, FullscreenAttack, ShieldAttack
+        }
+
+        private BossStage _currentStage = BossStage.One;
 
         private delegate void AttackHandler();
         private List<AttackHandler> _attackHandlers = new List<AttackHandler>();
+        private List<AttackHandler> _bossPhaseHandlers = new List<AttackHandler>();
+
+        private delegate void MovePhaseHandler(bool movePhase, int? phase);
+        private List<MovePhaseHandler> _movePhaseHandlers = new List<MovePhaseHandler>();
 
         public Vector2 Speed { get; private set; }
 
@@ -96,7 +105,11 @@ namespace TeamProject3
             _attackHandlers.Add(Dash);
             _attackHandlers.Add(JumpAttack);
             _attackHandlers.Add(FullscreenAttack);
-            _attackHandlers.Add(ComboAttack);
+            _attackHandlers.Add(ShieldAttack);
+
+            _bossPhaseHandlers.Add(StageOneAttack);
+            _bossPhaseHandlers.Add(StageTwoAttack);
+            _bossPhaseHandlers.Add(StageThreeAttack);
         }
 
         void ITriggerListener.OnTriggerEnter(Collider other, Collider local)
@@ -111,9 +124,13 @@ namespace TeamProject3
 
         void IUpdatable.Update()
         {
+            var playEntity = Entity.Scene.FindEntity("player-entity");
+            _bossDirection = (playEntity.Position.X < Entity.Position.X) ? -1.0f : 1.0f;
+            _spriteAnimator.FlipX = (_bossDirection < 0) ? true : false;
+
             if (!_timerStarted)
             {
-                _nextAttackDuration = Random.Range(3.0f, 6.0f);
+                _nextAttackDuration = Random.Range(2.5f, 3.5f);
                 _timerStarted = true;
             }
 
@@ -121,7 +138,7 @@ namespace TeamProject3
             {
                 _attackStarted = true;
 
-                _attackHandlers[_currentPhase].Invoke();
+                _bossPhaseHandlers[(int)_currentStage].Invoke();
             }
 
             _elapsedTime += Time.DeltaTime;
@@ -155,7 +172,7 @@ namespace TeamProject3
 
             Entity.Position = _startPosition;
 
-            _spriteAnimator.Play("WalkLeft", SpriteAnimator.LoopMode.Loop);
+            _spriteAnimator.Play("WalkRight", SpriteAnimator.LoopMode.Loop);
         }
 
         public override void OnRemovedFromEntity()
@@ -165,31 +182,31 @@ namespace TeamProject3
 
         private void ChainAttack()
         {
-            var tween = Entity.TweenPositionTo(new Vector2(-350, 0), 2.0f)
-                .SetFrom(Entity.Position)
-                .SetIsRelative()
-                .SetEaseType(EaseType.Linear);
-
-            tween.SetCompletionHandler(_tween =>
-            {
-                var secondTween = Entity.TweenPositionTo(new Vector2(-100, 0), _bossSettings.PunchDuration)
+            var tween = Entity
+                .TweenPositionTo(new Vector2(100 * _bossDirection, 0), _bossSettings.PunchDuration)
                 .SetFrom(Entity.Position)
                 .SetIsRelative()
                 .SetEaseType(EaseType.Punch)
                 .SetLoops(LoopType.RestartFromBeginning, _bossSettings.PunchLoops);
 
+            tween.SetCompletionHandler(_tween =>
+            {
+                _bossDirection *= -1;
+                _spriteAnimator.FlipX = !_spriteAnimator.FlipX;
+
+                var secondTween = Entity.TweenPositionTo(new Vector2(100 * _bossDirection, 0), _bossSettings.PunchDuration)
+                .SetFrom(Entity.Position)
+                .SetIsRelative()
+                .SetEaseType(EaseType.Punch)
+                .SetLoops(LoopType.None, 1);
+
                 secondTween.SetCompletionHandler(_secondTween =>
                 {
-                    var thirdTween = Entity.TweenPositionTo(new Vector2(350, 0), 3.0f)
-                    .SetFrom(Entity.Position)
-                    .SetIsRelative()
-                    .SetEaseType(EaseType.Linear)
-                    .SetCompletionHandler(_thirdTween =>
-                    {
-                        MoveToNextPhase();
-                    });
+                    _bossDirection *= -1;
+                    _spriteAnimator.FlipX = !_spriteAnimator.FlipX;
 
-                    thirdTween.Start();
+                    MoveToNextPhase();
+
                 }).Start();
 
             }).Start();
@@ -202,7 +219,8 @@ namespace TeamProject3
             entity.AddComponent(ParticleSystem
                 .CreateEmitter(ParticleSystem.ParticleType.Sun));
             entity.AddComponent<ProjectileMover>();
-            entity.AddComponent(new ProjectileController(new Vector2(_projectileVelocity, 0)));
+            entity.AddComponent(new ProjectileController(
+                new Vector2(_projectileVelocity * _bossDirection, 0)));
 
             var collider = entity.AddComponent<CircleCollider>();
             Flags.SetFlagExclusive(ref collider.CollidesWithLayers, 0);
@@ -213,19 +231,13 @@ namespace TeamProject3
 
         private void Dash()
         {
-            var tween = Entity.TweenPositionTo(new Vector2(-350, 0), _bossSettings.DashDuration)
+            var tween = Entity.TweenPositionTo(new Vector2(350 * _bossDirection, 0), _bossSettings.DashDuration)
                 .SetFrom(Entity.Position)
                 .SetIsRelative()
                 .SetEaseType(_bossSettings.DashEaseType)
                 .SetCompletionHandler(_tween =>
                 {
-                    var secondTween = Entity.TweenPositionTo(new Vector2(350, 0), 3.0f)
-                    .SetFrom(Entity.Position)
-                    .SetIsRelative()
-                    .SetEaseType(EaseType.Linear)
-                    .SetCompletionHandler(_secondTween => MoveToNextPhase());
-
-                    secondTween.Start();
+                    MoveToNextPhase();
                 });
 
             tween.Start();
@@ -285,17 +297,47 @@ namespace TeamProject3
             MoveToNextPhase();
         }
 
-        private void ComboAttack()
+        private void ShieldAttack()
         {
 
         }
 
-        private void MoveToNextPhase()
+        private void MoveToNextPhase(bool movePhase = false, int? phase = null)
         {
             _attackStarted = false;
             _timerStarted = false;
             _elapsedTime = 0.0f;
-            _currentPhase = (_currentPhase + 1) % 5;
+
+            if (movePhase && phase.HasValue)
+            {
+                _currentAttack = phase.Value;
+            }
+        }
+
+        private void StageOneAttack()
+        {
+            if (_currentAttackTick == 2)
+            {
+                MoveToNextPhase(true, (int)BossAttacks.RangeAttack);
+            }
+            else if (_currentAttackTick == 5)
+            {
+                MoveToNextPhase(true, (int)BossAttacks.Dash);
+            }
+            else
+                MoveToNextPhase(true, (int)BossAttacks.ChainAttack);
+
+            _attackHandlers[_currentAttack].Invoke();
+            _currentAttackTick = (_currentAttackTick + 1) % 6;
+        }
+
+        private void StageTwoAttack()
+        {
+        }
+
+        private void StageThreeAttack()
+        {
+
         }
     }
 }

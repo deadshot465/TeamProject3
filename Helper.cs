@@ -7,6 +7,9 @@ namespace TeamProject3
     {
         private static Random _random = new Random();
 
+        public static int ScreenWidth => 1920;
+        public static int ScreenHeight => 1080;
+
         public static void Shuffle<T>(this IList<T> collection)
         {
             var n = collection.Count;
