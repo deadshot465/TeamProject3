@@ -4,7 +4,9 @@ using Nez;
 using Nez.Sprites;
 using Nez.Textures;
 using Nez.Tweens;
+using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 
 namespace TeamProject3
 {
@@ -23,10 +25,10 @@ namespace TeamProject3
         public readonly EaseType DashEaseType = EaseType.BackIn;
         public readonly float DashDuration = 1.0f;
                 
-        public readonly Vector2 FirstStepJumpOffset = new Vector2(-175, -200);
+        public readonly Vector2 FirstStepJumpOffset = new Vector2(175, -200);
         public readonly EaseType FirstStepJumpEaseType = EaseType.CircIn;
         public readonly float FirstStepJumpDuration = 1.5f;
-        public readonly Vector2 SecondStepJumpOffset = new Vector2(-175, 200);
+        public readonly Vector2 SecondStepJumpOffset = new Vector2(175, 200);
         public readonly EaseType SecondStepJumpEaseType = EaseType.BackIn;
         public readonly float SecondStepJumpDuration = 1.0f;
 
@@ -84,10 +86,12 @@ namespace TeamProject3
 
         private delegate void AttackHandler();
         private List<AttackHandler> _attackHandlers = new List<AttackHandler>();
-        private List<AttackHandler> _bossPhaseHandlers = new List<AttackHandler>();
 
-        private delegate void MovePhaseHandler(bool movePhase, int? phase);
-        private List<MovePhaseHandler> _movePhaseHandlers = new List<MovePhaseHandler>();
+        private delegate void PhaseHandler(int patterns);
+        private List<PhaseHandler> _bossPhaseHandlers = new List<PhaseHandler>();
+
+        private List<Action> _movePhaseHandlers
+            = new List<Action>();
 
         public Vector2 Speed { get; private set; }
 
@@ -107,9 +111,25 @@ namespace TeamProject3
             _attackHandlers.Add(FullscreenAttack);
             _attackHandlers.Add(ShieldAttack);
 
-            _bossPhaseHandlers.Add(StageOneAttack);
-            _bossPhaseHandlers.Add(StageTwoAttack);
-            _bossPhaseHandlers.Add(StageThreeAttack);
+            _bossPhaseHandlers.Add(StageAttack);
+            _bossPhaseHandlers.Add(StageAttack);
+            _bossPhaseHandlers.Add(StageAttack);
+
+            Action[] actions = new Action[]
+            {
+                () => MoveToNextPhase(true, (int)BossAttacks.ChainAttack),
+                () => MoveToNextPhase(true, (int)BossAttacks.RangeAttack),
+                () => MoveToNextPhase(true, (int)BossAttacks.Dash)
+            };
+
+            _movePhaseHandlers.Add(actions[0]);
+            _movePhaseHandlers.Add(actions[0]);
+            _movePhaseHandlers.Add(actions[1]);
+            _movePhaseHandlers.Add(actions[0]);
+            _movePhaseHandlers.Add(actions[0]);
+            _movePhaseHandlers.Add(actions[2]);
+
+            MoveToNextStage(BossStage.Three);
         }
 
         void ITriggerListener.OnTriggerEnter(Collider other, Collider local)
@@ -130,7 +150,7 @@ namespace TeamProject3
 
             if (!_timerStarted)
             {
-                _nextAttackDuration = Random.Range(2.5f, 3.5f);
+                _nextAttackDuration = Nez.Random.Range(2.5f, 3.5f);
                 _timerStarted = true;
             }
 
@@ -138,7 +158,13 @@ namespace TeamProject3
             {
                 _attackStarted = true;
 
-                _bossPhaseHandlers[(int)_currentStage].Invoke();
+                _bossPhaseHandlers[(int)_currentStage].Invoke(_currentStage switch
+                {
+                    BossStage.One => 6,
+                    BossStage.Two => 16,
+                    BossStage.Three => 37,
+                    _ => 0
+                });
             }
 
             _elapsedTime += Time.DeltaTime;
@@ -245,34 +271,28 @@ namespace TeamProject3
 
         private void JumpAttack()
         {
+            var firstOffset = _bossSettings.FirstStepJumpOffset;
+            firstOffset.X *= _bossDirection;
+            var secondOffset = _bossSettings.SecondStepJumpOffset;
+            secondOffset.X *= _bossDirection;
+
             var tween = Entity
-                .TweenPositionTo(_bossSettings.FirstStepJumpOffset, _bossSettings.FirstStepJumpDuration)
+                .TweenPositionTo(firstOffset, _bossSettings.FirstStepJumpDuration)
                 .SetFrom(Entity.Position)
                 .SetIsRelative()
                 .SetEaseType(_bossSettings.FirstStepJumpEaseType)
                 .SetCompletionHandler(_tween =>
                 {
                     var secondTween = Entity
-                    .TweenPositionTo(_bossSettings.SecondStepJumpOffset, _bossSettings.SecondStepJumpDuration)
+                    .TweenPositionTo(secondOffset, _bossSettings.SecondStepJumpDuration)
                     .SetFrom(Entity.Position)
                     .SetIsRelative()
                     .SetEaseType(_bossSettings.SecondStepJumpEaseType)
-                    .SetCompletionHandler(_secondTween => {
+                    .SetCompletionHandler(_secondTween => MoveToNextPhase());
 
-                        var thirdTween = Entity.TweenPositionTo(new Vector2(350, 0), 2.0f)
-                        .SetFrom(Entity.Position)
-                        .SetIsRelative()
-                        .SetEaseType(EaseType.Linear)
-                        .SetCompletionHandler(_thirdTween => MoveToNextPhase());
-
-                        thirdTween.Start();
-                    });
-
-                    _spriteAnimator.Play("WalkLeft", SpriteAnimator.LoopMode.Loop);
                     secondTween.Start();
                 });
 
-            _spriteAnimator.Play("WalkDown", SpriteAnimator.LoopMode.Loop);
             tween.Start();
         }
 
@@ -299,7 +319,14 @@ namespace TeamProject3
 
         private void ShieldAttack()
         {
-
+            var tween = Entity
+                .TweenPositionTo(new Vector2(50 * _bossDirection, 0), 0.5f)
+                .SetFrom(Entity.Position)
+                .SetIsRelative()
+                .SetEaseType(EaseType.ExpoIn)
+                .SetCompletionHandler(_tween => MoveToNextPhase());
+            
+            tween.Start();
         }
 
         private void MoveToNextPhase(bool movePhase = false, int? phase = null)
@@ -314,30 +341,102 @@ namespace TeamProject3
             }
         }
 
-        private void StageOneAttack()
+        private void MoveToNextStage(BossStage stage)
         {
-            if (_currentAttackTick == 2)
+            _movePhaseHandlers.Clear();
+            _currentAttackTick = 0;
+
+            Action[] actions = new Action[]
             {
-                MoveToNextPhase(true, (int)BossAttacks.RangeAttack);
-            }
-            else if (_currentAttackTick == 5)
+                () => MoveToNextPhase(true, (int)BossAttacks.ChainAttack),
+                () => MoveToNextPhase(true, (int)BossAttacks.RangeAttack),
+                () => MoveToNextPhase(true, (int)BossAttacks.Dash),
+                () => MoveToNextPhase(true, (int)BossAttacks.JumpAttack),
+                () => MoveToNextPhase(true, (int)BossAttacks.ShieldAttack),
+                () => MoveToNextPhase(true, (int)BossAttacks.FullscreenAttack)
+            };
+
+            switch (stage)
             {
-                MoveToNextPhase(true, (int)BossAttacks.Dash);
+                case BossStage.One:
+                    break;
+                case BossStage.Two:
+                    {
+                        _movePhaseHandlers.Add(actions[0]);
+                        _movePhaseHandlers.Add(actions[1]);
+                        _movePhaseHandlers.Add(actions[2]);
+                        _movePhaseHandlers.Add(actions[3]);
+                        _movePhaseHandlers.Add(actions[0]);
+                        _movePhaseHandlers.Add(actions[2]);
+                        _movePhaseHandlers.Add(actions[0]);
+                        _movePhaseHandlers.Add(actions[4]);
+                        _movePhaseHandlers.Add(actions[1]);
+                        _movePhaseHandlers.Add(actions[2]);
+                        _movePhaseHandlers.Add(actions[1]);
+                        _movePhaseHandlers.Add(actions[4]);
+                        _movePhaseHandlers.Add(actions[3]);
+                        _movePhaseHandlers.Add(actions[2]);
+                        _movePhaseHandlers.Add(actions[3]);
+                        _movePhaseHandlers.Add(actions[4]);
+
+                        break;
+                    }
+                case BossStage.Three:
+                    {
+                        _movePhaseHandlers.Add(actions[0]);
+                        _movePhaseHandlers.Add(actions[4]);
+                        _movePhaseHandlers.Add(actions[1]);
+                        _movePhaseHandlers.Add(actions[4]);
+                        _movePhaseHandlers.Add(actions[3]);
+                        _movePhaseHandlers.Add(actions[4]);
+                        _movePhaseHandlers.Add(actions[0]);
+                        _movePhaseHandlers.Add(actions[2]);
+                        _movePhaseHandlers.Add(actions[1]);
+                        _movePhaseHandlers.Add(actions[2]);
+                        _movePhaseHandlers.Add(actions[3]);
+                        _movePhaseHandlers.Add(actions[2]);
+                        _movePhaseHandlers.Add(actions[5]);
+
+                        _movePhaseHandlers.Add(actions[0]);
+                        _movePhaseHandlers.Add(actions[1]);
+                        _movePhaseHandlers.Add(actions[2]);
+                        _movePhaseHandlers.Add(actions[3]);
+                        _movePhaseHandlers.Add(actions[0]);
+                        _movePhaseHandlers.Add(actions[2]);
+                        _movePhaseHandlers.Add(actions[1]);
+                        _movePhaseHandlers.Add(actions[2]);
+                        _movePhaseHandlers.Add(actions[3]);
+                        _movePhaseHandlers.Add(actions[2]);
+                        _movePhaseHandlers.Add(actions[5]);
+
+                        _movePhaseHandlers.Add(actions[0]);
+                        _movePhaseHandlers.Add(actions[4]);
+                        _movePhaseHandlers.Add(actions[1]);
+                        _movePhaseHandlers.Add(actions[2]);
+                        _movePhaseHandlers.Add(actions[3]);
+                        _movePhaseHandlers.Add(actions[4]);
+                        _movePhaseHandlers.Add(actions[0]);
+                        _movePhaseHandlers.Add(actions[2]);
+                        _movePhaseHandlers.Add(actions[1]);
+                        _movePhaseHandlers.Add(actions[4]);
+                        _movePhaseHandlers.Add(actions[3]);
+                        _movePhaseHandlers.Add(actions[2]);
+                        _movePhaseHandlers.Add(actions[5]);
+                        break;
+                    }
+                default:
+                    break;
             }
-            else
-                MoveToNextPhase(true, (int)BossAttacks.ChainAttack);
+
+            _currentStage = stage;
+        }
+
+        private void StageAttack(int patterns)
+        {
+            _movePhaseHandlers[_currentAttackTick].Invoke();
 
             _attackHandlers[_currentAttack].Invoke();
-            _currentAttackTick = (_currentAttackTick + 1) % 6;
-        }
-
-        private void StageTwoAttack()
-        {
-        }
-
-        private void StageThreeAttack()
-        {
-
+            _currentAttackTick = (_currentAttackTick + 1) % patterns;
         }
     }
 }
