@@ -6,7 +6,7 @@ using Nez.Textures;
 using Nez.Tweens;
 using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
+using System.Linq;
 
 namespace TeamProject3
 {
@@ -15,12 +15,12 @@ namespace TeamProject3
         public readonly Vector2 Speed = new Vector2(150);
         public readonly float AnimationFramerate = 20.0f;
         public readonly float ProjectileVelocity = 350.0f;
-        public readonly string AnimationFileName = "monster_dknight1";
-        public readonly int AnimationFrameWidth = 94;
-        public readonly int AnimationFrameHeight = 100;
+        public readonly string AnimationFileName = "boss1";
+        public readonly int AnimationFrameWidth = 500;
+        public readonly int AnimationFrameHeight = 500;
                 
-        public readonly int PunchLoops = 2;
-        public readonly float PunchDuration = 0.5f;
+        public readonly int PunchLoops = 1;
+        public readonly float PunchDuration = 1f;
                 
         public readonly EaseType DashEaseType = EaseType.BackIn;
         public readonly float DashDuration = 1.0f;
@@ -93,6 +93,8 @@ namespace TeamProject3
         private List<Action> _movePhaseHandlers
             = new List<Action>();
 
+        Action<string> _attackFinishAction;
+
         public Vector2 Speed { get; private set; }
 
         public Boss(Vector2 startPosition, BossSettings bossSettings)
@@ -130,6 +132,8 @@ namespace TeamProject3
             _movePhaseHandlers.Add(actions[2]);
 
             MoveToNextStage(BossStage.Three);
+
+            _attackFinishAction = animationName => MoveToNextPhase();
         }
 
         void ITriggerListener.OnTriggerEnter(Collider other, Collider local)
@@ -146,7 +150,7 @@ namespace TeamProject3
         {
             var playEntity = Entity.Scene.FindEntity("player-entity");
             _bossDirection = (playEntity.Position.X < Entity.Position.X) ? -1.0f : 1.0f;
-            _spriteAnimator.FlipX = (_bossDirection < 0) ? true : false;
+            _spriteAnimator.FlipX = (_bossDirection < 0) ? false : true;
 
             if (!_timerStarted)
             {
@@ -184,21 +188,23 @@ namespace TeamProject3
                 .SpritesFromAtlas(texture, _bossSettings.AnimationFrameWidth, _bossSettings.AnimationFrameHeight);
             _spriteAnimator = Entity.AddComponent<SpriteAnimator>();
 
-            _spriteAnimator.AddAnimation("WalkDown", new SpriteAnimation(
-                spriteAtlas.ToArray()[0..3], _animationFramerate));
-            _spriteAnimator.AddAnimation("WalkLeft", new SpriteAnimation(
-                spriteAtlas.ToArray()[3..6], _animationFramerate));
-            _spriteAnimator.AddAnimation("WalkRight", new SpriteAnimation(
-                spriteAtlas.ToArray()[6..9], _animationFramerate));
-            _spriteAnimator.AddAnimation("WalkUp", new SpriteAnimation(
-                spriteAtlas.ToArray()[9..12], _animationFramerate));
+            _spriteAnimator.AddAnimation("Idle", new SpriteAnimation(
+                spriteAtlas.ToArray()[0..10], _animationFramerate));
+            _spriteAnimator.AddAnimation("Move", new SpriteAnimation(
+                spriteAtlas.ToArray()[10..20], _animationFramerate));
+            _spriteAnimator.AddAnimation("RaiseSword", new SpriteAnimation(
+                spriteAtlas.ToArray()[20..30], _animationFramerate));
+            _spriteAnimator.AddAnimation("PutdownSword", new SpriteAnimation(
+                spriteAtlas.ToArray()[30..40], _animationFramerate));
+            _spriteAnimator.AddAnimation("Attack", new SpriteAnimation(
+                spriteAtlas.ToArray()[20..40], _animationFramerate));
 
             _mover = Entity.AddComponent<Mover>();
             //_collider = Entity.GetComponent<BoxCollider>();
 
             Entity.Position = _startPosition;
 
-            _spriteAnimator.Play("WalkRight", SpriteAnimator.LoopMode.Loop);
+            _spriteAnimator.Play("Idle", SpriteAnimator.LoopMode.Loop);
         }
 
         public override void OnRemovedFromEntity()
@@ -208,51 +214,51 @@ namespace TeamProject3
 
         private void ChainAttack()
         {
-            var tween = Entity
-                .TweenPositionTo(new Vector2(100 * _bossDirection, 0), _bossSettings.PunchDuration)
-                .SetFrom(Entity.Position)
-                .SetIsRelative()
-                .SetEaseType(EaseType.Punch)
-                .SetLoops(LoopType.RestartFromBeginning, _bossSettings.PunchLoops);
+            _spriteAnimator.Play("RaiseSword", SpriteAnimator.LoopMode.ClampForever);
 
-            tween.SetCompletionHandler(_tween =>
+            Core.Schedule(0.25f, timer =>
             {
-                _bossDirection *= -1;
-                _spriteAnimator.FlipX = !_spriteAnimator.FlipX;
-
-                var secondTween = Entity.TweenPositionTo(new Vector2(100 * _bossDirection, 0), _bossSettings.PunchDuration)
-                .SetFrom(Entity.Position)
-                .SetIsRelative()
-                .SetEaseType(EaseType.Punch)
-                .SetLoops(LoopType.None, 1);
-
-                secondTween.SetCompletionHandler(_secondTween =>
-                {
-                    _bossDirection *= -1;
-                    _spriteAnimator.FlipX = !_spriteAnimator.FlipX;
-
-                    MoveToNextPhase();
-
-                }).Start();
-
-            }).Start();
+                _spriteAnimator.Play("PutdownSword", SpriteAnimator.LoopMode.ClampForever);
+                _spriteAnimator.OnAnimationCompletedEvent += _attackFinishAction;
+            });
         }
 
         private void RangeAttack()
         {
+            _spriteAnimator.Play("RaiseSword", SpriteAnimator.LoopMode.ClampForever);
+
             var entity = Entity.Scene.CreateEntity("projectile");
-            entity.Position = Entity.Position;
-            entity.AddComponent(ParticleSystem
-                .CreateEmitter(ParticleSystem.ParticleType.Sun));
+            entity.Position = new Vector2(Entity.Position.X + (150 * _bossDirection), Entity.Position.Y - 200);
+            var emitter = entity.AddComponent(ParticleSystem
+                .CreateEmitter(ParticleSystem.ParticleType.Charge));
+            emitter.SetRenderLayer(-5);
             entity.AddComponent<ProjectileMover>();
-            entity.AddComponent(new ProjectileController(
-                new Vector2(_projectileVelocity * _bossDirection, 0)));
+            entity.AddComponent(new ProjectileController(Vector2.Zero));
 
             var collider = entity.AddComponent<CircleCollider>();
             Flags.SetFlagExclusive(ref collider.CollidesWithLayers, 0);
             Flags.SetFlagExclusive(ref collider.PhysicsLayer, 1);
 
-            MoveToNextPhase();
+            Core.Schedule(2f, timer => {
+                
+                entity.Destroy();
+
+                _spriteAnimator.Play("PutdownSword", SpriteAnimator.LoopMode.ClampForever);
+                _spriteAnimator.OnAnimationCompletedEvent += _attackFinishAction;
+
+                entity = Entity.Scene.CreateEntity("projectile");
+                entity.Position = new Vector2(Entity.Position.X + (100 * _bossDirection), Entity.Position.Y + 50);
+                var _emitter = entity.AddComponent(ParticleSystem
+                    .CreateEmitter(ParticleSystem.ParticleType.Charge));
+                _emitter.SetRenderLayer(-5);
+                entity.AddComponent<ProjectileMover>();
+                entity.AddComponent(new ProjectileController(
+                    new Vector2(_projectileVelocity * _bossDirection, 0)));
+
+                var _collider = entity.AddComponent<CircleCollider>();
+                Flags.SetFlagExclusive(ref _collider.CollidesWithLayers, 0);
+                Flags.SetFlagExclusive(ref _collider.PhysicsLayer, 1);
+            });
         }
 
         private void Dash()
@@ -265,6 +271,8 @@ namespace TeamProject3
                 {
                     MoveToNextPhase();
                 });
+
+            _spriteAnimator.Play("Move", SpriteAnimator.LoopMode.Loop);
 
             tween.Start();
         }
@@ -293,11 +301,15 @@ namespace TeamProject3
                     secondTween.Start();
                 });
 
+            _spriteAnimator.Play("Move", SpriteAnimator.LoopMode.Loop);
+
             tween.Start();
         }
 
         private void FullscreenAttack()
         {
+            _spriteAnimator.Play("RaiseSword", SpriteAnimator.LoopMode.ClampForever);
+
             var leftEntity = Entity.Scene.CreateEntity("projectile");
             leftEntity.Position = Entity.Position;
             leftEntity.AddComponent(ParticleSystem
@@ -314,7 +326,7 @@ namespace TeamProject3
             rightEntity.GetComponent<ProjectileController>().Velocity *= -1;
             rightEntity.AttachToScene(Entity.Scene);
 
-            MoveToNextPhase();
+            Core.Schedule(2.0f, timer => MoveToNextPhase());
         }
 
         private void ShieldAttack()
@@ -334,6 +346,8 @@ namespace TeamProject3
             _attackStarted = false;
             _timerStarted = false;
             _elapsedTime = 0.0f;
+            _spriteAnimator.Play("Idle", SpriteAnimator.LoopMode.Loop);
+            _spriteAnimator.OnAnimationCompletedEvent -= _attackFinishAction;
 
             if (movePhase && phase.HasValue)
             {

@@ -22,7 +22,6 @@ namespace TeamProject3
                 collection[k] = collection[n];
                 collection[n] = value;
             }
-            
         }
     }
 }

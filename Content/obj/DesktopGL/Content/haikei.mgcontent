@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/monster_dknight1.png</SourceFile>
-  <SourceTime>2015-10-26T11:36:32+09:00</SourceTime>
-  <DestFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/bin/DesktopGL/monster_dknight1.xnb</DestFile>
-  <DestTime>2019-11-05T23:51:51.7875229+09:00</DestTime>
+  <SourceFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/haikei.PNG</SourceFile>
+  <SourceTime>2019-11-18T13:46:48.0500884+09:00</SourceTime>
+  <DestFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/bin/DesktopGL/Content/haikei.xnb</DestFile>
+  <DestTime>2019-11-18T13:54:58.0755629+09:00</DestTime>
   <Importer>TextureImporter</Importer>
-  <ImporterTime>2018-12-09T01:35:54+09:00</ImporterTime>
+  <ImporterTime>2018-08-05T14:17:44+09:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
-  <ProcessorTime>2018-12-09T01:35:54+09:00</ProcessorTime>
+  <ProcessorTime>2018-08-05T14:17:44+09:00</ProcessorTime>
   <Parameters>
     <Key>ColorKeyColor</Key>
     <Value>255,0,255,255</Value>

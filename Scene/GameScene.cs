@@ -19,8 +19,8 @@ namespace TeamProject3.Scene
         private const float _projectileVelocity = 350.0f;
         private Vector2 _startPosition = new Vector2(250.0f, 100.0f);
 
-        private BoxCollider _playerCollider;
-        private BoxCollider _bossCollider;
+        private RenderLayerRenderer _defaultRenderer;
+        private RenderLayerRenderer _effectRenderer;
 
         private FollowCamera _followCamera;
 
@@ -34,6 +34,9 @@ namespace TeamProject3.Scene
         public override void Initialize()
         {
             base.Initialize();
+
+            _defaultRenderer = AddRenderer(new RenderLayerRenderer(0, new[] { 0 }));
+            _effectRenderer = AddRenderer(new RenderLayerRenderer(1, new[] { -5 }));
 
             var world = GetOrCreateSceneComponent<FSWorld>();
 

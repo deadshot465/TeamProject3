@@ -24,3 +24,9 @@ touch
 trippy
 winner
 wu1
+normaleffect
+cremation
+specialeffectready
+feather
+dashready
+punishment

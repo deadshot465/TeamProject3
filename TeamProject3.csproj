@@ -66,7 +66,10 @@
     <None Remove="Content\particle\Blue Galaxy.pex" />
     <None Remove="Content\particle\Comet.pex" />
     <None Remove="Content\particle\Crazy Blue.pex" />
+    <None Remove="Content\particle\cremation.pex" />
+    <None Remove="Content\particle\dashReady.pex" />
     <None Remove="Content\particle\Electrons.pex" />
+    <None Remove="Content\particle\feather.pex" />
     <None Remove="Content\particle\Fire.pex" />
     <None Remove="Content\particle\Foam.pex" />
     <None Remove="Content\particle\Giros Gratis.pex" />
@@ -77,10 +80,14 @@
     <None Remove="Content\particle\JasonChoi_Swirl01.pex" />
     <None Remove="Content\particle\Leaves.pex" />
     <None Remove="Content\particle\Meks Blood Spill.pex" />
+    <None Remove="Content\particle\normalEffect.pex" />
     <None Remove="Content\particle\Plasma Glow.pex" />
+    <None Remove="Content\particle\punishment.pex" />
     <None Remove="Content\particle\Real Popcorn.pex" />
     <None Remove="Content\particle\Shooting Fireball.pex" />
     <None Remove="Content\particle\Snow.pex" />
+    <None Remove="Content\particle\specialEffect.pex" />
+    <None Remove="Content\particle\specialEffectReady.pex" />
     <None Remove="Content\particle\The Sun.pex" />
     <None Remove="Content\particle\Thingy.pex" />
     <None Remove="Content\particle\thingy.png" />
@@ -239,7 +246,16 @@
     <Content Include="Content\particle\Crazy Blue.pex">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\particle\cremation.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\dashReady.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\particle\Electrons.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\feather.pex">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\particle\Fire.pex">
@@ -272,7 +288,13 @@
     <Content Include="Content\particle\Meks Blood Spill.pex">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\particle\normalEffect.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\particle\Plasma Glow.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\punishment.pex">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\particle\Real Popcorn.pex">
@@ -282,6 +304,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\particle\Snow.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\specialEffectReady.pex">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\particle\The Sun.pex">
