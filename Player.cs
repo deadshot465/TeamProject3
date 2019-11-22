@@ -9,7 +9,9 @@ using Nez.Farseer;
 using Nez.Sprites;
 using Nez.Textures;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace TeamProject3
@@ -21,6 +23,13 @@ namespace TeamProject3
         private SpriteAnimator _spriteAnimator;
         private Mover _mover;
         private float _animationFramerate = 0.0f;
+        private const int _animationWidth = 300;
+        private const int _animationHeight = 300;
+        private bool _animationStarted = false;
+        private bool _comboStarted = false;
+        private bool _comboStartedSecondStep = false;
+        private bool _waitForThirdAttack = false;
+        private float _comboTimer = 0.0f;
 
         private BoxCollider _collider;
         private FSRigidBody _rigidBody;
@@ -41,7 +50,8 @@ namespace TeamProject3
 
         private enum Input
         {
-            Attack, Flee, Jump
+            Attack, Flee, Jump,
+            //AttackTwo, AttackThree
         }
 
         private enum Movement
@@ -83,19 +93,24 @@ namespace TeamProject3
         {
             base.OnAddedToEntity();
 
-            var texture = Entity.Scene.Content.Load<Texture2D>("player_revised");
-            var spriteAtlas = Sprite.SpritesFromAtlas(texture, 128, 128);
+            var texture = Entity.Scene.Content.Load<Texture2D>("player");
+            var spriteAtlas = Sprite
+                .SpritesFromAtlas(texture, _animationWidth, _animationHeight);
             _spriteAnimator = Entity.AddComponent<SpriteAnimator>();
+            _spriteAnimator.AddAnimation("idle",
+                new SpriteAnimation(spriteAtlas.ToArray()[0..10], _animationFramerate));
             _spriteAnimator.AddAnimation("running",
-                new SpriteAnimation(spriteAtlas.ToArray()[0..3], _animationFramerate));
-            _spriteAnimator.AddAnimation("guard",
-                new SpriteAnimation(spriteAtlas.ToArray()[3..6], _animationFramerate));
-            _spriteAnimator.AddAnimation("parry",
-                new SpriteAnimation(spriteAtlas.ToArray()[6..9], _animationFramerate));
-            _spriteAnimator.AddAnimation("damage",
-                new SpriteAnimation(spriteAtlas.ToArray()[9..12], _animationFramerate));
-            _spriteAnimator.AddAnimation("prepare",
-                new SpriteAnimation(spriteAtlas.ToArray()[12..15], _animationFramerate));
+                new SpriteAnimation(spriteAtlas.ToArray()[10..20], _animationFramerate));
+            _spriteAnimator.AddAnimation("jump",
+                new SpriteAnimation(spriteAtlas.ToArray()[20..25], _animationFramerate));
+            _spriteAnimator.AddAnimation("flee",
+                new SpriteAnimation(spriteAtlas.ToArray()[30..35], _animationFramerate));
+            _spriteAnimator.AddAnimation("attack_1",
+                new SpriteAnimation(spriteAtlas.ToArray()[40..45], _animationFramerate * 0.75f));
+            _spriteAnimator.AddAnimation("attack_2",
+                new SpriteAnimation(spriteAtlas.ToArray()[50..55], _animationFramerate * 0.75f));
+            _spriteAnimator.AddAnimation("attack_3",
+                new SpriteAnimation(spriteAtlas.ToArray()[60..65], _animationFramerate * 0.75f));
 
             //_collider = Entity.GetComponent<BoxCollider>();
 
@@ -106,10 +121,10 @@ namespace TeamProject3
             _rigidBody = Entity.AddComponent<FSRigidBody>().SetBodyType(BodyType.Dynamic);
             //var _collisionBox = Entity.AddComponent(new FSCollisionBox(_spriteAnimator.Width, _spriteAnimator.Height));
             var vertices = new Vertices();
-            float x1 = FSConvert.ToSimUnits(-64);
-            float x2 = FSConvert.ToSimUnits(64);
-            float y1 = FSConvert.ToSimUnits(-64);
-            float y2 = FSConvert.ToSimUnits(64);
+            float x1 = FSConvert.ToSimUnits(-(_animationWidth / 2));
+            float x2 = FSConvert.ToSimUnits(_animationWidth / 2);
+            float y1 = FSConvert.ToSimUnits(-(_animationHeight / 2));
+            float y2 = FSConvert.ToSimUnits(_animationHeight / 2);
             vertices.Add(new Vector2(x1, y1));
             vertices.Add(new Vector2(x2, y1));
             vertices.Add(new Vector2(x1, y2));
@@ -119,14 +134,11 @@ namespace TeamProject3
             _gravity = FSConvert.ToDisplayUnits(_rigidBody.Body.World.Gravity);
             _finalVelocity = -Mathf.Sqrt(2.0f * _jumpHeight * _gravity.Y);
 
-            _spriteAnimator.OnAnimationCompletedEvent += animationName =>
-            {
-                _spriteAnimator.Play("running", SpriteAnimator.LoopMode.Loop);
-            };
+            _spriteAnimator.OnAnimationCompletedEvent += OnAnimationFinished;
 
             SetupKeyboardInputs();
 
-            _spriteAnimator.Play("running", SpriteAnimator.LoopMode.Loop);
+            _spriteAnimator.Play("idle", SpriteAnimator.LoopMode.Loop);
         }
 
         public override void OnRemovedFromEntity()
@@ -142,6 +154,15 @@ namespace TeamProject3
         void IUpdatable.Update()
         {
             var moveDirection = new Vector2(_inputMovementMappings[Movement.Move].Value, 0);
+
+            if (!_animationStarted || !_comboStarted)
+            {
+                if (moveDirection.X != 0 && _spriteAnimator.CurrentAnimationName != "running")
+                    _spriteAnimator.Play("running", SpriteAnimator.LoopMode.Loop);
+                else if (moveDirection.X == 0 &&
+                    _spriteAnimator.CurrentAnimationName != "idle")
+                    _spriteAnimator.Play("idle", SpriteAnimator.LoopMode.Loop);
+            }
 
             if (moveDirection.X < 0)
             {
@@ -178,6 +199,8 @@ namespace TeamProject3
             {
                 _isJumping = false;
             }
+
+            HandleKeyboardInputs();
         }
 
         private void SetupKeyboardInputs()
@@ -185,6 +208,7 @@ namespace TeamProject3
             _inputKeyMappings.Add(Input.Attack, new VirtualButton());
             _inputKeyMappings.Add(Input.Flee, new VirtualButton());
             _inputKeyMappings.Add(Input.Jump, new VirtualButton());
+            
             _inputMovementMappings.Add(Movement.Move, new VirtualIntegerAxis());
 
             AddInputButton(Input.Attack);
@@ -215,5 +239,68 @@ namespace TeamProject3
                 _inputMovements[movement].Item1,
                 _inputMovements[movement].Item2));
         }
+
+        private void HandleKeyboardInputs()
+        {
+            if (!_animationStarted &&
+                !_comboStarted &&
+                !_comboStartedSecondStep &&
+                    _inputKeyMappings[Input.Attack].IsPressed)
+            {
+                _animationStarted = true;
+                _comboStarted = true;
+                _waitForThirdAttack = true;
+                _spriteAnimator.Play("attack_1", SpriteAnimator.LoopMode.ClampForever);
+                _spriteAnimator.OnAnimationCompletedEvent -= OnAnimationFinished;
+                _spriteAnimator.OnAnimationCompletedEvent += OnAttackThreeFinished;
+            }
+            else if (_comboStarted && !_comboStartedSecondStep &&
+                _inputKeyMappings[Input.Attack].IsPressed)
+            {
+                _animationStarted = true;
+                _comboStarted = true;
+                _comboStartedSecondStep = true;
+                _waitForThirdAttack = true;
+                _comboTimer = 0.0f;
+                _spriteAnimator.Play("attack_2", SpriteAnimator.LoopMode.ClampForever);
+                _spriteAnimator.OnAnimationCompletedEvent -= OnAnimationFinished;
+                _spriteAnimator.OnAnimationCompletedEvent += OnAttackThreeFinished;
+            }
+            else if (_comboStarted &&
+                _comboStartedSecondStep &&
+                _inputKeyMappings[Input.Attack].IsPressed)
+            {
+                _animationStarted = true;
+                _waitForThirdAttack = true;
+                _spriteAnimator.Play("attack_3", SpriteAnimator.LoopMode.ClampForever);
+                _spriteAnimator.OnAnimationCompletedEvent -= OnAnimationFinished;
+                _spriteAnimator.OnAnimationCompletedEvent += OnAttackThreeFinished;
+            }
+
+            if (_comboStarted)
+            {
+                _comboTimer += Time.DeltaTime;
+
+                if (_comboTimer >= 1.0f && !_waitForThirdAttack)
+                {
+                    _comboTimer = 0.0f;
+                    _comboStarted = false;
+                    _comboStartedSecondStep = false;
+                    _animationStarted = false;
+                }
+            }
+        }
+
+        private void OnAttackThreeFinished(string animationName)
+        {
+            Core.Schedule(0.5f, timer =>
+            {
+                _waitForThirdAttack = false;
+                _spriteAnimator.OnAnimationCompletedEvent -= OnAttackThreeFinished;
+                _spriteAnimator.OnAnimationCompletedEvent += OnAnimationFinished;
+            });
+        }
+
+        private void OnAnimationFinished(string animationName) => _animationStarted = false;
     }
 }

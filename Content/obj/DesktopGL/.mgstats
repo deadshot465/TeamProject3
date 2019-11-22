@@ -1,6 +1,7 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/boss1.png","C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/bin/DesktopGL/boss1.xnb","TextureProcessor","Texture2DContent",2922192,40000085,1.542872
+"C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/boss1.png","C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/bin/DesktopGL/boss1.xnb","TextureProcessor","Texture2DContent",4372161,60000085,2.268929
 "C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/haikei.PNG","C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/bin/DesktopGL/haikei.xnb","TextureProcessor","Texture2DContent",1776205,8294485,0.2463425
+"C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/player.png","C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/bin/DesktopGL/player.xnb","TextureProcessor","Texture2DContent",1369844,25200085,0.9494263
 "C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/player_revised.png","C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/bin/DesktopGL/player_revised.xnb","TextureProcessor","Texture2DContent",14104,983125,0.0369348
 "C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/sample_ground.png","C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/bin/DesktopGL/sample_ground.xnb","TextureProcessor","Texture2DContent",198846,1113685,0.0358704
 "C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/sample_titlescreen.png","C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/bin/DesktopGL/sample_titlescreen.xnb","TextureProcessor","Texture2DContent",927807,2073685,0.0827779
