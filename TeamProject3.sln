@@ -8,11 +8,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamProject3", "TeamProject
 		{DC817B43-7883-45D0-B769-55E11163AF37} = {DC817B43-7883-45D0-B769-55E11163AF37}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez", "D:\source\repos\Nez\Nez.Portable\Nez.csproj", "{157C967B-CA8F-4F35-A856-40789C57132A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez", "./Nez/Nez.Portable/Nez.csproj", "{157C967B-CA8F-4F35-A856-40789C57132A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez.Persistence", "D:\source\repos\Nez\Nez.Persistence\Nez.Persistence.csproj", "{DC817B43-7883-45D0-B769-55E11163AF37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez.Persistence", "./Nez/Nez.Persistence/Nez.Persistence.csproj", "{DC817B43-7883-45D0-B769-55E11163AF37}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez.FarseerPhysics", "D:\source\repos\Nez\Nez.FarseerPhysics\Nez.FarseerPhysics.csproj", "{3AFA1B21-36F2-4849-A42F-615C43AC2D96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez.FarseerPhysics", "./Nez/Nez.FarseerPhysics/Nez.FarseerPhysics.csproj", "{3AFA1B21-36F2-4849-A42F-615C43AC2D96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,44 +1,225 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sonic\\OneDrive\\文件\\repos\\TeamProject3\\TeamProject3.csproj": {}
+    "/Users/Deadshot465/Projects/TeamProject3/TeamProject3.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sonic\\OneDrive\\文件\\repos\\TeamProject3\\TeamProject3.csproj": {
+    "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.FarseerPhysics/Nez.FarseerPhysics.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sonic\\OneDrive\\文件\\repos\\TeamProject3\\TeamProject3.csproj",
-        "projectName": "TeamProject3",
-        "projectPath": "C:\\Users\\sonic\\OneDrive\\文件\\repos\\TeamProject3\\TeamProject3.csproj",
-        "packagesPath": "C:\\Users\\sonic\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sonic\\OneDrive\\文件\\repos\\TeamProject3\\obj\\",
+        "projectUniqueName": "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.FarseerPhysics/Nez.FarseerPhysics.csproj",
+        "projectName": "Nez.FarseerPhysics",
+        "projectPath": "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.FarseerPhysics/Nez.FarseerPhysics.csproj",
+        "packagesPath": "/Users/Deadshot465/.nuget/packages/",
+        "outputPath": "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.FarseerPhysics/obj/Nez.FarseerPhysics/",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\sonic\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/Deadshot465/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {
+              "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.Portable/Nez.csproj": {
+                "projectPath": "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.Portable/Nez.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "MonoGame.Framework.DesktopGL.Core": {
+              "target": "Package",
+              "version": "[3.7.0.7, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.100-preview2-014569/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.Persistence/Nez.Persistence.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.Persistence/Nez.Persistence.csproj",
+        "projectName": "Nez.Persistence",
+        "projectPath": "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.Persistence/Nez.Persistence.csproj",
+        "packagesPath": "/Users/Deadshot465/.nuget/packages/",
+        "outputPath": "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.Persistence/obj/Nez.Persistence/",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "/Users/Deadshot465/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.100-preview2-014569/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.Portable/Nez.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.Portable/Nez.csproj",
+        "projectName": "Nez",
+        "projectPath": "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.Portable/Nez.csproj",
+        "packagesPath": "/Users/Deadshot465/.nuget/packages/",
+        "outputPath": "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.Portable/obj/Nez/",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "/Users/Deadshot465/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "MonoGame.Framework.DesktopGL.Core": {
+              "target": "Package",
+              "version": "[3.7.0.7, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[4.6.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.100-preview2-014569/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/Deadshot465/Projects/TeamProject3/TeamProject3.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/Deadshot465/Projects/TeamProject3/TeamProject3.csproj",
+        "projectName": "TeamProject3",
+        "projectPath": "/Users/Deadshot465/Projects/TeamProject3/TeamProject3.csproj",
+        "packagesPath": "/Users/Deadshot465/.nuget/packages/",
+        "outputPath": "/Users/Deadshot465/Projects/TeamProject3/obj/",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "/Users/Deadshot465/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://packages.xenko.com/nuget": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "D:\\source\\repos\\Nez\\Nez.FarseerPhysics\\Nez.FarseerPhysics.csproj": {
-                "projectPath": "D:\\source\\repos\\Nez\\Nez.FarseerPhysics\\Nez.FarseerPhysics.csproj"
+              "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.FarseerPhysics/Nez.FarseerPhysics.csproj": {
+                "projectPath": "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.FarseerPhysics/Nez.FarseerPhysics.csproj"
               },
-              "D:\\source\\repos\\Nez\\Nez.Persistence\\Nez.Persistence.csproj": {
-                "projectPath": "D:\\source\\repos\\Nez\\Nez.Persistence\\Nez.Persistence.csproj"
+              "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.Persistence/Nez.Persistence.csproj": {
+                "projectPath": "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.Persistence/Nez.Persistence.csproj"
               },
-              "D:\\source\\repos\\Nez\\Nez.Portable\\Nez.csproj": {
-                "projectPath": "D:\\source\\repos\\Nez\\Nez.Portable\\Nez.csproj"
+              "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.Portable/Nez.csproj": {
+                "projectPath": "/Users/Deadshot465/Projects/TeamProject3/Nez/Nez.Portable/Nez.csproj"
               }
             }
           }
@@ -73,16 +254,12 @@
           "warn": true,
           "downloadDependencies": [
             {
-              "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-              "version": "[3.1.0-preview3.19555.2, 3.1.0-preview3.19555.2]"
+              "name": "Microsoft.AspNetCore.App.Runtime.osx-x64",
+              "version": "[3.1.0-preview2.19528.8, 3.1.0-preview2.19528.8]"
             },
             {
-              "name": "Microsoft.NETCore.App.Runtime.win-x64",
-              "version": "[3.1.0-preview3.19553.2, 3.1.0-preview3.19553.2]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-              "version": "[3.1.0-preview3.19553.2, 3.1.0-preview3.19553.2]"
+              "name": "Microsoft.NETCore.App.Runtime.osx-x64",
+              "version": "[3.1.0-preview2.19525.6, 3.1.0-preview2.19525.6]"
             }
           ],
           "frameworkReferences": {
@@ -90,200 +267,12 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100-preview3-014645\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.100-preview2-014569/RuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {
-        "win-x64": {
+        "osx-x64": {
           "#import": []
-        }
-      }
-    },
-    "D:\\source\\repos\\Nez\\Nez.FarseerPhysics\\Nez.FarseerPhysics.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "D:\\source\\repos\\Nez\\Nez.FarseerPhysics\\Nez.FarseerPhysics.csproj",
-        "projectName": "Nez.FarseerPhysics",
-        "projectPath": "D:\\source\\repos\\Nez\\Nez.FarseerPhysics\\Nez.FarseerPhysics.csproj",
-        "packagesPath": "C:\\Users\\sonic\\.nuget\\packages\\",
-        "outputPath": "D:\\source\\repos\\Nez\\Nez.FarseerPhysics\\obj\\Nez.FarseerPhysics\\",
-        "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
-        "configFilePaths": [
-          "C:\\Users\\sonic\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "netstandard2.1"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://packages.xenko.com/nuget": {}
-        },
-        "frameworks": {
-          "netstandard2.1": {
-            "projectReferences": {
-              "D:\\source\\repos\\Nez\\Nez.Portable\\Nez.csproj": {
-                "projectPath": "D:\\source\\repos\\Nez\\Nez.Portable\\Nez.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        }
-      },
-      "frameworks": {
-        "netstandard2.1": {
-          "dependencies": {
-            "MonoGame.Framework.DesktopGL.Core": {
-              "target": "Package",
-              "version": "[3.7.0.7, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "NETStandard.Library": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100-preview3-014645\\RuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "D:\\source\\repos\\Nez\\Nez.Persistence\\Nez.Persistence.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "D:\\source\\repos\\Nez\\Nez.Persistence\\Nez.Persistence.csproj",
-        "projectName": "Nez.Persistence",
-        "projectPath": "D:\\source\\repos\\Nez\\Nez.Persistence\\Nez.Persistence.csproj",
-        "packagesPath": "C:\\Users\\sonic\\.nuget\\packages\\",
-        "outputPath": "D:\\source\\repos\\Nez\\Nez.Persistence\\obj\\Nez.Persistence\\",
-        "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
-        "configFilePaths": [
-          "C:\\Users\\sonic\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "netstandard2.1"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://packages.xenko.com/nuget": {}
-        },
-        "frameworks": {
-          "netstandard2.1": {
-            "projectReferences": {}
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        }
-      },
-      "frameworks": {
-        "netstandard2.1": {
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "NETStandard.Library": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100-preview3-014645\\RuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "D:\\source\\repos\\Nez\\Nez.Portable\\Nez.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "D:\\source\\repos\\Nez\\Nez.Portable\\Nez.csproj",
-        "projectName": "Nez",
-        "projectPath": "D:\\source\\repos\\Nez\\Nez.Portable\\Nez.csproj",
-        "packagesPath": "C:\\Users\\sonic\\.nuget\\packages\\",
-        "outputPath": "D:\\source\\repos\\Nez\\Nez.Portable\\obj\\Nez\\",
-        "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
-        "configFilePaths": [
-          "C:\\Users\\sonic\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "netstandard2.1"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://packages.xenko.com/nuget": {}
-        },
-        "frameworks": {
-          "netstandard2.1": {
-            "projectReferences": {}
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        }
-      },
-      "frameworks": {
-        "netstandard2.1": {
-          "dependencies": {
-            "MonoGame.Framework.DesktopGL.Core": {
-              "target": "Package",
-              "version": "[3.7.0.7, )"
-            },
-            "System.Drawing.Common": {
-              "target": "Package",
-              "version": "[4.7.0-preview2.19523.17, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "NETStandard.Library": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100-preview3-014645\\RuntimeIdentifierGraph.json"
         }
       }
     }
