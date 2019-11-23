@@ -9,9 +9,7 @@ using Nez.Farseer;
 using Nez.Sprites;
 using Nez.Textures;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace TeamProject3
@@ -27,9 +25,12 @@ namespace TeamProject3
         private const int _animationHeight = 300;
         private bool _animationStarted = false;
         private bool _comboStarted = false;
-        private bool _comboStartedSecondStep = false;
-        private bool _waitForThirdAttack = false;
+        private bool _movementStarted = false;
+        private bool _waitForNextInput = false;
+        private bool _inputTimerStarted = false;
         private float _comboTimer = 0.0f;
+        private float _inputTimer = 0.0f;
+        private int _comboIndex = 0;
 
         private BoxCollider _collider;
         private FSRigidBody _rigidBody;
@@ -71,6 +72,11 @@ namespace TeamProject3
         private Dictionary<Movement, Tuple<Keys, Keys>> _inputMovements =
             new Dictionary<Movement, Tuple<Keys, Keys>>();
 
+        private string[] _attackStrings = new[]
+        {
+            "attack_1", "attack_2", "attack_3"
+        };
+
         public Player(float speed, Vector2 startPosition, float animationFramerate)
         {
             _speed = speed;
@@ -102,7 +108,7 @@ namespace TeamProject3
             _spriteAnimator.AddAnimation("running",
                 new SpriteAnimation(spriteAtlas.ToArray()[10..20], _animationFramerate));
             _spriteAnimator.AddAnimation("jump",
-                new SpriteAnimation(spriteAtlas.ToArray()[20..25], _animationFramerate));
+                new SpriteAnimation(spriteAtlas.ToArray()[20..25], _animationFramerate * 0.5f));
             _spriteAnimator.AddAnimation("flee",
                 new SpriteAnimation(spriteAtlas.ToArray()[30..35], _animationFramerate));
             _spriteAnimator.AddAnimation("attack_1",
@@ -134,8 +140,6 @@ namespace TeamProject3
             _gravity = FSConvert.ToDisplayUnits(_rigidBody.Body.World.Gravity);
             _finalVelocity = -Mathf.Sqrt(2.0f * _jumpHeight * _gravity.Y);
 
-            _spriteAnimator.OnAnimationCompletedEvent += OnAnimationFinished;
-
             SetupKeyboardInputs();
 
             _spriteAnimator.Play("idle", SpriteAnimator.LoopMode.Loop);
@@ -155,7 +159,7 @@ namespace TeamProject3
         {
             var moveDirection = new Vector2(_inputMovementMappings[Movement.Move].Value, 0);
 
-            if (!_animationStarted || !_comboStarted)
+            if (!_animationStarted && !_comboStarted)
             {
                 if (moveDirection.X != 0 && _spriteAnimator.CurrentAnimationName != "running")
                     _spriteAnimator.Play("running", SpriteAnimator.LoopMode.Loop);
@@ -200,7 +204,16 @@ namespace TeamProject3
                 _isJumping = false;
             }
 
-            HandleKeyboardInputs();
+            if (_inputTimerStarted)
+            {
+                if (_inputTimer > 0.2f)
+                    _inputTimerStarted = false;
+                _inputTimer += Time.DeltaTime;
+            }
+            else
+            {
+                HandleKeyboardInputs();
+            }
         }
 
         private void SetupKeyboardInputs()
@@ -242,65 +255,82 @@ namespace TeamProject3
 
         private void HandleKeyboardInputs()
         {
-            if (!_animationStarted &&
-                !_comboStarted &&
-                !_comboStartedSecondStep &&
-                    _inputKeyMappings[Input.Attack].IsPressed)
+            if (_waitForNextInput)
             {
-                _animationStarted = true;
-                _comboStarted = true;
-                _waitForThirdAttack = true;
-                _spriteAnimator.Play("attack_1", SpriteAnimator.LoopMode.ClampForever);
-                _spriteAnimator.OnAnimationCompletedEvent -= OnAnimationFinished;
-                _spriteAnimator.OnAnimationCompletedEvent += OnAttackThreeFinished;
-            }
-            else if (_comboStarted && !_comboStartedSecondStep &&
-                _inputKeyMappings[Input.Attack].IsPressed)
-            {
-                _animationStarted = true;
-                _comboStarted = true;
-                _comboStartedSecondStep = true;
-                _waitForThirdAttack = true;
-                _comboTimer = 0.0f;
-                _spriteAnimator.Play("attack_2", SpriteAnimator.LoopMode.ClampForever);
-                _spriteAnimator.OnAnimationCompletedEvent -= OnAnimationFinished;
-                _spriteAnimator.OnAnimationCompletedEvent += OnAttackThreeFinished;
-            }
-            else if (_comboStarted &&
-                _comboStartedSecondStep &&
-                _inputKeyMappings[Input.Attack].IsPressed)
-            {
-                _animationStarted = true;
-                _waitForThirdAttack = true;
-                _spriteAnimator.Play("attack_3", SpriteAnimator.LoopMode.ClampForever);
-                _spriteAnimator.OnAnimationCompletedEvent -= OnAnimationFinished;
-                _spriteAnimator.OnAnimationCompletedEvent += OnAttackThreeFinished;
-            }
-
-            if (_comboStarted)
-            {
-                _comboTimer += Time.DeltaTime;
-
-                if (_comboTimer >= 1.0f && !_waitForThirdAttack)
+                if (_comboTimer > 0.5f)
                 {
                     _comboTimer = 0.0f;
-                    _comboStarted = false;
-                    _comboStartedSecondStep = false;
+                    _spriteAnimator.OnAnimationCompletedEvent -= OnAttackFinished;
+                    _comboIndex = 0;
                     _animationStarted = false;
+                    _comboStarted = false;
+                    _waitForNextInput = false;
+                    _movementStarted = false;
+                }
+                _comboTimer += Time.DeltaTime;
+            }
+
+            if (!_movementStarted)
+            {
+                if (_inputKeyMappings[Input.Attack].IsReleased)
+                {
+                    if (!_comboStarted)
+                    {
+                        _comboStarted = true;
+                        _animationStarted = true;
+                        _spriteAnimator.Play(_attackStrings[_comboIndex], SpriteAnimator.LoopMode.ClampForever);
+                        _spriteAnimator.OnAnimationCompletedEvent += OnAttackFinished;
+                    }
+                    else
+                    {
+                        if (_waitForNextInput)
+                        {
+                            _waitForNextInput = false;
+                            _comboTimer = 0.0f;
+                            _spriteAnimator.Play(_attackStrings[_comboIndex], SpriteAnimator.LoopMode.ClampForever);
+                        }
+                    }
+                    _inputTimerStarted = true;
+                }
+                else if (_inputKeyMappings[Input.Jump].IsReleased)
+                {
+                    _spriteAnimator.Play("jump", SpriteAnimator.LoopMode.Once);
+                    _animationStarted = true;
+                    _movementStarted = true;
+                    if (!_comboStarted)
+                        _spriteAnimator.OnAnimationCompletedEvent += OnAnimationFinished;
+                    _inputTimerStarted = true;
+                }
+                else if (_inputKeyMappings[Input.Flee].IsReleased)
+                {
+                    _spriteAnimator.Play("flee", SpriteAnimator.LoopMode.Once);
+                    _animationStarted = true;
+                    _movementStarted = true;
+                    var tween = Entity.TweenPositionTo(
+                        new Vector2(200 * (_spriteAnimator.FlipX ? -1 : 1), 0), 0.5f);
+                    tween.SetFrom(Entity.Position)
+                        .SetIsRelative()
+                        .SetEaseType(Nez.Tweens.EaseType.Linear)
+                        .Start();
+                    if (!_comboStarted)
+                        _spriteAnimator.OnAnimationCompletedEvent += OnAnimationFinished;
+                    _inputTimerStarted = true;
                 }
             }
         }
 
-        private void OnAttackThreeFinished(string animationName)
+        private void OnAttackFinished(string animationName)
         {
-            Core.Schedule(0.5f, timer =>
-            {
-                _waitForThirdAttack = false;
-                _spriteAnimator.OnAnimationCompletedEvent -= OnAttackThreeFinished;
-                _spriteAnimator.OnAnimationCompletedEvent += OnAnimationFinished;
-            });
+            _waitForNextInput = true;
+            _comboTimer = 0.0f;
+            _comboIndex = (_comboIndex + 1) % 3; ;
         }
 
-        private void OnAnimationFinished(string animationName) => _animationStarted = false;
+        private void OnAnimationFinished(string animationName)
+        {
+            _animationStarted = false;
+            _movementStarted = false;
+            _spriteAnimator.OnAnimationCompletedEvent -= OnAnimationFinished;
+        }
     }
 }

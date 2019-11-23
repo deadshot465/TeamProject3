@@ -11,6 +11,7 @@ namespace TeamProject3
     {
         private TitleScene _titleScene;
         private SplashScene _splashScene;
+        private GameScene _gameScene;
         private bool _splashScreenShown = false;
         private bool _titleScreenShown = false;
         private Nez.Scene.SceneResolutionPolicy _sceneResolutionPolicy;
@@ -18,8 +19,7 @@ namespace TeamProject3
         private const int _screenWidth = 1920;
         private const int _screenHeight = 1080;
 
-        public Game1() : base(_screenWidth, _screenHeight,
-            windowTitle: "Team Project 2", isFullScreen: true)
+        public Game1() : base(windowTitle: "Team Project 2", isFullScreen: false)
         {
             _sceneResolutionPolicy = Nez.Scene.SceneResolutionPolicy.ShowAll;
             ExitOnEscapeKeypress = true;
@@ -32,8 +32,6 @@ namespace TeamProject3
 
             // TODO: Add your initialization logic here
             _splashScene = new SplashScene();
-            _splashScene.SetDesignResolution(_screenWidth, _screenHeight,
-                _sceneResolutionPolicy);
 
             Scene = _splashScene;
 
@@ -51,13 +49,13 @@ namespace TeamProject3
         {
             base.Update(gameTime);
 
+            Scene.SetDesignResolution(_screenWidth, _screenHeight, _sceneResolutionPolicy);
+
             if (!_splashScreenShown)
             {
                 Core.Schedule(2.0f, timer =>
                 {
                     _titleScene = new TitleScene();
-                    _titleScene.SetDesignResolution(_screenWidth, _screenHeight,
-                        _sceneResolutionPolicy);
                     
                     var transition = new FadeTransition(() => _titleScene);
                     transition.FadeToColor = Color.Black;
@@ -80,8 +78,9 @@ namespace TeamProject3
 
             if (_startButton.IsPressed)
             {
-                var transition = new WindTransition(()
-                    => new GameScene(new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)));
+                var transition =
+                    new WindTransition(() => new GameScene(
+                        new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)));
                 transition.Duration = 5.0f;
                 StartSceneTransition(transition);
                 _startButton.Deregister();

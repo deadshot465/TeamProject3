@@ -46,7 +46,7 @@ namespace TeamProject3.Scene
 
             _playerEntity = CreateEntity("player-entity");
             _playerEntity
-                .AddComponent(new Player(200.0f, _startPosition, _animationFramerate));
+                .AddComponent(new Player(300.0f, _startPosition, _animationFramerate));
             _followCamera = Camera.Entity.AddComponent(new FollowCamera(_playerEntity));
             Camera.Entity.AddComponent<CameraShake>();
             //_playerCollider = _playerCharacterEntity.AddComponent<BoxCollider>();
