@@ -31,7 +31,7 @@ namespace TeamProject3
 
         public static Tuple<FSRigidBody, Fixture> CreateFarseerFixture(ref Nez.Entity entity,
             BodyType bodyType, float mass,
-            float collisionBoxWidth, float collisionBoxHeight)
+            float collisionBoxWidth, float collisionBoxHeight, float density = 1.0f)
         {
             var rigidBody = entity.AddComponent<FSRigidBody>().SetBodyType(bodyType)
                 .SetMass(mass).SetIsAwake(true).SetIsSleepingAllowed(false);
@@ -44,7 +44,7 @@ namespace TeamProject3
             vertices.Add(new Vector2(x2, y1));
             vertices.Add(new Vector2(x1, y2));
             vertices.Add(new Vector2(x2, y2));
-            var fixture = rigidBody.Body.CreateFixture(new PolygonShape(vertices, 1.0f));
+            var fixture = rigidBody.Body.CreateFixture(new PolygonShape(vertices, density));
             return new Tuple<FSRigidBody, Fixture>(rigidBody, fixture);
         }
     }

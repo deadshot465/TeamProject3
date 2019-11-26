@@ -32,7 +32,6 @@ namespace TeamProject3
         private float _inputTimer = 0.0f;
         private int _comboIndex = 0;
 
-        private BoxCollider _collider;
         private FSRigidBody _rigidBody;
         public Fixture PlayerFixture { get; private set; }
 
@@ -46,6 +45,7 @@ namespace TeamProject3
 
         public float Width => _spriteAnimator.Width;
         public float Height => _spriteAnimator.Height;
+        public BoxCollider Collider { get; private set; }
 
         public Fixture GroundFixture { get; set; }
         public Fixture BossFixture { get; set; }
@@ -119,7 +119,9 @@ namespace TeamProject3
             _spriteAnimator.AddAnimation("attack_3",
                 new SpriteAnimation(spriteAtlas.ToArray()[60..65], _animationFramerate * 0.75f));
 
-            //_collider = Entity.GetComponent<BoxCollider>();
+            Collider = Entity.AddComponent(
+                new BoxCollider(_spriteAnimator.Width / 2,
+                _spriteAnimator.Height));
 
             _mover = Entity.AddComponent<Mover>();
 
@@ -129,6 +131,7 @@ namespace TeamProject3
                 BodyType.Dynamic,
                 -1.0f, _animationWidth / 4, _animationHeight / 2);
             _rigidBody.SetInertia(0.0f).SetFixedRotation(true);
+            PlayerFixture.CollisionGroup = -1;
 
             _gravity = FSConvert.ToDisplayUnits(_rigidBody.Body.World.Gravity);
             _finalVelocity = -Mathf.Sqrt(2.0f * _jumpHeight * _gravity.Y);
@@ -187,6 +190,7 @@ namespace TeamProject3
 
             var movement = _velocity * Time.DeltaTime;
             var res = _mover.CalculateMovement(ref movement, out var result);
+
             _subpixelVector.Update(ref movement);
             _mover.ApplyMovement(movement);
 

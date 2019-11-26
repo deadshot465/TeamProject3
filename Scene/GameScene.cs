@@ -12,8 +12,8 @@ namespace TeamProject3.Scene
 {
     public class GameScene : Nez.Scene
     {
-        private Entity _playerEntity;
-        private Entity _bossEntity;
+        public Entity PlayerEntity;
+        public Entity BossEntity;
         private Entity _groundEntity;
         private const float _animationFramerate = 20.0f;
         private const float _projectileVelocity = 350.0f;
@@ -31,6 +31,8 @@ namespace TeamProject3.Scene
             Viewport = viewportCenter;
         }
 
+        private ulong _count = 0;
+
         public override void Initialize()
         {
             base.Initialize();
@@ -45,17 +47,15 @@ namespace TeamProject3.Scene
             debugView.AppendFlags(FSDebugView.DebugViewFlags.ContactPoints);
             debugView.AppendFlags(FSDebugView.DebugViewFlags.CenterOfMass);
 
-            _playerEntity = CreateEntity("player-entity");
-            _playerEntity
+            PlayerEntity = CreateEntity("player-entity");
+            PlayerEntity
                 .AddComponent(new Player(400.0f, _startPosition, _animationFramerate));
-            _followCamera = Camera.Entity.AddComponent(new FollowCamera(_playerEntity));
+            _followCamera = Camera.Entity.AddComponent(new FollowCamera(PlayerEntity));
             Camera.Entity.AddComponent<CameraShake>();
-            //_playerCollider = _playerCharacterEntity.AddComponent<BoxCollider>();
 
-            _bossEntity = CreateEntity("boss-entity");
-            _bossEntity.AddComponent(new Boss(new Vector2(_startPosition.X + 400,
+            BossEntity = CreateEntity("boss-entity");
+            BossEntity.AddComponent(new Boss(new Vector2(_startPosition.X + 400,
                 _startPosition.Y), BossSettings.ImportBossSettings()));
-            //_bossCollider = _bossEntity.AddComponent<BoxCollider>();
 
             var groundTexture = Content.Load<Texture2D>("sample_ground");
             _groundEntity = CreateEntity("ground");
@@ -74,8 +74,8 @@ namespace TeamProject3.Scene
             vertices.Add(new Vector2(x2, y2));
             var fixture = groundRigidBody.Body.CreateFixture(new PolygonShape(vertices, 1.0f));
 
-            var playerComponent = _playerEntity.GetComponent<Player>();
-            var bossComponent = _bossEntity.GetComponent<Boss>();
+            var playerComponent = PlayerEntity.GetComponent<Player>();
+            var bossComponent = BossEntity.GetComponent<Boss>();
             playerComponent.GroundFixture = fixture;
             bossComponent.GroundFixture = fixture;
             playerComponent.BossFixture = bossComponent.BossFixture;
@@ -120,10 +120,19 @@ namespace TeamProject3.Scene
             var world = GetSceneComponent<FSWorld>().World;
             world.Step(Time.DeltaTime);
 
-            var playerComponent = _playerEntity.GetComponent<Player>();
-            var bossComponent = _bossEntity.GetComponent<Boss>();
+            var playerComponent = PlayerEntity.GetComponent<Player>();
+            var bossComponent = BossEntity.GetComponent<Boss>();
             bossComponent.PlayerFixture = playerComponent.PlayerFixture;
             playerComponent.BossFixture = bossComponent.BossFixture;
+
+            if (System.Math.Abs(PlayerEntity.Position.X - BossEntity.Position.X) < 210)
+            {
+                var hit = Physics.Linecast(PlayerEntity.Position, BossEntity.Position);
+                if (hit.Collider != null)
+                {
+                    System.Console.WriteLine($"Collision Detected!\tCount: {_count++}");
+                }
+            }
         }
 
         private void SetColliderFlags<T>(ref T collider) where T : Collider

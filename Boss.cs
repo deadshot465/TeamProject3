@@ -64,7 +64,6 @@ namespace TeamProject3
         private float _nextAttackDuration = 0.0f;
         private bool _timerStarted = false;
         private bool _attackStarted = false;
-        private BoxCollider _collider;
         private int _currentAttack = 0;
         private int _currentAttackTick = 0;
         private readonly float _projectileVelocity;
@@ -75,6 +74,7 @@ namespace TeamProject3
 
         public float Width => _spriteAnimator.Width;
         public float Height => _spriteAnimator.Height;
+        public BoxCollider Collider { get; private set; }
 
         private BossSettings _bossSettings;
 
@@ -210,7 +210,8 @@ namespace TeamProject3
                 spriteAtlas.ToArray()[20..40], _animationFramerate));
 
             _mover = Entity.AddComponent<Mover>();
-            //_collider = Entity.GetComponent<BoxCollider>();
+            Collider = Entity.AddComponent(
+                new BoxCollider(Width / 2, Height));
 
             Entity.Position = _startPosition;
 
@@ -218,6 +219,7 @@ namespace TeamProject3
                 BodyType.Dynamic, -1.0f,
                 Width / 4, Height / 2);
             _rigidBody.SetInertia(0.0f).SetFixedRotation(true);
+            BossFixture.CollisionGroup = -1;
 
             _spriteAnimator.Play("Idle", SpriteAnimator.LoopMode.Loop);
         }
@@ -277,7 +279,7 @@ namespace TeamProject3
                 var (bulletRigidBody, bulletFixture) = Helper.CreateFarseerFixture(ref entity, BodyType.Kinematic, 0.0f, 75.0f, 75.0f);
                 bulletRigidBody.SetIsBullet(true)
                 .SetIgnoreGravity(true)
-                .SetLinearVelocity(new Vector2(-3.0f, 0.0f));
+                .SetLinearVelocity(new Vector2(3.0f * _bossDirection, 0.0f));
                 bulletFixture.IgnoreCollisionWith(PlayerFixture);
                 bulletFixture.IgnoreCollisionWith(BossFixture);
             });
