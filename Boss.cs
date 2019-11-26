@@ -1,6 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Common;
+using FarseerPhysics.Dynamics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nez;
+using Nez.Farseer;
 using Nez.Sprites;
 using Nez.Textures;
 using Nez.Tweens;
@@ -66,6 +70,9 @@ namespace TeamProject3
         private readonly float _projectileVelocity;
         private float _bossDirection = 0;
 
+        private FSRigidBody _rigidBody;
+        public Fixture BossFixture { get; private set; }
+
         public float Width => _spriteAnimator.Width;
         public float Height => _spriteAnimator.Height;
 
@@ -96,6 +103,8 @@ namespace TeamProject3
         Action<string> _attackFinishAction;
 
         public Vector2 Speed { get; private set; }
+        public Fixture GroundFixture { get; set; }
+        public Fixture PlayerFixture { get; set; }
 
         public Boss(Vector2 startPosition, BossSettings bossSettings)
         {
@@ -131,7 +140,7 @@ namespace TeamProject3
             _movePhaseHandlers.Add(actions[0]);
             _movePhaseHandlers.Add(actions[2]);
 
-            MoveToNextStage(BossStage.Three);
+            MoveToNextStage(BossStage.Two);
 
             _attackFinishAction = animationName => MoveToNextPhase();
         }
@@ -172,6 +181,7 @@ namespace TeamProject3
             }
 
             _elapsedTime += Time.DeltaTime;
+            _rigidBody.SetIsAwake(true).SetIsSleepingAllowed(false);
         }
 
         public override void Initialize()
@@ -204,6 +214,11 @@ namespace TeamProject3
 
             Entity.Position = _startPosition;
 
+            (_rigidBody, BossFixture) = Helper.CreateFarseerFixture(ref Entity,
+                BodyType.Dynamic, -1.0f,
+                Width / 4, Height / 2);
+            _rigidBody.SetInertia(0.0f).SetFixedRotation(true);
+
             _spriteAnimator.Play("Idle", SpriteAnimator.LoopMode.Loop);
         }
 
@@ -235,9 +250,9 @@ namespace TeamProject3
             entity.AddComponent<ProjectileMover>();
             entity.AddComponent(new ProjectileController(Vector2.Zero));
 
-            var collider = entity.AddComponent<CircleCollider>();
-            Flags.SetFlagExclusive(ref collider.CollidesWithLayers, 0);
-            Flags.SetFlagExclusive(ref collider.PhysicsLayer, 1);
+            //var collider = entity.AddComponent<CircleCollider>();
+            //Flags.SetFlagExclusive(ref collider.CollidesWithLayers, 0);
+            //Flags.SetFlagExclusive(ref collider.PhysicsLayer, 1);
 
             Core.Schedule(2f, timer => {
                 
@@ -255,9 +270,16 @@ namespace TeamProject3
                 entity.AddComponent(new ProjectileController(
                     new Vector2(_projectileVelocity * _bossDirection, 0)));
 
-                var _collider = entity.AddComponent<CircleCollider>();
-                Flags.SetFlagExclusive(ref _collider.CollidesWithLayers, 0);
-                Flags.SetFlagExclusive(ref _collider.PhysicsLayer, 1);
+                //var _collider = entity.AddComponent<CircleCollider>();
+                //Flags.SetFlagExclusive(ref _collider.CollidesWithLayers, 0);
+                //Flags.SetFlagExclusive(ref _collider.PhysicsLayer, 1);
+
+                var (bulletRigidBody, bulletFixture) = Helper.CreateFarseerFixture(ref entity, BodyType.Kinematic, 0.0f, 75.0f, 75.0f);
+                bulletRigidBody.SetIsBullet(true)
+                .SetIgnoreGravity(true)
+                .SetLinearVelocity(new Vector2(-3.0f, 0.0f));
+                bulletFixture.IgnoreCollisionWith(PlayerFixture);
+                bulletFixture.IgnoreCollisionWith(BossFixture);
             });
         }
 

@@ -18,7 +18,7 @@ namespace TeamProject3
             Fire, Foam, GirosGratis, Huo1, IntoTheBlue, Flash, RisingUp, Swirl1,
             Leaves, BloodSpill, PlasmaGlow, RealPopCorn, ShootingFireball, Snow,
             Sun, Thingy, TouchUp, Trippy, WinnerStars, Wu1, Sword, Cremation,
-            Charge, FullscreenFeather, DashReady, Punishment
+            Charge, FullscreenFeather, DashReady, Punishment, NormalAttack, Claw
         }
 
         public static void Initialize()

@@ -2,33 +2,33 @@
   <yCoordFlipped value="1" />
   <sourcePosition x="150" y="50" />
   <sourcePositionVariance x="0" y="0" />
-  <speed value="0.00" />
-  <speedVariance value="200.00" />
-  <particleLifeSpan value="0.5000" />
-  <particleLifespanVariance value="0.1000" />
-  <angle value="0" />
-  <angleVariance value="0" />
+  <speed value="225.00" />
+  <speedVariance value="30.00" />
+  <particleLifeSpan value="0.2000" />
+  <particleLifespanVariance value="0.0000" />
+  <angle value="97" />
+  <angleVariance value="29" />
   <gravity x="0" y="0" />
   <radialAcceleration value="0.00" />
   <radialAccelVariance value="0.00" />
   <tangentialAcceleration value="0.00" />
   <tangentialAccelVariance value="0.00" />
-  <startColor red="0.86" green="0.86" blue="0.00" alpha="1.00" />
-  <startColorVariance red="0.39" green="0.39" blue="0.39" alpha="0.50" />
-  <finishColor red="0.21" green="0.01" blue="0.00" alpha="1.00" />
+  <startColor red="0.83" green="0.52" blue="0.18" alpha="1.00" />
+  <startColorVariance red="0.00" green="0.20" blue="0.20" alpha="0.50" />
+  <finishColor red="0.87" green="0.52" blue="0.18" alpha="1.00" />
   <finishColorVariance red="0.00" green="0.00" blue="0.00" alpha="1.00" />
-  <maxParticles value="2000" />
-  <startParticleSize value="100.00" />
-  <startParticleSizeVariance value="100.00" />
-  <finishParticleSize value="0.00" />
+  <maxParticles value="1000" />
+  <startParticleSize value="42.53" />
+  <startParticleSizeVariance value="0.00" />
+  <finishParticleSize value="42.00" />
   <finishParticleSizeVariance value="0.00" />
   <duration value="-1.00" />
-  <emitterType value="0" />
-  <maxRadius value="0.00" />
+  <emitterType value="1" />
+  <maxRadius value="270.00" />
   <maxRadiusVariance value="0.00" />
-  <minRadius value="300.00" />
+  <minRadius value="270.00" />
   <minRadiusVariance value="0.00" />
-  <rotatePerSecond value="360.00" />
+  <rotatePerSecond value="-1000.00" />
   <rotatePerSecondVariance value="0.00" />
   <blendFuncSource value="770" />
   <blendFuncDestination value="1" />

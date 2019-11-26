@@ -34,20 +34,21 @@ namespace TeamProject3
 
         private BoxCollider _collider;
         private FSRigidBody _rigidBody;
-        private Fixture _fixture;
+        public Fixture PlayerFixture { get; private set; }
 
         private float _speed = 0.0f;
         private bool _isJumping = false;
         private Vector2 _gravity;
         private Vector2 _velocity = Vector2.Zero;
         private float _finalVelocity;
-        private const float _jumpHeight = 300.0f;
+        private const float _jumpHeight = 400.0f;
         private const float _scale = 2.0f;
 
         public float Width => _spriteAnimator.Width;
         public float Height => _spriteAnimator.Height;
 
         public Fixture GroundFixture { get; set; }
+        public Fixture BossFixture { get; set; }
 
         private enum Input
         {
@@ -104,13 +105,13 @@ namespace TeamProject3
                 .SpritesFromAtlas(texture, _animationWidth, _animationHeight);
             _spriteAnimator = Entity.AddComponent<SpriteAnimator>();
             _spriteAnimator.AddAnimation("idle",
-                new SpriteAnimation(spriteAtlas.ToArray()[0..10], _animationFramerate));
+                new SpriteAnimation(spriteAtlas.ToArray()[0..10], _animationFramerate * 0.5f));
             _spriteAnimator.AddAnimation("running",
-                new SpriteAnimation(spriteAtlas.ToArray()[10..20], _animationFramerate));
+                new SpriteAnimation(spriteAtlas.ToArray()[10..20], _animationFramerate * 0.5f));
             _spriteAnimator.AddAnimation("jump",
-                new SpriteAnimation(spriteAtlas.ToArray()[20..25], _animationFramerate * 0.5f));
+                new SpriteAnimation(spriteAtlas.ToArray()[20..25], _animationFramerate * 0.75f));
             _spriteAnimator.AddAnimation("flee",
-                new SpriteAnimation(spriteAtlas.ToArray()[30..35], _animationFramerate));
+                new SpriteAnimation(spriteAtlas.ToArray()[30..35], _animationFramerate * 0.45f));
             _spriteAnimator.AddAnimation("attack_1",
                 new SpriteAnimation(spriteAtlas.ToArray()[40..45], _animationFramerate * 0.75f));
             _spriteAnimator.AddAnimation("attack_2",
@@ -124,18 +125,10 @@ namespace TeamProject3
 
             Entity.Position = _startPosition;
 
-            _rigidBody = Entity.AddComponent<FSRigidBody>().SetBodyType(BodyType.Dynamic);
-            //var _collisionBox = Entity.AddComponent(new FSCollisionBox(_spriteAnimator.Width, _spriteAnimator.Height));
-            var vertices = new Vertices();
-            float x1 = FSConvert.ToSimUnits(-(_animationWidth / 2));
-            float x2 = FSConvert.ToSimUnits(_animationWidth / 2);
-            float y1 = FSConvert.ToSimUnits(-(_animationHeight / 2));
-            float y2 = FSConvert.ToSimUnits(_animationHeight / 2);
-            vertices.Add(new Vector2(x1, y1));
-            vertices.Add(new Vector2(x2, y1));
-            vertices.Add(new Vector2(x1, y2));
-            vertices.Add(new Vector2(x2, y2));
-            _fixture = _rigidBody.Body.CreateFixture(new PolygonShape(vertices, 1.0f));
+            (_rigidBody, PlayerFixture) = Helper.CreateFarseerFixture(ref Entity,
+                BodyType.Dynamic,
+                -1.0f, _animationWidth / 4, _animationHeight / 2);
+            _rigidBody.SetInertia(0.0f).SetFixedRotation(true);
 
             _gravity = FSConvert.ToDisplayUnits(_rigidBody.Body.World.Gravity);
             _finalVelocity = -Mathf.Sqrt(2.0f * _jumpHeight * _gravity.Y);
@@ -197,7 +190,7 @@ namespace TeamProject3
             _subpixelVector.Update(ref movement);
             _mover.ApplyMovement(movement);
 
-            FSCollisions.CollideFixtures(_fixture, GroundFixture, out var fsResult);
+            FSCollisions.CollideFixtures(PlayerFixture, GroundFixture, out var fsResult);
 
             if (fsResult.Normal.Y < 0)
             {
@@ -214,6 +207,7 @@ namespace TeamProject3
             {
                 HandleKeyboardInputs();
             }
+            _rigidBody.SetIsAwake(true).SetIsSleepingAllowed(false);
         }
 
         private void SetupKeyboardInputs()
@@ -307,7 +301,7 @@ namespace TeamProject3
                     _animationStarted = true;
                     _movementStarted = true;
                     var tween = Entity.TweenPositionTo(
-                        new Vector2(200 * (_spriteAnimator.FlipX ? -1 : 1), 0), 0.5f);
+                        new Vector2(400 * (_spriteAnimator.FlipX ? -1 : 1), 0), 0.25f);
                     tween.SetFrom(Entity.Position)
                         .SetIsRelative()
                         .SetEaseType(Nez.Tweens.EaseType.Linear)

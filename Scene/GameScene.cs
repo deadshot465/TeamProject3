@@ -43,10 +43,11 @@ namespace TeamProject3.Scene
             var debugView = CreateEntity("debug-view").AddComponent(new FSDebugView(world));
             debugView.AppendFlags(FSDebugView.DebugViewFlags.AABB);
             debugView.AppendFlags(FSDebugView.DebugViewFlags.ContactPoints);
+            debugView.AppendFlags(FSDebugView.DebugViewFlags.CenterOfMass);
 
             _playerEntity = CreateEntity("player-entity");
             _playerEntity
-                .AddComponent(new Player(300.0f, _startPosition, _animationFramerate));
+                .AddComponent(new Player(400.0f, _startPosition, _animationFramerate));
             _followCamera = Camera.Entity.AddComponent(new FollowCamera(_playerEntity));
             Camera.Entity.AddComponent<CameraShake>();
             //_playerCollider = _playerCharacterEntity.AddComponent<BoxCollider>();
@@ -73,7 +74,12 @@ namespace TeamProject3.Scene
             vertices.Add(new Vector2(x2, y2));
             var fixture = groundRigidBody.Body.CreateFixture(new PolygonShape(vertices, 1.0f));
 
-            _playerEntity.GetComponent<Player>().GroundFixture = fixture;
+            var playerComponent = _playerEntity.GetComponent<Player>();
+            var bossComponent = _bossEntity.GetComponent<Boss>();
+            playerComponent.GroundFixture = fixture;
+            bossComponent.GroundFixture = fixture;
+            playerComponent.BossFixture = bossComponent.BossFixture;
+            bossComponent.PlayerFixture = playerComponent.PlayerFixture;
 
             //var collider = _groundEntity.AddComponent<BoxCollider>();
 
@@ -110,6 +116,14 @@ namespace TeamProject3.Scene
             {
                 Camera.Entity.GetComponent<CameraShake>().Shake();
             }
+
+            var world = GetSceneComponent<FSWorld>().World;
+            world.Step(Time.DeltaTime);
+
+            var playerComponent = _playerEntity.GetComponent<Player>();
+            var bossComponent = _bossEntity.GetComponent<Boss>();
+            bossComponent.PlayerFixture = playerComponent.PlayerFixture;
+            playerComponent.BossFixture = bossComponent.BossFixture;
         }
 
         private void SetColliderFlags<T>(ref T collider) where T : Collider

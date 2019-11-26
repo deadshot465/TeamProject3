@@ -30,3 +30,5 @@ specialeffectready
 feather
 dashready
 punishment
+normalattack
+claw

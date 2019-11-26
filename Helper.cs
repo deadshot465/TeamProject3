@@ -1,4 +1,9 @@
-﻿using System;
+﻿using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Common;
+using FarseerPhysics.Dynamics;
+using Microsoft.Xna.Framework;
+using Nez.Farseer;
+using System;
 using System.Collections.Generic;
 
 namespace TeamProject3
@@ -22,6 +27,25 @@ namespace TeamProject3
                 collection[k] = collection[n];
                 collection[n] = value;
             }
+        }
+
+        public static Tuple<FSRigidBody, Fixture> CreateFarseerFixture(ref Nez.Entity entity,
+            BodyType bodyType, float mass,
+            float collisionBoxWidth, float collisionBoxHeight)
+        {
+            var rigidBody = entity.AddComponent<FSRigidBody>().SetBodyType(bodyType)
+                .SetMass(mass).SetIsAwake(true).SetIsSleepingAllowed(false);
+            var vertices = new Vertices();
+            float x1 = FSConvert.ToSimUnits(-collisionBoxWidth);
+            float x2 = FSConvert.ToSimUnits(collisionBoxWidth);
+            float y1 = FSConvert.ToSimUnits(-collisionBoxHeight);
+            float y2 = FSConvert.ToSimUnits(collisionBoxHeight);
+            vertices.Add(new Vector2(x1, y1));
+            vertices.Add(new Vector2(x2, y1));
+            vertices.Add(new Vector2(x1, y2));
+            vertices.Add(new Vector2(x2, y2));
+            var fixture = rigidBody.Body.CreateFixture(new PolygonShape(vertices, 1.0f));
+            return new Tuple<FSRigidBody, Fixture>(rigidBody, fixture);
         }
     }
 }
