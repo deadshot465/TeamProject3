@@ -9,6 +9,7 @@ using Nez;
 using Nez.Farseer;
 using Nez.Sprites;
 using System;
+using System.Collections;
 
 namespace TeamProject3.Scene
 {
@@ -31,21 +32,21 @@ namespace TeamProject3.Scene
 
         private BackgroundElement[] _backgroundElements = new BackgroundElement[4];
         private BackgroundElement _stageElement = new BackgroundElement();
+        private BackgroundElement _shadeElement = new BackgroundElement();
         private Fixture _stageFixture;
 
         private FollowCamera _followCamera;
 
         public Vector2 Viewport { get; set; } = Vector2.Zero;
+        public Entity PlayerEntity;
+        public Entity BossEntity;
+
+        private ulong _count = 0;
 
         public GameScene(Vector2 viewportCenter)
         {
             Viewport = viewportCenter;
         }
-
-        public Entity PlayerEntity;
-        public Entity BossEntity;
-
-        private ulong _count = 0;
 
         public override void Initialize()
         {
@@ -96,23 +97,58 @@ namespace TeamProject3.Scene
 
             if (Math.Abs(PlayerEntity.Position.X - BossEntity.Position.X) < 210)
             {
-                //var hit = Physics.Linecast(PlayerEntity.Position, BossEntity.Position);
-                //if (hit.Collider != null)
-                //{
-                //    Console.WriteLine($"Collision Detected!\tCount: {_count++}");
-                //}
+                var hit = Physics.Linecast(PlayerEntity.Position, BossEntity.Position);
+                if (hit.Collider != null)
+                {
+                    PlayerEntity.GetComponent<Player>().CanAttack = true;
+                }
+            }
+            else
+            {
+                PlayerEntity.GetComponent<Player>().CanAttack = false;
+            }
+
+            if (bossComponent.FadeFlag && !bossComponent.FadeFinished)
+            {
+                Core.StartCoroutine(ShadeFadeIn());
+            }
+            else if (!bossComponent.FadeFlag && bossComponent.FadeFinished)
+            {
+                Core.StartCoroutine(ShadeFadeOut());
             }
         }
 
-        private void SetColliderFlags<T>(ref T collider) where T : Collider
+        private IEnumerator ShadeFadeIn()
         {
-            Flags.SetFlagExclusive(ref collider.CollidesWithLayers, 0);
-            Flags.SetFlagExclusive(ref collider.PhysicsLayer, 1);
+            if (BossEntity.GetComponent<Boss>().FadeFinished) yield break;
+            for (float i = 0.0f; i <= 0.5f; i += Time.DeltaTime)
+            {
+                _shadeElement.ElementSprite
+                    .SetColor(new Color(0, 0, 0, i));
+                yield return null;
+            }
+            BossEntity.GetComponent<Boss>().FadeFinished = true;
+            yield break;
+        }
+
+        private IEnumerator ShadeFadeOut()
+        {
+            if (!BossEntity.GetComponent<Boss>().FadeFinished) yield break;
+            for (float i = 0.5f; i >= 0.0f; i -= Time.DeltaTime)
+            {
+                _shadeElement.ElementSprite
+                    .SetColor(new Color(0, 0, 0, i));
+                yield return null;
+            }
+            BossEntity.GetComponent<Boss>().FadeFinished = false;
+            yield break;
         }
 
         private void SetupRendererAndPhysicalWorld()
         {
-            _staticSpriteRenderer = AddRenderer(new RenderLayerRenderer(0, new[] { 1000, 990, 980, 970, 960 }));
+            _staticSpriteRenderer =
+                AddRenderer(new RenderLayerRenderer(0,
+                new[] { 1000, 990, 980, 970, 960, 950 }));
             _defaultRenderer = AddRenderer(new RenderLayerRenderer(1, new[] { 0 }));
             _effectRenderer = AddRenderer(new RenderLayerRenderer(2, new[] { -5 }));
 
@@ -159,8 +195,6 @@ namespace TeamProject3.Scene
             bossComponent.GroundFixture = _stageFixture;
             playerComponent.BossFixture = bossComponent.BossFixture;
             bossComponent.PlayerFixture = playerComponent.PlayerFixture;
-
-            //var collider = _groundEntity.AddComponent<BoxCollider>();
         }
 
         private void SetupBackgrounds(Tuple<string, string>[] names, int[] renderLayer)
@@ -217,6 +251,19 @@ namespace TeamProject3.Scene
 
             _stageFixture = stageRigidBody.Body
                 .CreateFixture(new PolygonShape(vertices, 100000.0f));
+
+            // Create a black shade.
+            _shadeElement.ElementTexture = Graphics
+                .CreateSingleColorTexture(Helper.ScreenWidth, Helper.ScreenHeight, Color.Black);
+            _shadeElement.ElementEntity = CreateEntity("shade-entity");
+            _shadeElement.ElementSprite = _shadeElement.ElementEntity
+                .AddComponent(new SpriteRenderer(_shadeElement.ElementTexture));
+            _shadeElement.ElementEntity
+                .SetPosition(Helper.ScreenWidth / 2,
+                Helper.ScreenHeight / 2);
+            _shadeElement.ElementSprite
+                .SetRenderLayer(950);
+            _shadeElement.ElementSprite.SetColor(Color.TransparentBlack);
         }
     }
 }

@@ -35,8 +35,6 @@ namespace TeamProject3
 
         private FSRigidBody _rigidBody;
         private FSRigidBody _battleRigidBody;
-        public Fixture PlayerFixture { get; private set; }
-        public Fixture BattleFixture { get; private set; }
 
         private float _speed = 0.0f;
         private bool _isJumping = false;
@@ -48,10 +46,13 @@ namespace TeamProject3
 
         public float Width => _spriteAnimator.Width;
         public float Height => _spriteAnimator.Height;
-        public BoxCollider Collider { get; private set; }
-
         public Fixture GroundFixture { get; set; }
         public Fixture BossFixture { get; set; }
+        public Fixture PlayerFixture { get; private set; }
+        public Fixture BattleFixture { get; private set; }
+        public BoxCollider Collider { get; private set; }
+        public float Hp { get; set; } = 100.0f;
+        public bool CanAttack { get; set; } = false;
 
         private enum Input
         {
@@ -122,9 +123,9 @@ namespace TeamProject3
             _spriteAnimator.AddAnimation("attack_3",
                 new SpriteAnimation(spriteAtlas.ToArray()[60..65], _animationFramerate * 0.75f));
 
-            //Collider = Entity.AddComponent(
-            //    new BoxCollider(_spriteAnimator.Width / 2,
-            //    _spriteAnimator.Height));
+            Collider = Entity.AddComponent(
+                new BoxCollider(_spriteAnimator.Width / 2,
+                _spriteAnimator.Height));
 
             _mover = Entity.AddComponent<Mover>();
 
@@ -293,6 +294,7 @@ namespace TeamProject3
                         }
                     }
                     _inputTimerStarted = true;
+                    if (CanAttack) HandleAttack();
                 }
                 else if (_inputKeyMappings[Input.Jump].IsReleased)
                 {
@@ -308,6 +310,7 @@ namespace TeamProject3
                     _spriteAnimator.Play("flee", SpriteAnimator.LoopMode.Once);
                     _animationStarted = true;
                     _movementStarted = true;
+                    //Collider.Enabled = false;
                     var tween = Entity.TweenPositionTo(
                         new Vector2(400 * (_spriteAnimator.FlipX ? -1 : 1), 0), 0.25f);
                     tween.SetFrom(Entity.Position)
@@ -332,6 +335,8 @@ namespace TeamProject3
         {
             _animationStarted = false;
             _movementStarted = false;
+            // TODO: Bug
+            //Core.Schedule(1.0f, timer => Collider.Enabled = true);
             _spriteAnimator.OnAnimationCompletedEvent -= OnAnimationFinished;
         }
 
@@ -340,6 +345,13 @@ namespace TeamProject3
             _spriteAnimator.SetColor(Color.Red);
             Core.Schedule(0.3f, timer => _spriteAnimator.SetColor(Color.White));
             return true;
+        }
+
+        private void HandleAttack()
+        {
+            var bossEntity = Entity.Scene.FindEntity("boss-entity");
+            bossEntity.GetComponent<Boss>().Hp -= 1;
+            Console.WriteLine($"Boss Hp: {bossEntity.GetComponent<Boss>().Hp}");
         }
     }
 }

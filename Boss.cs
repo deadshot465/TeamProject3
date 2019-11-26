@@ -71,12 +71,6 @@ namespace TeamProject3
 
         private FSRigidBody _rigidBody;
         private FSRigidBody _battleRigidBody;
-        public Fixture BossFixture { get; private set; }
-        public Fixture BattleFixture { get; private set; }
-
-        public float Width => _spriteAnimator.Width;
-        public float Height => _spriteAnimator.Height;
-        public BoxCollider Collider { get; private set; }
 
         private BossSettings _bossSettings;
 
@@ -107,6 +101,14 @@ namespace TeamProject3
         public Vector2 Speed { get; private set; }
         public Fixture GroundFixture { get; set; }
         public Fixture PlayerFixture { get; set; }
+        public Fixture BossFixture { get; private set; }
+        public Fixture BattleFixture { get; private set; }
+        public float Width => _spriteAnimator.Width;
+        public float Height => _spriteAnimator.Height;
+        public BoxCollider Collider { get; private set; }
+        public float Hp { get; set; } = 100.0f;
+        public bool FadeFlag { get; private set; } = false;
+        public bool FadeFinished { get; set; } = false;
 
         public Boss(Vector2 startPosition, BossSettings bossSettings)
         {
@@ -212,8 +214,8 @@ namespace TeamProject3
                 spriteAtlas.ToArray()[20..40], _animationFramerate));
 
             _mover = Entity.AddComponent<Mover>();
-            //Collider = Entity.AddComponent(
-            //    new BoxCollider(Width / 2, Height));
+            Collider = Entity.AddComponent(
+                new BoxCollider(Width / 2, Height));
 
             Entity.Position = _startPosition;
 
@@ -254,6 +256,8 @@ namespace TeamProject3
             entity.AddComponent<ProjectileMover>();
             //entity.AddComponent(new ProjectileController(Vector2.Zero));
 
+            if (!FadeFlag && !FadeFinished) FadeFlag = true;
+
             Core.Schedule(2f, timer => {
                 
                 entity.Destroy();
@@ -281,6 +285,8 @@ namespace TeamProject3
                 entity.AddComponent(new ProjectileController(
                     new Vector2(_projectileVelocity * _bossDirection, 0),
                     bulletRigidBody, bulletFixture));
+
+                if (FadeFlag && FadeFinished) FadeFlag = false;
             });
         }
 
