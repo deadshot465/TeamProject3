@@ -1,6 +1,7 @@
 ﻿using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
 using FarseerPhysics.Dynamics;
+using FarseerPhysics.Dynamics.Contacts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -33,7 +34,9 @@ namespace TeamProject3
         private int _comboIndex = 0;
 
         private FSRigidBody _rigidBody;
+        private FSRigidBody _battleRigidBody;
         public Fixture PlayerFixture { get; private set; }
+        public Fixture BattleFixture { get; private set; }
 
         private float _speed = 0.0f;
         private bool _isJumping = false;
@@ -119,9 +122,9 @@ namespace TeamProject3
             _spriteAnimator.AddAnimation("attack_3",
                 new SpriteAnimation(spriteAtlas.ToArray()[60..65], _animationFramerate * 0.75f));
 
-            Collider = Entity.AddComponent(
-                new BoxCollider(_spriteAnimator.Width / 2,
-                _spriteAnimator.Height));
+            //Collider = Entity.AddComponent(
+            //    new BoxCollider(_spriteAnimator.Width / 2,
+            //    _spriteAnimator.Height));
 
             _mover = Entity.AddComponent<Mover>();
 
@@ -132,6 +135,7 @@ namespace TeamProject3
                 -1.0f, _animationWidth / 4, _animationHeight / 2);
             _rigidBody.SetInertia(0.0f).SetFixedRotation(true);
             PlayerFixture.CollisionGroup = -1;
+            PlayerFixture.OnCollision += CollisionHandler;
 
             _gravity = FSConvert.ToDisplayUnits(_rigidBody.Body.World.Gravity);
             _finalVelocity = -Mathf.Sqrt(2.0f * _jumpHeight * _gravity.Y);
@@ -211,7 +215,7 @@ namespace TeamProject3
             {
                 HandleKeyboardInputs();
             }
-            _rigidBody.SetIsAwake(true).SetIsSleepingAllowed(false);
+            _rigidBody.SetIsAwake(true).SetIsSleepingAllowed(false);           
         }
 
         private void SetupKeyboardInputs()
@@ -329,6 +333,13 @@ namespace TeamProject3
             _animationStarted = false;
             _movementStarted = false;
             _spriteAnimator.OnAnimationCompletedEvent -= OnAnimationFinished;
+        }
+
+        private bool CollisionHandler(Fixture fixtureA, Fixture fixtureB, Contact contact)
+        {
+            _spriteAnimator.SetColor(Color.Red);
+            Core.Schedule(0.3f, timer => _spriteAnimator.SetColor(Color.White));
+            return true;
         }
     }
 }

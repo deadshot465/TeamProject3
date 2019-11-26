@@ -4,6 +4,11 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
+    <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/1sky.png</File>
+    <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/2pillar.png</File>
+    <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/3pillar.png</File>
+    <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/4cloud.png</File>
+    <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/5stage.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/boss1.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/haikei.PNG</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/player.png</File>
@@ -13,6 +18,11 @@
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/splash_screen.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

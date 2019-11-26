@@ -70,7 +70,9 @@ namespace TeamProject3
         private float _bossDirection = 0;
 
         private FSRigidBody _rigidBody;
+        private FSRigidBody _battleRigidBody;
         public Fixture BossFixture { get; private set; }
+        public Fixture BattleFixture { get; private set; }
 
         public float Width => _spriteAnimator.Width;
         public float Height => _spriteAnimator.Height;
@@ -210,8 +212,8 @@ namespace TeamProject3
                 spriteAtlas.ToArray()[20..40], _animationFramerate));
 
             _mover = Entity.AddComponent<Mover>();
-            Collider = Entity.AddComponent(
-                new BoxCollider(Width / 2, Height));
+            //Collider = Entity.AddComponent(
+            //    new BoxCollider(Width / 2, Height));
 
             Entity.Position = _startPosition;
 
@@ -250,11 +252,7 @@ namespace TeamProject3
                 .CreateEmitter(ParticleSystem.ParticleType.Charge));
             emitter.SetRenderLayer(-5);
             entity.AddComponent<ProjectileMover>();
-            entity.AddComponent(new ProjectileController(Vector2.Zero));
-
-            //var collider = entity.AddComponent<CircleCollider>();
-            //Flags.SetFlagExclusive(ref collider.CollidesWithLayers, 0);
-            //Flags.SetFlagExclusive(ref collider.PhysicsLayer, 1);
+            //entity.AddComponent(new ProjectileController(Vector2.Zero));
 
             Core.Schedule(2f, timer => {
                 
@@ -266,11 +264,9 @@ namespace TeamProject3
                 entity = Entity.Scene.CreateEntity("projectile");
                 entity.Position = new Vector2(Entity.Position.X + (100 * _bossDirection), Entity.Position.Y + 50);
                 var _emitter = entity.AddComponent(ParticleSystem
-                    .CreateEmitter(ParticleSystem.ParticleType.Charge));
+                    .CreateEmitter(ParticleSystem.ParticleType.Cremation));
                 _emitter.SetRenderLayer(-5);
                 entity.AddComponent<ProjectileMover>();
-                entity.AddComponent(new ProjectileController(
-                    new Vector2(_projectileVelocity * _bossDirection, 0)));
 
                 //var _collider = entity.AddComponent<CircleCollider>();
                 //Flags.SetFlagExclusive(ref _collider.CollidesWithLayers, 0);
@@ -280,8 +276,11 @@ namespace TeamProject3
                 bulletRigidBody.SetIsBullet(true)
                 .SetIgnoreGravity(true)
                 .SetLinearVelocity(new Vector2(3.0f * _bossDirection, 0.0f));
-                bulletFixture.IgnoreCollisionWith(PlayerFixture);
                 bulletFixture.IgnoreCollisionWith(BossFixture);
+
+                entity.AddComponent(new ProjectileController(
+                    new Vector2(_projectileVelocity * _bossDirection, 0),
+                    bulletRigidBody, bulletFixture));
             });
         }
 
@@ -339,7 +338,7 @@ namespace TeamProject3
             leftEntity.AddComponent(ParticleSystem
                 .CreateEmitter(ParticleSystem.ParticleType.BlueFlame));
             leftEntity.AddComponent<ProjectileMover>();
-            leftEntity.AddComponent(new ProjectileController(new Vector2(_projectileVelocity, 0)));
+            //leftEntity.AddComponent(new ProjectileController(new Vector2(_projectileVelocity, 0)));
 
             var collider = leftEntity.AddComponent<CircleCollider>();
             Flags.SetFlagExclusive(ref collider.CollidesWithLayers, 0);

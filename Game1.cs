@@ -50,6 +50,8 @@ namespace TeamProject3
             base.Update(gameTime);
 
             Scene.SetDesignResolution(_screenWidth, _screenHeight, _sceneResolutionPolicy);
+            //Screen.SetSize(_screenWidth, _screenHeight);
+            //Screen.IsFullscreen = true;
 
             if (!_splashScreenShown)
             {
