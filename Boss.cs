@@ -32,9 +32,12 @@ namespace TeamProject3
         public readonly Vector2 FirstStepJumpOffset = new Vector2(175, -200);
         public readonly EaseType FirstStepJumpEaseType = EaseType.CircIn;
         public readonly float FirstStepJumpDuration = 1.5f;
-        public readonly Vector2 SecondStepJumpOffset = new Vector2(175, 200);
+        public readonly Vector2 SecondStepJumpOffset = new Vector2(175, 372.5f);
         public readonly EaseType SecondStepJumpEaseType = EaseType.BackIn;
         public readonly float SecondStepJumpDuration = 1.0f;
+        public readonly Vector2 ThirdStepJumpOffset = new Vector2(-75f, -172.5f);
+        public readonly EaseType ThirdStepJumpEaseType = EaseType.Linear;
+        public readonly float ThirdStepJumpDuration = 0.5f;
 
         public BossSettings()
         {
@@ -100,15 +103,16 @@ namespace TeamProject3
 
         public Vector2 Speed { get; private set; }
         public Fixture GroundFixture { get; set; }
+        public Fixture LeftWallFixture { get; set; }
         public Fixture PlayerFixture { get; set; }
         public Fixture BossFixture { get; private set; }
-        public Fixture BattleFixture { get; private set; }
         public float Width => _spriteAnimator.Width;
         public float Height => _spriteAnimator.Height;
         public BoxCollider Collider { get; private set; }
         public float Hp { get; set; } = 100.0f;
         public bool FadeFlag { get; private set; } = false;
         public bool FadeFinished { get; set; } = false;
+        public bool CanAttack { get; set; } = false;
 
         public Boss(Vector2 startPosition, BossSettings bossSettings)
         {
@@ -210,6 +214,10 @@ namespace TeamProject3
                 spriteAtlas.ToArray()[20..30], _animationFramerate));
             _spriteAnimator.AddAnimation("PutdownSword", new SpriteAnimation(
                 spriteAtlas.ToArray()[30..40], _animationFramerate));
+            _spriteAnimator.AddAnimation("Shielding", new SpriteAnimation(
+                spriteAtlas.ToArray()[40..50], _animationFramerate));
+            _spriteAnimator.AddAnimation("HideSword", new SpriteAnimation(
+                spriteAtlas.ToArray()[50..60], _animationFramerate));
             _spriteAnimator.AddAnimation("Attack", new SpriteAnimation(
                 spriteAtlas.ToArray()[20..40], _animationFramerate));
 
@@ -222,7 +230,7 @@ namespace TeamProject3
             (_rigidBody, BossFixture) = Helper.CreateFarseerFixture(ref Entity,
                 BodyType.Dynamic, -1.0f,
                 Width / 4, Height / 2);
-            _rigidBody.SetInertia(0.0f).SetFixedRotation(true);
+            _rigidBody.SetInertia(0.0f).SetFixedRotation(true).SetIgnoreGravity(true);
             BossFixture.CollisionGroup = -1;
 
             _spriteAnimator.Play("Idle", SpriteAnimator.LoopMode.Loop);
@@ -241,6 +249,7 @@ namespace TeamProject3
             {
                 _spriteAnimator.Play("PutdownSword", SpriteAnimator.LoopMode.ClampForever);
                 _spriteAnimator.OnAnimationCompletedEvent += _attackFinishAction;
+                HandleAttack();
             });
         }
 
@@ -254,7 +263,6 @@ namespace TeamProject3
                 .CreateEmitter(ParticleSystem.ParticleType.Charge));
             emitter.SetRenderLayer(-5);
             entity.AddComponent<ProjectileMover>();
-            //entity.AddComponent(new ProjectileController(Vector2.Zero));
 
             if (!FadeFlag && !FadeFinished) FadeFlag = true;
 
@@ -272,10 +280,6 @@ namespace TeamProject3
                 _emitter.SetRenderLayer(-5);
                 entity.AddComponent<ProjectileMover>();
 
-                //var _collider = entity.AddComponent<CircleCollider>();
-                //Flags.SetFlagExclusive(ref _collider.CollidesWithLayers, 0);
-                //Flags.SetFlagExclusive(ref _collider.PhysicsLayer, 1);
-
                 var (bulletRigidBody, bulletFixture) = Helper.CreateFarseerFixture(ref entity, BodyType.Kinematic, 0.0f, 75.0f, 75.0f);
                 bulletRigidBody.SetIsBullet(true)
                 .SetIgnoreGravity(true)
@@ -284,7 +288,7 @@ namespace TeamProject3
 
                 entity.AddComponent(new ProjectileController(
                     new Vector2(_projectileVelocity * _bossDirection, 0),
-                    bulletRigidBody, bulletFixture));
+                    bulletRigidBody, bulletFixture, true));
 
                 if (FadeFlag && FadeFinished) FadeFlag = false;
             });
@@ -292,18 +296,31 @@ namespace TeamProject3
 
         private void Dash()
         {
-            var tween = Entity.TweenPositionTo(new Vector2(350 * _bossDirection, 0), _bossSettings.DashDuration)
+            var entity = Entity.Scene.CreateEntity("projectile");
+            //entity.Position = new Vector2(Entity.Position.X + (100 * _bossDirection), Entity.Position.Y);
+            entity.SetParent(Entity);
+            entity.SetLocalPosition(new Vector2(0.0f, -200.0f));
+            var emitter = entity.AddComponent(ParticleSystem
+                .CreateEmitter(ParticleSystem.ParticleType.DashReady));
+            emitter.SetRenderLayer(-5);
+
+            Core.Schedule(2.0f, timer =>
+            {
+                _spriteAnimator.Play("Move", SpriteAnimator.LoopMode.Loop);
+
+                var tween = Entity.TweenPositionTo(new Vector2(350 * _bossDirection, 0), _bossSettings.DashDuration)
                 .SetFrom(Entity.Position)
                 .SetIsRelative()
                 .SetEaseType(_bossSettings.DashEaseType)
                 .SetCompletionHandler(_tween =>
                 {
+                    entity.Destroy();
+                    HandleAttack();
                     MoveToNextPhase();
                 });
 
-            _spriteAnimator.Play("Move", SpriteAnimator.LoopMode.Loop);
-
-            tween.Start();
+                tween.Start();
+            });
         }
 
         private void JumpAttack()
@@ -312,6 +329,8 @@ namespace TeamProject3
             firstOffset.X *= _bossDirection;
             var secondOffset = _bossSettings.SecondStepJumpOffset;
             secondOffset.X *= _bossDirection;
+            var thirdOffset = _bossSettings.ThirdStepJumpOffset;
+            thirdOffset.X *= _bossDirection;
 
             var tween = Entity
                 .TweenPositionTo(firstOffset, _bossSettings.FirstStepJumpDuration)
@@ -325,7 +344,52 @@ namespace TeamProject3
                     .SetFrom(Entity.Position)
                     .SetIsRelative()
                     .SetEaseType(_bossSettings.SecondStepJumpEaseType)
-                    .SetCompletionHandler(_secondTween => MoveToNextPhase());
+                    .SetCompletionHandler(_secondTween =>
+                    {
+                        var entity = Entity.Scene.CreateEntity("projectile-1");
+                        entity.Position = new Vector2(Entity.Position.X + (100 * _bossDirection), Entity.Position.Y + 50);
+                        var _emitter = entity.AddComponent(ParticleSystem
+                            .CreateEmitter(ParticleSystem.ParticleType.Charge));
+                        _emitter.SetRenderLayer(-5);
+                        entity.AddComponent<ProjectileMover>();
+
+                        var clonedEntity = entity.Clone(new Vector2(
+                            Entity.Position.X + (100 * -(_bossDirection)), Entity.Position.Y + 50));
+                        clonedEntity.AttachToScene(Entity.Scene);
+
+                        var (bulletRigidBody1, bulletFixture1) = Helper.CreateFarseerFixture(ref entity, BodyType.Kinematic, 0.0f, 50.0f, 50.0f);
+                        bulletRigidBody1.SetIsBullet(true)
+                        .SetIgnoreGravity(true)
+                        .SetLinearVelocity(new Vector2(5.0f * _bossDirection, 0.0f));
+                        bulletFixture1.IgnoreCollisionWith(BossFixture);
+
+                        var (bulletRigidBody2, bulletFixture2) = Helper.CreateFarseerFixture(ref clonedEntity, BodyType.Kinematic, 0.0f, 50.0f, 50.0f);
+                        bulletRigidBody2.SetIsBullet(true)
+                        .SetIgnoreGravity(true)
+                        .SetLinearVelocity(new Vector2(5.0f * -(_bossDirection), 0.0f));
+                        bulletFixture2.IgnoreCollisionWith(BossFixture);
+
+                        entity.AddComponent(new ProjectileController(
+                            new Vector2(_projectileVelocity * _bossDirection, 0),
+                            bulletRigidBody1, bulletFixture1, true));
+
+                        clonedEntity.AddComponent(new ProjectileController(
+                            new Vector2(_projectileVelocity * _bossDirection, 0),
+                            bulletRigidBody2, bulletFixture2, true));
+
+                        var thirdTween = Entity
+                        .TweenPositionTo(thirdOffset, _bossSettings.ThirdStepJumpDuration)
+                        .SetFrom(Entity.Position)
+                        .SetIsRelative()
+                        .SetEaseType(_bossSettings.ThirdStepJumpEaseType)
+                        .SetCompletionHandler(_thirdTween =>
+                        {
+                            HandleAttack();
+                            MoveToNextPhase();
+                        });
+
+                        thirdTween.Start();
+                    });
 
                     secondTween.Start();
                 });
@@ -346,10 +410,6 @@ namespace TeamProject3
             leftEntity.AddComponent<ProjectileMover>();
             //leftEntity.AddComponent(new ProjectileController(new Vector2(_projectileVelocity, 0)));
 
-            var collider = leftEntity.AddComponent<CircleCollider>();
-            Flags.SetFlagExclusive(ref collider.CollidesWithLayers, 0);
-            Flags.SetFlagExclusive(ref collider.PhysicsLayer, 1);
-
             var rightEntity = leftEntity.Clone();
             rightEntity.Position = Entity.Position;
             rightEntity.GetComponent<ProjectileController>().Velocity *= -1;
@@ -365,7 +425,11 @@ namespace TeamProject3
                 .SetFrom(Entity.Position)
                 .SetIsRelative()
                 .SetEaseType(EaseType.ExpoIn)
-                .SetCompletionHandler(_tween => MoveToNextPhase());
+                .SetCompletionHandler(_tween =>
+                {
+                    HandleAttack();
+                    MoveToNextPhase();
+                });
             
             tween.Start();
         }
@@ -480,6 +544,20 @@ namespace TeamProject3
 
             _attackHandlers[_currentAttack].Invoke();
             _currentAttackTick = (_currentAttackTick + 1) % patterns;
+        }
+
+        private void HandleAttack()
+        {
+            if (!CanAttack) return;
+            var playerEntity = Entity.Scene.FindEntity("player-entity");
+            if (playerEntity != null)
+            {
+                if (!playerEntity.GetComponent<Player>().IsInvincible)
+                {
+                    playerEntity.GetComponent<Player>().Hp -= 10;
+                    System.Console.WriteLine($"Player Hp: {playerEntity.GetComponent<Player>().Hp}");
+                }
+            }
         }
     }
 }

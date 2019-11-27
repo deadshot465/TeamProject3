@@ -79,6 +79,7 @@
     <None Remove="Content\particle\JasonChoi_Flash.pex" />
     <None Remove="Content\particle\JasonChoi_rising up.pex" />
     <None Remove="Content\particle\JasonChoi_Swirl01.pex" />
+    <None Remove="Content\particle\judgement.pex" />
     <None Remove="Content\particle\Leaves.pex" />
     <None Remove="Content\particle\Meks Blood Spill.pex" />
     <None Remove="Content\particle\normalAttack.pex" />
@@ -98,6 +99,12 @@
     <None Remove="Content\particle\Winner Stars.pex" />
     <None Remove="Content\particle\wu1.pex" />
     <None Remove="Content\particle_types.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Content\particle\judgement.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

@@ -42,7 +42,7 @@ namespace TeamProject3
         {
             var _emitter = new ParticleEmitter(_particleTypes[type]);
             _emitter.SimulateInWorldSpace = worldSimulation;
-            _emitter.CollisionConfig.Enabled = true;
+            _emitter.CollisionConfig.Enabled = false;
             return _emitter;
         }
     }

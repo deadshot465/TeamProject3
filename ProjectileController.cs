@@ -13,14 +13,21 @@ namespace TeamProject3
         ProjectileMover _mover;
         FSRigidBody _rigidBody;
         Fixture _fixture;
+        bool _isBossProjectile = false;
+        bool _immutable = false;
 
         public Vector2 Velocity { get; set; }
 
-        public ProjectileController(Vector2 velocity, FSRigidBody rigidBody, Fixture fixture)
+        public ProjectileController(Vector2 velocity,
+            FSRigidBody rigidBody, Fixture fixture,
+            bool isBossProjectile = false,
+            bool immutable = false)
         {
             Velocity = velocity;
             _rigidBody = rigidBody;
             _fixture = fixture;
+            _isBossProjectile = isBossProjectile;
+            _immutable = immutable;
         }
 
 
@@ -45,7 +52,21 @@ namespace TeamProject3
 
         private bool CollisionHandler(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
-            if (!Entity.IsDestroyed)
+            var playerEntity = Entity.Scene.FindEntity("player-entity");
+            var invincible = playerEntity.GetComponent<Player>().IsInvincible;
+
+            if (_isBossProjectile)
+            {
+                if (playerEntity != null)
+                {
+                    if (!invincible)
+                    {
+                        playerEntity.GetComponent<Player>().Hp -= 10;
+                        System.Console.WriteLine($"Player Hp: {playerEntity.GetComponent<Player>().Hp}");
+                    }
+                }
+            }
+            if (!Entity.IsDestroyed && !invincible)
                 Entity.Destroy();
             return true;
         }

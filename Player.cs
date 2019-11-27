@@ -41,18 +41,19 @@ namespace TeamProject3
         private Vector2 _gravity;
         private Vector2 _velocity = Vector2.Zero;
         private float _finalVelocity;
-        private const float _jumpHeight = 400.0f;
+        private const float _jumpHeight = 500.0f;
         private const float _scale = 2.0f;
 
         public float Width => _spriteAnimator.Width;
         public float Height => _spriteAnimator.Height;
         public Fixture GroundFixture { get; set; }
+        public Fixture LeftWallFixture { get; set; }
         public Fixture BossFixture { get; set; }
         public Fixture PlayerFixture { get; private set; }
-        public Fixture BattleFixture { get; private set; }
         public BoxCollider Collider { get; private set; }
         public float Hp { get; set; } = 100.0f;
         public bool CanAttack { get; set; } = false;
+        public bool IsInvincible { get; set; } = false;
 
         private enum Input
         {
@@ -206,6 +207,10 @@ namespace TeamProject3
                 _isJumping = false;
             }
 
+            //FSCollisions.CollideFixtures(PlayerFixture, LeftWallFixture, out fsResult);
+            //if (fsResult.Normal.X > 0)
+            //    Entity.Position = new Vector2(Entity.Position.X + 10, Entity.Position.Y);
+
             if (_inputTimerStarted)
             {
                 if (_inputTimer > 0.2f)
@@ -216,7 +221,7 @@ namespace TeamProject3
             {
                 HandleKeyboardInputs();
             }
-            _rigidBody.SetIsAwake(true).SetIsSleepingAllowed(false);           
+            _rigidBody.SetIsAwake(true).SetIsSleepingAllowed(false);
         }
 
         private void SetupKeyboardInputs()
@@ -236,7 +241,7 @@ namespace TeamProject3
             _inputMovementMappings[Movement.Move].Nodes
                 .Add(new VirtualAxis.GamePadLeftStickX());
 
-            AddInputAxis(Movement.Move);    
+            AddInputAxis(Movement.Move);
         }
 
         private void AddInputButton(Input input)
@@ -311,6 +316,7 @@ namespace TeamProject3
                     _animationStarted = true;
                     _movementStarted = true;
                     //Collider.Enabled = false;
+                    IsInvincible = true;
                     var tween = Entity.TweenPositionTo(
                         new Vector2(400 * (_spriteAnimator.FlipX ? -1 : 1), 0), 0.25f);
                     tween.SetFrom(Entity.Position)
@@ -337,6 +343,7 @@ namespace TeamProject3
             _movementStarted = false;
             // TODO: Bug
             //Core.Schedule(1.0f, timer => Collider.Enabled = true);
+            IsInvincible = false;
             _spriteAnimator.OnAnimationCompletedEvent -= OnAnimationFinished;
         }
 
