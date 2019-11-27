@@ -263,10 +263,10 @@ namespace TeamProject3.Scene
                 .CreateFixture(new PolygonShape(vertices, 100000.0f));
             #endregion
 
-            var leftWallEntity = CreateEntity("left-wall-entity");
-            leftWallEntity.Position = new Vector2(Helper.ScreenWidth / 4 - 384, Helper.ScreenHeight / 2);
-            leftWallEntity.AddComponent(new SpriteRenderer(
-                Graphics.CreateSingleColorTexture(216, Helper.ScreenHeight, Color.Transparent)));
+            //var leftWallEntity = CreateEntity("left-wall-entity");
+            //leftWallEntity.Position = new Vector2(Helper.ScreenWidth / 4 - 384, Helper.ScreenHeight / 2);
+            //leftWallEntity.AddComponent(new SpriteRenderer(
+            //    Graphics.CreateSingleColorTexture(216, Helper.ScreenHeight, Color.Transparent)));
             //_leftWallRigidBody = leftWallEntity.AddComponent<FSRigidBody>()
             //    .SetBodyType(BodyType.Static)
             //    .SetFixedRotation(true)
@@ -284,7 +284,7 @@ namespace TeamProject3.Scene
             //_leftWallFixture =
             //    _leftWallRigidBody.Body
             //    .CreateFixture(new PolygonShape(leftWallVertices, 100000.0f));
-            leftWallEntity.AddComponent<BoxCollider>();
+            //leftWallEntity.AddComponent<BoxCollider>();
 
             #region Black Shade Preparation
             // Create a black shade.

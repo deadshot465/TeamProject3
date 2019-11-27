@@ -37,7 +37,7 @@ namespace TeamProject3
 
             _startButton.Nodes.Add(new VirtualButton.KeyboardKey(Keys.Space));
 
-            Core.DebugRenderEnabled = true;
+            Core.DebugRenderEnabled = false;
         }
 
         protected override void OnExiting(object sender, EventArgs args)

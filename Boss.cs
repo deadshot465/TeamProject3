@@ -99,7 +99,9 @@ namespace TeamProject3
         private List<Action> _movePhaseHandlers
             = new List<Action>();
 
-        Action<string> _attackFinishAction;
+        private List<Entity> _judgeEntities = new List<Entity>();
+
+        private Action<string> _attackFinishAction;
 
         public Vector2 Speed { get; private set; }
         public Fixture GroundFixture { get; set; }
@@ -138,17 +140,27 @@ namespace TeamProject3
             {
                 () => MoveToNextPhase(true, (int)BossAttacks.ChainAttack),
                 () => MoveToNextPhase(true, (int)BossAttacks.RangeAttack),
-                () => MoveToNextPhase(true, (int)BossAttacks.Dash)
+                () => MoveToNextPhase(true, (int)BossAttacks.Dash),
+                () => MoveToNextPhase(true, (int)BossAttacks.JumpAttack),
+                () => MoveToNextPhase(true, (int)BossAttacks.ShieldAttack),
+                () => MoveToNextPhase(true, (int)BossAttacks.FullscreenAttack)
             };
 
-            _movePhaseHandlers.Add(actions[0]);
-            _movePhaseHandlers.Add(actions[0]);
-            _movePhaseHandlers.Add(actions[1]);
-            _movePhaseHandlers.Add(actions[0]);
-            _movePhaseHandlers.Add(actions[0]);
-            _movePhaseHandlers.Add(actions[2]);
+            //_movePhaseHandlers.Add(actions[0]);
+            //_movePhaseHandlers.Add(actions[0]);
+            //_movePhaseHandlers.Add(actions[1]);
+            //_movePhaseHandlers.Add(actions[0]);
+            //_movePhaseHandlers.Add(actions[0]);
+            //_movePhaseHandlers.Add(actions[2]);
 
-            MoveToNextStage(BossStage.Two);
+            _movePhaseHandlers.Add(actions[5]);
+            _movePhaseHandlers.Add(actions[5]);
+            _movePhaseHandlers.Add(actions[5]);
+            _movePhaseHandlers.Add(actions[5]);
+            _movePhaseHandlers.Add(actions[5]);
+            _movePhaseHandlers.Add(actions[5]);
+
+            //MoveToNextStage(BossStage.Two);
 
             _attackFinishAction = animationName => MoveToNextPhase();
         }
@@ -171,7 +183,7 @@ namespace TeamProject3
 
             if (!_timerStarted)
             {
-                _nextAttackDuration = Nez.Random.Range(2.5f, 3.5f);
+                _nextAttackDuration = Nez.Random.Range(3.5f, 4.5f);
                 _timerStarted = true;
             }
 
@@ -304,6 +316,8 @@ namespace TeamProject3
                 .CreateEmitter(ParticleSystem.ParticleType.DashReady));
             emitter.SetRenderLayer(-5);
 
+            if (!FadeFlag && !FadeFinished) FadeFlag = true;
+
             Core.Schedule(2.0f, timer =>
             {
                 _spriteAnimator.Play("Move", SpriteAnimator.LoopMode.Loop);
@@ -320,6 +334,8 @@ namespace TeamProject3
                 });
 
                 tween.Start();
+
+                if (FadeFlag && FadeFinished) FadeFlag = false;
             });
         }
 
@@ -401,21 +417,103 @@ namespace TeamProject3
 
         private void FullscreenAttack()
         {
-            _spriteAnimator.Play("RaiseSword", SpriteAnimator.LoopMode.ClampForever);
+            var tween = Entity.TweenPositionTo(new Vector2(Helper.ScreenWidth / 2, 150.0f), 2.0f)
+                .SetFrom(Entity.Position)
+                .SetEaseType(EaseType.ExpoInOut)
+                .SetCompletionHandler(_tween =>
+                {
+                    _spriteAnimator.Play("HideSword", SpriteAnimator.LoopMode.ClampForever);
 
-            var leftEntity = Entity.Scene.CreateEntity("projectile");
-            leftEntity.Position = Entity.Position;
-            leftEntity.AddComponent(ParticleSystem
-                .CreateEmitter(ParticleSystem.ParticleType.BlueFlame));
-            leftEntity.AddComponent<ProjectileMover>();
+                    Core.Schedule(0.5f, timer =>
+                    {
+                        var entity = Entity.Scene.CreateEntity("admonishment");
+                        entity.SetParent(Entity);
+                        entity.SetLocalPosition(new Vector2(0.0f, 100.0f));
+                        var emitter = entity.AddComponent(ParticleSystem
+                            .CreateEmitter(ParticleSystem.ParticleType.Admonishment));
+                        emitter.SetRenderLayer(-5);
+
+                        Core.Schedule(3.0f, _timer =>
+                        {
+                            entity.Destroy();
+
+                            const float padding = 300.0f;
+                            for (float i = Helper.ScreenWidth / 2; i > 0; i -= padding)
+                            {
+                                _judgeEntities.Add(Entity.Scene.CreateEntity(Nez.Utils.RandomString(10)));
+                                var judgeLeftEntity = _judgeEntities.Last();
+                                judgeLeftEntity.Position = new Vector2(
+                                    i, Entity.Position.Y);
+                                var judgeLeftEmitter = judgeLeftEntity.AddComponent(
+                                    ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.Judgement));
+                                judgeLeftEmitter.SetRenderLayer(-5);
+                                judgeLeftEmitter.AddComponent<ProjectileMover>();
+
+                                var (bulletRigidBody, bulletFixture) = Helper.CreateFarseerFixture(ref judgeLeftEntity, BodyType.Kinematic, 0.0f, 50.0f, 50.0f);
+                                bulletRigidBody.SetIsBullet(true).SetIgnoreGravity(true);
+                                bulletFixture.IgnoreCollisionWith(BossFixture);
+
+                                judgeLeftEntity.AddComponent(new ProjectileController(
+                                new Vector2(_projectileVelocity * _bossDirection, 0),
+                                bulletRigidBody, bulletFixture, true));
+
+                                if (i != Helper.ScreenWidth / 2)
+                                {
+                                    _judgeEntities.Add(Entity.Scene.CreateEntity(Nez.Utils.RandomString(10)));
+                                    var judgeRightEntity = _judgeEntities.Last();
+                                    judgeRightEntity.Position = new Vector2(
+                                    Helper.ScreenWidth / 2 + (Helper.ScreenWidth / 2 - i), Entity.Position.Y);
+                                    //var judgeRightEntity = judgeLeftEntity.Clone(new Vector2(
+                                    //Helper.ScreenWidth / 2 + (Helper.ScreenWidth / 2 - i), Entity.Position.Y + 150));
+                                    //judgeRightEntity.AttachToScene(Entity.Scene);
+
+                                    var judgeRightEmitter = judgeRightEntity.AddComponent(
+                                    ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.Judgement));
+                                    judgeRightEmitter.SetRenderLayer(-5);
+                                    judgeRightEmitter.AddComponent<ProjectileMover>();
+
+                                    var (bulletRigidBodyRight, bulletFixtureRight) = Helper.CreateFarseerFixture(ref judgeRightEntity, BodyType.Kinematic, 0.0f, 50.0f, 50.0f);
+                                    bulletRigidBodyRight.SetIsBullet(true).SetIgnoreGravity(true);
+                                    bulletFixtureRight.IgnoreCollisionWith(BossFixture);
+
+                                    judgeRightEntity.AddComponent(new ProjectileController(
+                                    new Vector2(_projectileVelocity * _bossDirection, 0),
+                                    bulletRigidBodyRight, bulletFixtureRight, true));
+
+                                    _judgeEntities.Add(judgeRightEntity);
+                                }
+                            }
+
+                            Core.Schedule(3.0f, __timer =>
+                            {
+                                _judgeEntities.ForEach(_entity =>
+                                {
+                                    if (_entity.GetComponent<FSRigidBody>() != null)
+                                    {
+                                        _entity.GetComponent<FSRigidBody>()
+                                        .SetLinearVelocity(new Vector2(0.0f, 3.0f));
+                                    }
+                                });
+
+                                MoveToNextPhase();
+                            });
+                        });
+                    });
+                });
+
+            tween.Start();
+
+            //var leftEntity = Entity.Scene.CreateEntity("projectile");
+            //leftEntity.Position = Entity.Position;
+            //leftEntity.AddComponent(ParticleSystem
+            //    .CreateEmitter(ParticleSystem.ParticleType.BlueFlame));
+            //leftEntity.AddComponent<ProjectileMover>();
             //leftEntity.AddComponent(new ProjectileController(new Vector2(_projectileVelocity, 0)));
 
-            var rightEntity = leftEntity.Clone();
-            rightEntity.Position = Entity.Position;
-            rightEntity.GetComponent<ProjectileController>().Velocity *= -1;
-            rightEntity.AttachToScene(Entity.Scene);
-
-            Core.Schedule(2.0f, timer => MoveToNextPhase());
+            //var rightEntity = leftEntity.Clone();
+            //rightEntity.Position = Entity.Position;
+            //rightEntity.GetComponent<ProjectileController>().Velocity *= -1;
+            //rightEntity.AttachToScene(Entity.Scene);
         }
 
         private void ShieldAttack()

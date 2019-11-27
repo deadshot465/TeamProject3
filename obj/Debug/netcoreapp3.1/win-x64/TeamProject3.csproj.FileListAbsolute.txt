@@ -333,3 +333,5 @@ C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x6
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\3pillar.xnb
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\4cloud.xnb
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\5stage.xnb
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\particle\judgement.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\particle\admonishment.pex

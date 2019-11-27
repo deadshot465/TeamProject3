@@ -32,3 +32,5 @@ dashready
 punishment
 normalattack
 claw
+judgement
+admonishment
