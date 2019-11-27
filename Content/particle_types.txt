@@ -36,3 +36,5 @@ judgement
 admonishment
 newbegin
 theend
+infinity
+devilmaycry

@@ -19,7 +19,7 @@ namespace TeamProject3
             Leaves, BloodSpill, PlasmaGlow, RealPopCorn, ShootingFireball, Snow,
             Sun, Thingy, TouchUp, Trippy, WinnerStars, Wu1, Sword, Cremation,
             Charge, FullscreenFeather, DashReady, Punishment, NormalAttack, Claw,
-            Judgement, Admonishment, NewBegin, TheEnd
+            Judgement, Admonishment, NewBegin, TheEnd, Infinity, DevilMayCry
         }
 
         public static void Initialize()

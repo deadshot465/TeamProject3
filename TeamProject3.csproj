@@ -70,12 +70,14 @@
     <None Remove="Content\particle\Crazy Blue.pex" />
     <None Remove="Content\particle\cremation.pex" />
     <None Remove="Content\particle\dashReady.pex" />
+    <None Remove="Content\particle\devilMayCry.pex" />
     <None Remove="Content\particle\Electrons.pex" />
     <None Remove="Content\particle\feather.pex" />
     <None Remove="Content\particle\Fire.pex" />
     <None Remove="Content\particle\Foam.pex" />
     <None Remove="Content\particle\Giros Gratis.pex" />
     <None Remove="Content\particle\huo1.pex" />
+    <None Remove="Content\particle\infinity.pex" />
     <None Remove="Content\particle\Into The Blue.pex" />
     <None Remove="Content\particle\JasonChoi_Flash.pex" />
     <None Remove="Content\particle\JasonChoi_rising up.pex" />
@@ -106,6 +108,12 @@
 
   <ItemGroup>
     <Content Include="Content\particle\admonishment.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\devilMayCry.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\infinity.pex">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\particle\judgement.pex">

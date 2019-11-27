@@ -161,10 +161,10 @@ namespace TeamProject3.Scene
             var world = GetOrCreateSceneComponent<FSWorld>();
 
 #if DEBUG
-            var debugView = CreateEntity("debug-view").AddComponent(new FSDebugView(world));
-            debugView.AppendFlags(FSDebugView.DebugViewFlags.AABB);
-            debugView.AppendFlags(FSDebugView.DebugViewFlags.ContactPoints);
-            debugView.AppendFlags(FSDebugView.DebugViewFlags.CenterOfMass);
+            //var debugView = CreateEntity("debug-view").AddComponent(new FSDebugView(world));
+            //debugView.AppendFlags(FSDebugView.DebugViewFlags.AABB);
+            //debugView.AppendFlags(FSDebugView.DebugViewFlags.ContactPoints);
+            //debugView.AppendFlags(FSDebugView.DebugViewFlags.CenterOfMass);
 #endif
         }
 
@@ -262,6 +262,14 @@ namespace TeamProject3.Scene
 
             _stageFixture = stageRigidBody.Body
                 .CreateFixture(new PolygonShape(vertices, 100000.0f));
+
+            var stageSecondEntity = CreateEntity("stage-second-entity");
+            var stageSecondTexture = Graphics.CreateSingleColorTexture(1488, 216, Color.Transparent);
+            stageSecondEntity.SetParent(_stageElement.ElementEntity);
+            stageSecondEntity.SetLocalPosition(new Vector2(0.0f, 432.0f));
+            stageSecondEntity.AddComponent(new SpriteRenderer(stageSecondTexture));
+            stageSecondEntity.AddComponent<BoxCollider>();
+            
             #endregion
 
             //var leftWallEntity = CreateEntity("left-wall-entity");
