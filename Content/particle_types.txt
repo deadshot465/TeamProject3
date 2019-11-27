@@ -34,3 +34,5 @@ normalattack
 claw
 judgement
 admonishment
+newbegin
+theend

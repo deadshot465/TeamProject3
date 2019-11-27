@@ -34,8 +34,9 @@ namespace TeamProject3
         void IUpdatable.Update()
         {
             if (_mover.Move(Velocity * Time.DeltaTime) ||
-                Entity.Position.X > 12000 ||
-                Entity.Position.X < -12000)
+                Entity.Position.X > 6000 ||
+                Entity.Position.X < -6000 ||
+                Entity.Position.Y > 3000)
             {
                 Entity.Destroy();
             }

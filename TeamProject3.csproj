@@ -83,6 +83,7 @@
     <None Remove="Content\particle\judgement.pex" />
     <None Remove="Content\particle\Leaves.pex" />
     <None Remove="Content\particle\Meks Blood Spill.pex" />
+    <None Remove="Content\particle\newBegin.pex" />
     <None Remove="Content\particle\normalAttack.pex" />
     <None Remove="Content\particle\normalEffect.pex" />
     <None Remove="Content\particle\Plasma Glow.pex" />
@@ -93,6 +94,7 @@
     <None Remove="Content\particle\specialEffect.pex" />
     <None Remove="Content\particle\specialEffectReady.pex" />
     <None Remove="Content\particle\The Sun.pex" />
+    <None Remove="Content\particle\theEnd.pex" />
     <None Remove="Content\particle\Thingy.pex" />
     <None Remove="Content\particle\thingy.png" />
     <None Remove="Content\particle\Touch Up.pex" />
@@ -304,6 +306,9 @@
     <Content Include="Content\particle\Meks Blood Spill.pex">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\particle\newBegin.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\particle\normalAttack.pex">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -329,6 +334,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\particle\The Sun.pex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\particle\theEnd.pex">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\particle\Thingy.pex">

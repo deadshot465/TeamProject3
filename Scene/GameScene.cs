@@ -98,7 +98,8 @@ namespace TeamProject3.Scene
             bossComponent.PlayerFixture = playerComponent.PlayerFixture;
             playerComponent.BossFixture = bossComponent.BossFixture;
 
-            if (Math.Abs(PlayerEntity.Position.X - BossEntity.Position.X) < 210)
+            if (Math.Abs(PlayerEntity.Position.X - BossEntity.Position.X) < 210 &&
+                Math.Abs(PlayerEntity.Position.Y - BossEntity.Position.Y) < 175)
             {
                 var hit = Physics.Linecast(PlayerEntity.Position, BossEntity.Position);
                 if (hit.Collider != null)

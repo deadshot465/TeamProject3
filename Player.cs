@@ -134,7 +134,7 @@ namespace TeamProject3
 
             (_rigidBody, PlayerFixture) = Helper.CreateFarseerFixture(ref Entity,
                 BodyType.Dynamic,
-                -1.0f, _animationWidth / 4, _animationHeight / 2);
+                -1.0f, _animationWidth / 6, _animationHeight / 2);
             _rigidBody.SetInertia(0.0f).SetFixedRotation(true);
             PlayerFixture.CollisionGroup = -1;
             PlayerFixture.OnCollision += CollisionHandler;

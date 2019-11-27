@@ -160,7 +160,7 @@ namespace TeamProject3
             _movePhaseHandlers.Add(actions[5]);
             _movePhaseHandlers.Add(actions[5]);
 
-            //MoveToNextStage(BossStage.Two);
+            MoveToNextStage(BossStage.Three);
 
             _attackFinishAction = animationName => MoveToNextPhase();
         }
@@ -183,13 +183,17 @@ namespace TeamProject3
 
             if (!_timerStarted)
             {
-                _nextAttackDuration = Nez.Random.Range(3.5f, 4.5f);
+                _nextAttackDuration = Nez.Random.Range(1.0f, 2.0f);
                 _timerStarted = true;
+                return;
             }
+            else
+                _elapsedTime += Time.DeltaTime;
 
             if (_elapsedTime > _nextAttackDuration && !_attackStarted)
             {
                 _attackStarted = true;
+                _elapsedTime = 0.0f;
 
                 _bossPhaseHandlers[(int)_currentStage].Invoke(_currentStage switch
                 {
@@ -200,7 +204,6 @@ namespace TeamProject3
                 });
             }
 
-            _elapsedTime += Time.DeltaTime;
             _rigidBody.SetIsAwake(true).SetIsSleepingAllowed(false);
         }
 
@@ -401,7 +404,7 @@ namespace TeamProject3
                         .SetCompletionHandler(_thirdTween =>
                         {
                             HandleAttack();
-                            MoveToNextPhase();
+                            Core.Schedule(0.5f, timer => MoveToNextPhase());
                         });
 
                         thirdTween.Start();
@@ -433,7 +436,7 @@ namespace TeamProject3
                             .CreateEmitter(ParticleSystem.ParticleType.Admonishment));
                         emitter.SetRenderLayer(-5);
 
-                        Core.Schedule(3.0f, _timer =>
+                        Core.Schedule(1.0f, _timer =>
                         {
                             entity.Destroy();
 
@@ -463,9 +466,6 @@ namespace TeamProject3
                                     var judgeRightEntity = _judgeEntities.Last();
                                     judgeRightEntity.Position = new Vector2(
                                     Helper.ScreenWidth / 2 + (Helper.ScreenWidth / 2 - i), Entity.Position.Y);
-                                    //var judgeRightEntity = judgeLeftEntity.Clone(new Vector2(
-                                    //Helper.ScreenWidth / 2 + (Helper.ScreenWidth / 2 - i), Entity.Position.Y + 150));
-                                    //judgeRightEntity.AttachToScene(Entity.Scene);
 
                                     var judgeRightEmitter = judgeRightEntity.AddComponent(
                                     ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.Judgement));
@@ -484,7 +484,7 @@ namespace TeamProject3
                                 }
                             }
 
-                            Core.Schedule(3.0f, __timer =>
+                            Core.Schedule(1.0f, __timer =>
                             {
                                 _judgeEntities.ForEach(_entity =>
                                 {
@@ -495,25 +495,24 @@ namespace TeamProject3
                                     }
                                 });
 
-                                MoveToNextPhase();
+                                Core.Schedule(1.0f, ___timer =>
+                                {
+                                    _spriteAnimator.Play("Idle", SpriteAnimator.LoopMode.Loop);
+                                    var secondTween = Entity.TweenPositionTo(new Vector2(Helper.ScreenWidth / 2, _startPosition.Y), 3.0f);
+                                    secondTween.SetFrom(Entity.Position)
+                                    .SetEaseType(EaseType.Linear)
+                                    .SetCompletionHandler(_secondTween =>
+                                    {
+                                        Core.Schedule(1.0f, timer => MoveToNextPhase());
+                                    })
+                                    .Start();
+                                });
                             });
                         });
                     });
                 });
 
             tween.Start();
-
-            //var leftEntity = Entity.Scene.CreateEntity("projectile");
-            //leftEntity.Position = Entity.Position;
-            //leftEntity.AddComponent(ParticleSystem
-            //    .CreateEmitter(ParticleSystem.ParticleType.BlueFlame));
-            //leftEntity.AddComponent<ProjectileMover>();
-            //leftEntity.AddComponent(new ProjectileController(new Vector2(_projectileVelocity, 0)));
-
-            //var rightEntity = leftEntity.Clone();
-            //rightEntity.Position = Entity.Position;
-            //rightEntity.GetComponent<ProjectileController>().Velocity *= -1;
-            //rightEntity.AttachToScene(Entity.Scene);
         }
 
         private void ShieldAttack()
@@ -534,9 +533,13 @@ namespace TeamProject3
 
         private void MoveToNextPhase(bool movePhase = false, int? phase = null)
         {
-            _attackStarted = false;
-            _timerStarted = false;
-            _elapsedTime = 0.0f;
+            if (!movePhase)
+            {
+                _attackStarted = false;
+                _timerStarted = false;
+                _elapsedTime = 0.0f;
+            }
+            
             _spriteAnimator.Play("Idle", SpriteAnimator.LoopMode.Loop);
             _spriteAnimator.OnAnimationCompletedEvent -= _attackFinishAction;
 
