@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/player_revised.png</SourceFile>
-  <SourceTime>2019-10-10T13:44:17.673922+09:00</SourceTime>
-  <DestFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/bin/DesktopGL/player_revised.xnb</DestFile>
-  <DestTime>2019-11-18T13:47:53.271989+09:00</DestTime>
+  <SourceFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/gameover.png</SourceFile>
+  <SourceTime>2019-11-27T09:52:08+09:00</SourceTime>
+  <DestFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/bin/DesktopGL/Content/gameover.xnb</DestFile>
+  <DestTime>2019-11-28T04:37:04.0532808+09:00</DestTime>
   <Importer>TextureImporter</Importer>
-  <ImporterTime>2018-12-09T01:35:54+09:00</ImporterTime>
+  <ImporterTime>2018-08-05T14:17:44+09:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
-  <ProcessorTime>2018-12-09T01:35:54+09:00</ProcessorTime>
+  <ProcessorTime>2018-08-05T14:17:44+09:00</ProcessorTime>
   <Parameters>
     <Key>ColorKeyColor</Key>
-    <Value>250,125,250,255</Value>
+    <Value>255,0,255,255</Value>
   </Parameters>
   <Parameters>
     <Key>ColorKeyEnabled</Key>
@@ -22,7 +22,7 @@
   </Parameters>
   <Parameters>
     <Key>PremultiplyAlpha</Key>
-    <Value>False</Value>
+    <Value>True</Value>
   </Parameters>
   <Parameters>
     <Key>ResizeToPowerOfTwo</Key>

@@ -70,7 +70,6 @@ C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x6
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\particle\Winner Stars.pex
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\particle\wu1.pex
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\particle_types.txt
-C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\player_revised.xnb
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\TeamProject3.exe
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\TeamProject3.deps.json
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\TeamProject3.runtimeconfig.json
@@ -312,12 +311,9 @@ C:\Users\sonic\OneDrive\文件\repos\TeamProject3\obj\Debug\netcoreapp3.1\win-x6
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\splash_screen.xnb
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Nez.Persistence.dll
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Nez.Persistence.pdb
-C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\sample_titlescreen.xnb
-C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\sample_ground.xnb
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Nez.FarseerPhysics.dll
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Nez.FarseerPhysics.pdb
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\boss1.xnb
-C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\haikei.xnb
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\mscordaccore_amd64_amd64_4.700.19.53102.dll
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\particle\feather.pex
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\particle\normalEffect.pex
@@ -337,3 +333,14 @@ C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x6
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\particle\admonishment.pex
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\particle\newBegin.pex
 C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\particle\theEnd.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\particle\devilMayCry.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\particle\infinity.pex
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\gameclear.xnb
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\gameover.xnb
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\press_space_key.xnb
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\title.xnb
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\UI_boss1.xnb
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\UI_boss2.xnb
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\UI_player1.xnb
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\UI_player2.xnb
+C:\Users\sonic\OneDrive\文件\repos\TeamProject3\bin\Debug\netcoreapp3.1\win-x64\Content\UI_rolling.xnb

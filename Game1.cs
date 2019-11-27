@@ -14,8 +14,14 @@ namespace TeamProject3
         private GameScene _gameScene;
         private bool _splashScreenShown = false;
         private bool _titleScreenShown = false;
+        private bool _gameSceneLoaded = false;
+        private bool _endScreenShown = false;
         private Nez.Scene.SceneResolutionPolicy _sceneResolutionPolicy;
         private VirtualButton _startButton = new VirtualButton();
+#if DEBUG
+        private VirtualButton _gameClearButton = new VirtualButton();
+        private VirtualButton _gameOverButton = new VirtualButton();
+#endif
         private const int _screenWidth = 1920;
         private const int _screenHeight = 1080;
 
@@ -36,6 +42,10 @@ namespace TeamProject3
             Scene = _splashScene;
 
             _startButton.Nodes.Add(new VirtualButton.KeyboardKey(Keys.Space));
+#if DEBUG
+            _gameClearButton.Nodes.Add(new VirtualButton.KeyboardKey(Keys.P));
+            _gameOverButton.Nodes.Add(new VirtualButton.KeyboardKey(Keys.L));
+#endif
 
             Core.DebugRenderEnabled = true;
         }
@@ -61,14 +71,46 @@ namespace TeamProject3
                     
                     var transition = new FadeTransition(() => _titleScene);
                     transition.FadeToColor = Color.Black;
-                    transition.OnTransitionCompleted = () =>
-                    {
-                        _titleScreenShown = true;
-                    };
+                    transition.OnTransitionCompleted = () => _titleScreenShown = true;
                     StartSceneTransition(transition);
                 });
 
                 _splashScreenShown = true;
+            }
+
+            if (_gameSceneLoaded)
+            {
+#if DEBUG
+                if (_gameClearButton.IsPressed)
+                {
+                    var transition = new FadeTransition(() =>
+                    new EndScene());
+                    transition.FadeToColor = Color.Black;
+                    transition.OnTransitionCompleted = () => _endScreenShown = true;
+                    _gameSceneLoaded = false;
+                    StartSceneTransition(transition);
+                }
+                else if (_gameOverButton.IsPressed)
+                {
+                    var transition = new FadeTransition(() =>
+                    new EndScene(false));
+                    transition.FadeToColor = Color.Black;
+                    transition.OnTransitionCompleted = () => _endScreenShown = true;
+                    _gameSceneLoaded = false;
+                    StartSceneTransition(transition);
+                }
+#endif
+            }
+
+            if (_endScreenShown && _startButton.IsPressed)
+            {
+                _titleScene = new TitleScene();
+
+                var transition = new FadeTransition(() => _titleScene);
+                transition.FadeToColor = Color.Black;
+                transition.OnTransitionCompleted = () => _titleScreenShown = true;
+                _endScreenShown = false;
+                StartSceneTransition(transition);
             }
 
             LoadGameScene();
@@ -81,11 +123,13 @@ namespace TeamProject3
             if (_startButton.IsPressed)
             {
                 var transition =
-                    new WindTransition(() => new GameScene(
+                    new FadeTransition(() => new GameScene(
                         new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)));
-                transition.Duration = 5.0f;
+                transition.FadeInDuration = 1.5f;
+                transition.FadeOutDuration = 1.5f;
+                transition.FadeToColor = Color.Black;
+                transition.OnTransitionCompleted = () => _gameSceneLoaded = true;
                 StartSceneTransition(transition);
-                _startButton.Deregister();
                 _titleScreenShown = false;
             }
         }

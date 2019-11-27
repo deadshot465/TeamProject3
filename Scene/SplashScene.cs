@@ -5,7 +5,7 @@ using Nez.Sprites;
 
 namespace TeamProject3.Scene
 {
-    public class SplashScene :Nez.Scene
+    public class SplashScene : Nez.Scene
     {
         private Entity _splashScreenEntity;
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/sample_titlescreen.png</SourceFile>
-  <SourceTime>2019-11-05T09:43:21+09:00</SourceTime>
-  <DestFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/bin/DesktopGL/sample_titlescreen.xnb</DestFile>
-  <DestTime>2019-11-18T13:47:53.39469+09:00</DestTime>
+  <SourceFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/gameclear.png</SourceFile>
+  <SourceTime>2019-11-27T09:52:16+09:00</SourceTime>
+  <DestFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/bin/DesktopGL/gameclear.xnb</DestFile>
+  <DestTime>2019-11-28T04:30:28.8254342+09:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2018-12-09T01:35:54+09:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

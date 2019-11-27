@@ -35,14 +35,14 @@ namespace TeamProject3.Scene
         private BackgroundElement _shadeElement = new BackgroundElement();
         private BackgroundElement _hiddenStageElement = new BackgroundElement();
         private Fixture _stageFixture;
-        private FSRigidBody _leftWallRigidBody;
-        private Fixture _leftWallFixture;
 
         private FollowCamera _followCamera;
 
         public Vector2 Viewport { get; set; } = Vector2.Zero;
         public Entity PlayerEntity;
         public Entity BossEntity;
+        public bool IsPlayerAlive => PlayerEntity.GetComponent<Player>().Hp > 0;
+        public bool IsBossAlive => BossEntity.GetComponent<Boss>().Hp > 0;
 
         private ulong _count = 0;
 
@@ -198,9 +198,7 @@ namespace TeamProject3.Scene
             var playerComponent = PlayerEntity.GetComponent<Player>();
             var bossComponent = BossEntity.GetComponent<Boss>();
             playerComponent.GroundFixture = _stageFixture;
-            //playerComponent.LeftWallFixture = _leftWallFixture;
             bossComponent.GroundFixture = _stageFixture;
-            //bossComponent.LeftWallFixture = _leftWallFixture;
             playerComponent.BossFixture = bossComponent.BossFixture;
             bossComponent.PlayerFixture = playerComponent.PlayerFixture;
         }
