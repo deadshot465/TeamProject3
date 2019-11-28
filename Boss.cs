@@ -71,15 +71,18 @@ namespace TeamProject3
         private int _currentAttackTick = 0;
         private readonly float _projectileVelocity;
         private float _bossDirection = 0;
+        private const float _stageOneHp = 50.0f;
+        private const float _stageTwoHp = 50.0f;
+        private const float _stageThreeHp = 100.0f;
+        private bool _isAttackPaused = false;
 
         private FSRigidBody _rigidBody;
-        private FSRigidBody _battleRigidBody;
 
         private BossSettings _bossSettings;
 
         private enum BossStage
         {
-            One, Two, Three
+            One, Two, Three, End
         }
 
         private enum BossAttacks
@@ -92,15 +95,11 @@ namespace TeamProject3
 
         private delegate void AttackHandler();
         private List<AttackHandler> _attackHandlers = new List<AttackHandler>();
-
         private delegate void PhaseHandler(int patterns);
         private List<PhaseHandler> _bossPhaseHandlers = new List<PhaseHandler>();
-
         private List<Action> _movePhaseHandlers
             = new List<Action>();
-
         private List<Entity> _judgeEntities = new List<Entity>();
-
         private Action<string> _attackFinishAction;
 
         public Vector2 Speed { get; private set; }
@@ -111,10 +110,11 @@ namespace TeamProject3
         public float Width => _spriteAnimator.Width;
         public float Height => _spriteAnimator.Height;
         public BoxCollider Collider { get; private set; }
-        public float Hp { get; set; } = 100.0f;
+        public float Hp { get; set; } = _stageOneHp;
         public bool FadeFlag { get; private set; } = false;
         public bool FadeFinished { get; set; } = false;
         public bool CanAttack { get; set; } = false;
+        public bool IsDead { get; private set; } = false;
 
         public Boss(Vector2 startPosition, BossSettings bossSettings)
         {
@@ -146,21 +146,12 @@ namespace TeamProject3
                 () => MoveToNextPhase(true, (int)BossAttacks.FullscreenAttack)
             };
 
-            //_movePhaseHandlers.Add(actions[0]);
-            //_movePhaseHandlers.Add(actions[0]);
-            //_movePhaseHandlers.Add(actions[1]);
-            //_movePhaseHandlers.Add(actions[0]);
-            //_movePhaseHandlers.Add(actions[0]);
-            //_movePhaseHandlers.Add(actions[2]);
-
-            _movePhaseHandlers.Add(actions[5]);
-            _movePhaseHandlers.Add(actions[5]);
-            _movePhaseHandlers.Add(actions[5]);
-            _movePhaseHandlers.Add(actions[5]);
-            _movePhaseHandlers.Add(actions[5]);
-            _movePhaseHandlers.Add(actions[5]);
-
-            MoveToNextStage(BossStage.Three);
+            _movePhaseHandlers.Add(actions[0]);
+            _movePhaseHandlers.Add(actions[0]);
+            _movePhaseHandlers.Add(actions[1]);
+            _movePhaseHandlers.Add(actions[0]);
+            _movePhaseHandlers.Add(actions[0]);
+            _movePhaseHandlers.Add(actions[2]);
 
             _attackFinishAction = animationName => MoveToNextPhase();
         }
@@ -177,31 +168,38 @@ namespace TeamProject3
 
         void IUpdatable.Update()
         {
+            HandleMoveStage();
+
+            if (IsDead) return;
+
             var playEntity = Entity.Scene.FindEntity("player-entity");
             _bossDirection = (playEntity.Position.X < Entity.Position.X) ? -1.0f : 1.0f;
             _spriteAnimator.FlipX = (_bossDirection < 0) ? false : true;
 
-            if (!_timerStarted)
+            if (_currentStage != BossStage.End)
             {
-                _nextAttackDuration = Nez.Random.Range(1.0f, 2.0f);
-                _timerStarted = true;
-                return;
-            }
-            else
-                _elapsedTime += Time.DeltaTime;
-
-            if (_elapsedTime > _nextAttackDuration && !_attackStarted)
-            {
-                _attackStarted = true;
-                _elapsedTime = 0.0f;
-
-                _bossPhaseHandlers[(int)_currentStage].Invoke(_currentStage switch
+                if (!_timerStarted)
                 {
-                    BossStage.One => 6,
-                    BossStage.Two => 16,
-                    BossStage.Three => 37,
-                    _ => 0
-                });
+                    _nextAttackDuration = Nez.Random.Range(1.0f, 2.0f);
+                    _timerStarted = true;
+                    return;
+                }
+                else
+                    _elapsedTime += Time.DeltaTime;
+
+                if (_elapsedTime > _nextAttackDuration && !_attackStarted)
+                {
+                    _attackStarted = true;
+                    _elapsedTime = 0.0f;
+
+                    _bossPhaseHandlers[(int)_currentStage].Invoke(_currentStage switch
+                    {
+                        BossStage.One => 6,
+                        BossStage.Two => 16,
+                        BossStage.Three => 37,
+                        _ => 0
+                    });
+                }
             }
 
             _rigidBody.SetIsAwake(true).SetIsSleepingAllowed(false);
@@ -249,6 +247,8 @@ namespace TeamProject3
             BossFixture.CollisionGroup = -1;
 
             _spriteAnimator.Play("Idle", SpriteAnimator.LoopMode.Loop);
+
+            //MoveToNextStage(BossStage.End);
         }
 
         public override void OnRemovedFromEntity()
@@ -258,6 +258,7 @@ namespace TeamProject3
 
         private void ChainAttack()
         {
+            if (_isAttackPaused) return;
             _spriteAnimator.Play("RaiseSword", SpriteAnimator.LoopMode.ClampForever);
 
             Core.Schedule(0.25f, timer =>
@@ -270,6 +271,7 @@ namespace TeamProject3
 
         private void RangeAttack()
         {
+            if (_isAttackPaused) return;
             _spriteAnimator.Play("RaiseSword", SpriteAnimator.LoopMode.ClampForever);
 
             var entity = Entity.Scene.CreateEntity("projectile");
@@ -311,6 +313,7 @@ namespace TeamProject3
 
         private void Dash()
         {
+            if (_isAttackPaused) return;
             var entity = Entity.Scene.CreateEntity("projectile");
             //entity.Position = new Vector2(Entity.Position.X + (100 * _bossDirection), Entity.Position.Y);
             entity.SetParent(Entity);
@@ -344,6 +347,7 @@ namespace TeamProject3
 
         private void JumpAttack()
         {
+            if (_isAttackPaused) return;
             var firstOffset = _bossSettings.FirstStepJumpOffset;
             firstOffset.X *= _bossDirection;
             var secondOffset = _bossSettings.SecondStepJumpOffset;
@@ -420,6 +424,7 @@ namespace TeamProject3
 
         private void FullscreenAttack()
         {
+            if (_currentStage == BossStage.End) return;
             var tween = Entity.TweenPositionTo(new Vector2(Helper.ScreenWidth / 2, 150.0f), 2.0f)
                 .SetFrom(Entity.Position)
                 .SetEaseType(EaseType.ExpoInOut)
@@ -517,6 +522,7 @@ namespace TeamProject3
 
         private void ShieldAttack()
         {
+            if (_isAttackPaused) return;
             var tween = Entity
                 .TweenPositionTo(new Vector2(50 * _bossDirection, 0), 0.5f)
                 .SetFrom(Entity.Position)
@@ -527,12 +533,15 @@ namespace TeamProject3
                     HandleAttack();
                     MoveToNextPhase();
                 });
+
+            _spriteAnimator.Play("Shielding", SpriteAnimator.LoopMode.Once);
             
             tween.Start();
         }
 
         private void MoveToNextPhase(bool movePhase = false, int? phase = null)
         {
+            if (_currentStage == BossStage.End) return;
             if (!movePhase)
             {
                 _attackStarted = false;
@@ -587,6 +596,7 @@ namespace TeamProject3
                         _movePhaseHandlers.Add(actions[3]);
                         _movePhaseHandlers.Add(actions[4]);
 
+                        Hp = _stageTwoHp;
                         break;
                     }
                 case BossStage.Three:
@@ -630,8 +640,22 @@ namespace TeamProject3
                         _movePhaseHandlers.Add(actions[3]);
                         _movePhaseHandlers.Add(actions[2]);
                         _movePhaseHandlers.Add(actions[5]);
+
+                        Hp = _stageThreeHp;
+                        Core.Schedule(2.0f, timer =>
+                        {
+                            var entity = Entity.Scene.CreateEntity("infinity");
+                            entity.SetParent(Entity);
+                            var emitter = entity.AddComponent(
+                                ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.Infinity));
+                            emitter.SetRenderLayer(-5);
+                            entity.AddComponent<ProjectileMover>();
+                        });
                         break;
                     }
+                case BossStage.End:
+                    HandleDeath();
+                    break;
                 default:
                     break;
             }
@@ -641,6 +665,7 @@ namespace TeamProject3
 
         private void StageAttack(int patterns)
         {
+            if (_currentStage == BossStage.End || _isAttackPaused) return;
             _movePhaseHandlers[_currentAttackTick].Invoke();
 
             _attackHandlers[_currentAttack].Invoke();
@@ -649,6 +674,7 @@ namespace TeamProject3
 
         private void HandleAttack()
         {
+            if (_currentStage == BossStage.End || _isAttackPaused) return;
             if (!CanAttack) return;
             var playerEntity = Entity.Scene.FindEntity("player-entity");
             if (playerEntity != null)
@@ -659,6 +685,70 @@ namespace TeamProject3
                     System.Console.WriteLine($"Player Hp: {playerEntity.GetComponent<Player>().Hp}");
                 }
             }
+        }
+
+        private void HandleMoveStage()
+        {
+            if (Hp > 0 || _currentStage == BossStage.End) return;
+            _isAttackPaused = true;
+            
+            if (_currentStage != BossStage.Three) FullscreenAttack();
+            MoveToNextStage(_currentStage switch
+            {
+                BossStage.One => BossStage.Two,
+                BossStage.Two => BossStage.Three,
+                BossStage.Three => BossStage.End
+            });
+            Core.Schedule(5.0f, timer => _isAttackPaused = false);
+        }
+
+        private void HandleDeath()
+        {
+            _isAttackPaused = true;
+            var infinityEntity = Entity.Scene.FindEntity("infinity");
+            if (infinityEntity != null) infinityEntity.Destroy();
+
+            var tween = Entity.TweenPositionTo(
+                new Vector2(Helper.ScreenWidth / 2, Helper.ScreenHeight / 2 - 150.0f), 3.0f);
+            _spriteAnimator.Play("Idle", SpriteAnimator.LoopMode.Loop);
+            _spriteAnimator.Speed *= 0.75f;
+            tween.SetDelay(2.0f)
+                .SetEaseType(EaseType.Linear)
+                .SetFrom(Entity.Position)
+                .SetCompletionHandler(_tween =>
+                {
+                    Core.Schedule(2.0f, timer =>
+                    {
+                        var entity = Entity.Scene.CreateEntity("the-end");
+                        entity.SetParent(Entity);
+                        var emitter = entity.AddComponent(
+                            ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.TheEnd));
+                        emitter.SetRenderLayer(-5);
+                        entity.AddComponent<ProjectileMover>();
+                        var emitterTween = emitter.TweenColorTo(Color.DarkRed, 5.0f);
+                        emitterTween.SetEaseType(EaseType.Linear)
+                        .SetFrom(emitter.Color)
+                        .SetCompletionHandler(emitterTimer =>
+                        {
+                            var secondEntity = Entity.Scene.CreateEntity("new-beginning");
+                            secondEntity.SetParent(Entity);
+                            var secondEmitter = secondEntity.AddComponent(
+                                ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.FullscreenFeather));
+                            secondEmitter.SetRenderLayer(-5);
+                            secondEmitter.AddComponent<ProjectileMover>();
+                            entity.Destroy();
+
+                            var lastTween = _spriteAnimator.TweenColorTo(Color.Transparent, 5.0f);
+                            lastTween.SetFrom(_spriteAnimator.Color)
+                            .SetCompletionHandler(lastTweenTimer =>
+                            {
+                                secondEntity.Destroy();
+                                Core.Schedule(2.0f, endTimer => IsDead = true);
+                            }).Start();
+
+                        }).Start();
+                    });
+                }).Start();
         }
     }
 }

@@ -51,7 +51,7 @@ namespace TeamProject3
         public Fixture BossFixture { get; set; }
         public Fixture PlayerFixture { get; private set; }
         public BoxCollider Collider { get; private set; }
-        public float Hp { get; set; } = 100.0f;
+        public float Hp { get; set; } = 1000.0f;
         public bool CanAttack { get; set; } = false;
         public bool IsInvincible { get; set; } = false;
 

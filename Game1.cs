@@ -100,6 +100,25 @@ namespace TeamProject3
                     StartSceneTransition(transition);
                 }
 #endif
+                if (_gameScene.IsBossDead)
+                {
+                    var transition = new FadeTransition(() =>
+                    new EndScene());
+                    transition.FadeToColor = Color.Black;
+                    transition.FadeOutDuration = 5.0f;
+                    transition.OnTransitionCompleted = () => _endScreenShown = true;
+                    _gameSceneLoaded = false;
+                    StartSceneTransition(transition);
+                }
+                else if (!_gameScene.IsPlayerAlive)
+                {
+                    var transition = new FadeTransition(() =>
+                    new EndScene(false));
+                    transition.FadeToColor = Color.Black;
+                    transition.OnTransitionCompleted = () => _endScreenShown = true;
+                    _gameSceneLoaded = false;
+                    StartSceneTransition(transition);
+                }
             }
 
             if (_endScreenShown && _startButton.IsPressed)
@@ -122,9 +141,11 @@ namespace TeamProject3
 
             if (_startButton.IsPressed)
             {
+                _gameScene = new GameScene(
+                        new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
+
                 var transition =
-                    new FadeTransition(() => new GameScene(
-                        new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)));
+                    new FadeTransition(() => _gameScene);
                 transition.FadeInDuration = 1.5f;
                 transition.FadeOutDuration = 1.5f;
                 transition.FadeToColor = Color.Black;

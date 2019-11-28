@@ -29,6 +29,7 @@ namespace TeamProject3.Scene
         private RenderLayerRenderer _defaultRenderer;
         private RenderLayerRenderer _effectRenderer;
         private RenderLayerRenderer _staticSpriteRenderer;
+        private RenderLayerRenderer _uiRenderer;
 
         private BackgroundElement[] _backgroundElements = new BackgroundElement[4];
         private BackgroundElement _stageElement = new BackgroundElement();
@@ -36,13 +37,41 @@ namespace TeamProject3.Scene
         private BackgroundElement _hiddenStageElement = new BackgroundElement();
         private Fixture _stageFixture;
 
+        private Entity _playerUiEntity;
+        private Entity _bossUiEntity;
+        private SpriteRenderer _playerHpSprite;
+        private SpriteRenderer _bossHpSprite;
+
+        private float PlayerHp => PlayerEntity.GetComponent<Player>().Hp;
+        private float BossHp => BossEntity.GetComponent<Boss>().Hp;
+
         private FollowCamera _followCamera;
 
         public Vector2 Viewport { get; set; } = Vector2.Zero;
         public Entity PlayerEntity;
         public Entity BossEntity;
-        public bool IsPlayerAlive => PlayerEntity.GetComponent<Player>().Hp > 0;
-        public bool IsBossAlive => BossEntity.GetComponent<Boss>().Hp > 0;
+        public bool IsPlayerAlive
+        {
+            get
+            {
+                if (PlayerEntity != null && PlayerEntity.GetComponent<Player>() != null)
+                {
+                    return PlayerEntity.GetComponent<Player>().Hp > 0;
+                }
+                return true;
+            }
+        }
+        public bool IsBossDead
+        {
+            get
+            {
+                if (BossEntity != null && BossEntity.GetComponent<Boss>() != null)
+                {
+                    return BossEntity.GetComponent<Boss>().IsDead;
+                }
+                return true;
+            }
+        }
 
         private ulong _count = 0;
 
@@ -57,6 +86,7 @@ namespace TeamProject3.Scene
 
             SetupRendererAndPhysicalWorld();
             CreateEntities();
+            LoadUi();
 
             BossSettings.ExportBossSettings();
         }
@@ -157,6 +187,7 @@ namespace TeamProject3.Scene
                 new[] { 1000, 990, 980, 970, 960, 950 }));
             _defaultRenderer = AddRenderer(new RenderLayerRenderer(1, new[] { 0 }));
             _effectRenderer = AddRenderer(new RenderLayerRenderer(2, new[] { -5 }));
+            _uiRenderer = AddRenderer(new RenderLayerRenderer(2, new[] { -20, -15, -10 }));
 
             var world = GetOrCreateSceneComponent<FSWorld>();
 
@@ -307,6 +338,23 @@ namespace TeamProject3.Scene
                 .SetRenderLayer(950);
             _shadeElement.ElementSprite.SetColor(Color.TransparentBlack);
             #endregion
+        }
+
+        private void LoadUi()
+        {
+            _playerUiEntity = CreateEntity("player-ui");
+            _bossUiEntity = CreateEntity("boss-ui");
+            var _playerGaugeTexture = Content.Load<Texture2D>("UI_player1");
+            var _playerHpTexture = Content.Load<Texture2D>("UI_player2");
+            _playerUiEntity.Position =
+                new Vector2(Helper.ScreenWidth / 6, Helper.ScreenHeight / 10);
+            _playerUiEntity.SetUpdateOrder(int.MaxValue);
+            
+            _playerUiEntity.AddComponent(
+                new SpriteRenderer(_playerGaugeTexture)).SetRenderLayer(-10);
+            _playerHpSprite = _playerUiEntity.AddComponent(
+                new SpriteRenderer(_playerHpTexture));
+            _playerHpSprite.SetRenderLayer(-15);
         }
     }
 }
