@@ -29,12 +29,15 @@ namespace TeamProject3
         private bool _movementStarted = false;
         private bool _waitForNextInput = false;
         private bool _inputTimerStarted = false;
+        private bool _isCharacterLoaded = false;
+        private int _playerDirection = 1;
         private float _comboTimer = 0.0f;
         private float _inputTimer = 0.0f;
+        private float _attackIntervalTimer = 0.0f;
+        private float _fleeTimer = 0.0f;
         private int _comboIndex = 0;
 
         private FSRigidBody _rigidBody;
-        private FSRigidBody _battleRigidBody;
 
         private float _speed = 0.0f;
         private bool _isJumping = false;
@@ -51,9 +54,11 @@ namespace TeamProject3
         public Fixture BossFixture { get; set; }
         public Fixture PlayerFixture { get; private set; }
         public BoxCollider Collider { get; private set; }
-        public float Hp { get; set; } = 1000.0f;
+        public float Hp { get; private set; } = 100.0f;
         public bool CanAttack { get; set; } = false;
         public bool IsInvincible { get; set; } = false;
+        public bool IsDead { get; private set; } = false;
+        public bool IsFleeingAvailable { get; private set; } = true;
 
         private enum Input
         {
@@ -145,6 +150,8 @@ namespace TeamProject3
             SetupKeyboardInputs();
 
             _spriteAnimator.Play("idle", SpriteAnimator.LoopMode.Loop);
+
+            _isCharacterLoaded = true;
         }
 
         public override void OnRemovedFromEntity()
@@ -159,6 +166,9 @@ namespace TeamProject3
 
         void IUpdatable.Update()
         {
+            if (_isCharacterLoaded) HandleDeath();
+            if (IsDead) return;
+
             var moveDirection = new Vector2(_inputMovementMappings[Movement.Move].Value, 0);
 
             if (!_animationStarted && !_comboStarted)
@@ -174,11 +184,13 @@ namespace TeamProject3
             {
                 _velocity.X = -_speed;
                 _spriteAnimator.FlipX = true;
+                _playerDirection = -1;
             }
             else if (moveDirection.X > 0)
             {
                 _velocity.X = _speed;
                 _spriteAnimator.FlipX = false;
+                _playerDirection = 1;
             }
             else
             {
@@ -263,6 +275,8 @@ namespace TeamProject3
 
         private void HandleKeyboardInputs()
         {
+            if (IsDead) return;
+
             if (_waitForNextInput)
             {
                 if (_comboTimer > 0.5f)
@@ -282,24 +296,30 @@ namespace TeamProject3
             {
                 if (_inputKeyMappings[Input.Attack].IsReleased)
                 {
-                    if (!_comboStarted)
+                    if (_attackIntervalTimer > 0.5f)
                     {
-                        _comboStarted = true;
-                        _animationStarted = true;
-                        _spriteAnimator.Play(_attackStrings[_comboIndex], SpriteAnimator.LoopMode.ClampForever);
-                        _spriteAnimator.OnAnimationCompletedEvent += OnAttackFinished;
-                    }
-                    else
-                    {
-                        if (_waitForNextInput)
+                        if (!_comboStarted)
                         {
-                            _waitForNextInput = false;
-                            _comboTimer = 0.0f;
+                            _comboStarted = true;
+                            _animationStarted = true;
                             _spriteAnimator.Play(_attackStrings[_comboIndex], SpriteAnimator.LoopMode.ClampForever);
+                            _spriteAnimator.OnAnimationCompletedEvent += OnAttackFinished;
                         }
+                        else
+                        {
+                            if (_waitForNextInput)
+                            {
+                                _waitForNextInput = false;
+                                _comboTimer = 0.0f;
+                                _spriteAnimator.Play(_attackStrings[_comboIndex], SpriteAnimator.LoopMode.ClampForever);
+                            }
+                        }
+                        GenerateHitEffect();
+                        _inputTimerStarted = true;
+                        if (CanAttack) HandleAttack();
+                        _attackIntervalTimer = 0.0f;
                     }
-                    _inputTimerStarted = true;
-                    if (CanAttack) HandleAttack();
+                    
                 }
                 else if (_inputKeyMappings[Input.Jump].IsReleased)
                 {
@@ -310,13 +330,14 @@ namespace TeamProject3
                         _spriteAnimator.OnAnimationCompletedEvent += OnAnimationFinished;
                     _inputTimerStarted = true;
                 }
-                else if (_inputKeyMappings[Input.Flee].IsReleased)
+                else if (_inputKeyMappings[Input.Flee].IsReleased && IsFleeingAvailable)
                 {
                     _spriteAnimator.Play("flee", SpriteAnimator.LoopMode.Once);
                     _animationStarted = true;
                     _movementStarted = true;
                     //Collider.Enabled = false;
                     IsInvincible = true;
+                    IsFleeingAvailable = false;
                     var tween = Entity.TweenPositionTo(
                         new Vector2(400 * (_spriteAnimator.FlipX ? -1 : 1), 0), 0.25f);
                     tween.SetFrom(Entity.Position)
@@ -326,8 +347,14 @@ namespace TeamProject3
                     if (!_comboStarted)
                         _spriteAnimator.OnAnimationCompletedEvent += OnAnimationFinished;
                     _inputTimerStarted = true;
+                    _fleeTimer = 0.0f;
                 }
             }
+
+            if (_fleeTimer > 2.0f) IsFleeingAvailable = true;
+
+            _attackIntervalTimer += Time.DeltaTime;
+            _fleeTimer += Time.DeltaTime;
         }
 
         private void OnAttackFinished(string animationName)
@@ -349,16 +376,43 @@ namespace TeamProject3
 
         private bool CollisionHandler(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
-            _spriteAnimator.SetColor(Color.Red);
-            Core.Schedule(0.3f, timer => _spriteAnimator.SetColor(Color.White));
             return true;
         }
 
         private void HandleAttack()
         {
+            if (IsDead) return;
+
             var bossEntity = Entity.Scene.FindEntity("boss-entity");
             bossEntity.GetComponent<Boss>().Hp -= 1;
             Console.WriteLine($"Boss Hp: {bossEntity.GetComponent<Boss>().Hp}");
+        }
+
+        private void HandleDeath()
+        {
+            if (Hp <= 0 || Entity.Position.Y > 1500)
+            {
+                IsDead = true;
+            }
+        }
+
+        private void GenerateHitEffect()
+        {
+            var entity = Entity.Scene.CreateEntity(Nez.Utils.RandomString());
+            entity.SetParent(Entity);
+            var emitter = entity.AddComponent(
+                ParticleSystem.CreateEmitter(ParticleSystem.ParticleType.DevilMayCry));
+            emitter.SetRenderLayer(-5);
+            emitter.SetLocalOffset(new Vector2(75.0f * _playerDirection, -50.0f));
+
+            Core.Schedule(0.5f, timer => entity.Destroy());
+        }
+
+        public void HandleDamage()
+        {
+            Hp -= 10;
+            _spriteAnimator.SetColor(Color.Red);
+            Core.Schedule(0.3f, timer => _spriteAnimator.SetColor(Color.White));
         }
     }
 }

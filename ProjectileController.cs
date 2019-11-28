@@ -62,7 +62,7 @@ namespace TeamProject3
                 {
                     if (!invincible)
                     {
-                        playerEntity.GetComponent<Player>().Hp -= 10;
+                        playerEntity.GetComponent<Player>().HandleDamage();
                         System.Console.WriteLine($"Player Hp: {playerEntity.GetComponent<Player>().Hp}");
                     }
                 }

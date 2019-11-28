@@ -110,11 +110,12 @@ namespace TeamProject3
                     _gameSceneLoaded = false;
                     StartSceneTransition(transition);
                 }
-                else if (!_gameScene.IsPlayerAlive)
+                else if (_gameScene.IsPlayerDead)
                 {
                     var transition = new FadeTransition(() =>
                     new EndScene(false));
                     transition.FadeToColor = Color.Black;
+                    transition.FadeOutDuration = 5.0f;
                     transition.OnTransitionCompleted = () => _endScreenShown = true;
                     _gameSceneLoaded = false;
                     StartSceneTransition(transition);

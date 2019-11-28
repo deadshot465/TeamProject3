@@ -85,6 +85,30 @@
 /processorParam:TextureFormat=Color
 /build:boss1.png
 
+#begin Explosion Blast Large 01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Explosion Blast Large 01.wav
+
+#begin Fire Blaze Roar Crackle 01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Fire Blaze Roar Crackle 01.wav
+
+#begin Fire Fireball Large 02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Fire Fireball Large 02.wav
+
+#begin Fire Heavy Crackle Blaze Sizzle 01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Fire Heavy Crackle Blaze Sizzle 01.wav
+
 #begin gameclear.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -133,6 +157,24 @@
 /processorParam:TextureFormat=Color
 /build:press_space_key.png
 
+#begin red (1).PNG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:red (1).PNG
+
+#begin reverse_clock.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:reverse_clock.mp3
+
 #begin splash_screen.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -144,6 +186,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:splash_screen.png
+
+#begin title.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:title.png
 
 #begin title.png
 /importer:TextureImporter
@@ -216,4 +270,10 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UI_rolling.png
+
+#begin Weapon Sword Whips 02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Weapon Sword Whips 02.wav
 

@@ -5,11 +5,13 @@ using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using Nez;
 using Nez.Farseer;
 using Nez.Sprites;
 using System;
 using System.Collections;
+using TeamProject3.UI;
 
 namespace TeamProject3.Scene
 {
@@ -37,26 +39,31 @@ namespace TeamProject3.Scene
         private BackgroundElement _hiddenStageElement = new BackgroundElement();
         private Fixture _stageFixture;
 
-        private Entity _playerUiEntity;
+        private Entity _playerUiGaugeEntity;
         private Entity _bossUiEntity;
-        private SpriteRenderer _playerHpSprite;
-        private SpriteRenderer _bossHpSprite;
+        private Entity _playerFleeEntity;
+        private HpGauge _playerHpSprite;
+        private HpGauge _bossHpSprite;
+        private SpriteRenderer _playerFleeSkillMask;
 
         private float PlayerHp => PlayerEntity.GetComponent<Player>().Hp;
+        private float _playerInitialHp = 0.0f;
+        private bool PlayerFleeAvailable => PlayerEntity.GetComponent<Player>().IsFleeingAvailable;
         private float BossHp => BossEntity.GetComponent<Boss>().Hp;
+        private float _bossInitialHp = 0.0f;
 
         private FollowCamera _followCamera;
 
         public Vector2 Viewport { get; set; } = Vector2.Zero;
         public Entity PlayerEntity;
         public Entity BossEntity;
-        public bool IsPlayerAlive
+        public bool IsPlayerDead
         {
             get
             {
                 if (PlayerEntity != null && PlayerEntity.GetComponent<Player>() != null)
                 {
-                    return PlayerEntity.GetComponent<Player>().Hp > 0;
+                    return PlayerEntity.GetComponent<Player>().IsDead;
                 }
                 return true;
             }
@@ -87,6 +94,10 @@ namespace TeamProject3.Scene
             SetupRendererAndPhysicalWorld();
             CreateEntities();
             LoadUi();
+
+            var song = Content.Load<Song>("reverse_clock");
+            MediaPlayer.Play(song);
+            MediaPlayer.IsRepeating = true;
 
             BossSettings.ExportBossSettings();
         }
@@ -152,6 +163,8 @@ namespace TeamProject3.Scene
             {
                 Core.StartCoroutine(ShadeFadeOut());
             }
+
+            UpdateUi();
         }
 
         private IEnumerator ShadeFadeIn()
@@ -232,6 +245,9 @@ namespace TeamProject3.Scene
             bossComponent.GroundFixture = _stageFixture;
             playerComponent.BossFixture = bossComponent.BossFixture;
             bossComponent.PlayerFixture = playerComponent.PlayerFixture;
+
+            _playerInitialHp = PlayerHp;
+            _bossInitialHp = BossHp;
         }
 
         private void SetupBackgrounds(Tuple<string, string>[] names, int[] renderLayer)
@@ -342,19 +358,67 @@ namespace TeamProject3.Scene
 
         private void LoadUi()
         {
-            _playerUiEntity = CreateEntity("player-ui");
+            _playerUiGaugeEntity = CreateEntity("player-ui-gauge");
             _bossUiEntity = CreateEntity("boss-ui");
+            _playerFleeEntity = CreateEntity("player-ui-flee");
+
             var _playerGaugeTexture = Content.Load<Texture2D>("UI_player1");
             var _playerHpTexture = Content.Load<Texture2D>("UI_player2");
-            _playerUiEntity.Position =
+            var _playerFleeTexture = Content.Load<Texture2D>("red (1)");
+            var _bossGaugeTexture = Content.Load<Texture2D>("UI_boss1");
+            var _bossHpTexture = Content.Load<Texture2D>("UI_boss2");
+
+            _playerUiGaugeEntity.Position =
                 new Vector2(Helper.ScreenWidth / 6, Helper.ScreenHeight / 10);
-            _playerUiEntity.SetUpdateOrder(int.MaxValue);
-            
-            _playerUiEntity.AddComponent(
+            _playerUiGaugeEntity.SetUpdateOrder(int.MaxValue);
+            _playerFleeEntity.Position =
+                new Vector2(Helper.ScreenWidth / 6 + 384, Helper.ScreenHeight / 10);
+            _playerFleeEntity.SetUpdateOrder(int.MaxValue).SetScale(0.5f);
+
+            _bossUiEntity.Position =
+                new Vector2(Helper.ScreenWidth / 2 + Helper.ScreenWidth / 5 + 50.0f, Helper.ScreenHeight / 12);
+            _bossUiEntity.SetUpdateOrder(int.MaxValue);
+
+            _playerUiGaugeEntity.AddComponent(
                 new SpriteRenderer(_playerGaugeTexture)).SetRenderLayer(-10);
-            _playerHpSprite = _playerUiEntity.AddComponent(
-                new SpriteRenderer(_playerHpTexture));
-            _playerHpSprite.SetRenderLayer(-15);
+            _bossUiEntity.AddComponent(
+                new SpriteRenderer(_bossGaugeTexture)).SetRenderLayer(-15);
+            _playerFleeEntity.AddComponent(
+                new SpriteRenderer(_playerFleeTexture)).SetRenderLayer(-10);
+            _playerFleeSkillMask = _playerFleeEntity.AddComponent(
+                new SpriteRenderer(Graphics.CreateSingleColorTexture(256, 256, Color.TransparentBlack)));
+            _playerFleeSkillMask.SetRenderLayer(-15);
+
+            _playerHpSprite = _playerUiGaugeEntity.AddComponent(
+                new HpGauge(_playerHpTexture));
+            _playerHpSprite.SetRenderLayer(-15)
+                .SetLocalOffset(
+                new Vector2(-(_playerHpSprite.Width / 2), -(_playerHpSprite.Height / 2)));
+            _bossHpSprite = _bossUiEntity.AddComponent(
+                new HpGauge(_bossHpTexture));
+            _bossHpSprite.SetRenderLayer(-10)
+                .SetLocalOffset(
+                new Vector2(-(_bossHpSprite.Width / 2) + 10.0f, -(_bossHpSprite.Height / 2)));
+        }
+
+        private void UpdateUi()
+        {
+            var playerPercentage = PlayerHp / _playerInitialHp;
+            var bossPercentage = BossHp / _bossInitialHp;
+
+            _playerHpSprite.Percentage = playerPercentage;
+            _bossHpSprite.Percentage = bossPercentage;
+
+            if (PlayerFleeAvailable)
+            {
+                _playerFleeEntity.Enabled = true;
+                _playerFleeSkillMask.SetColor(Color.TransparentBlack);
+            }
+            else
+            {
+                _playerFleeEntity.Enabled = false;
+                _playerFleeSkillMask.SetColor(Color.White);
+            }
         }
     }
 }

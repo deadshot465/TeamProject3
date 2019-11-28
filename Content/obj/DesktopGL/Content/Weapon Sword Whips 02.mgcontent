@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/Weapon Sword Whips 02.wav</SourceFile>
+  <SourceTime>2012-01-15T22:33:30+09:00</SourceTime>
+  <DestFile>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/bin/DesktopGL/Content/Weapon Sword Whips 02.xnb</DestFile>
+  <DestTime>2019-11-28T12:15:48.371028+09:00</DestTime>
+  <Importer>WavImporter</Importer>
+  <ImporterTime>2018-08-05T14:17:44+09:00</ImporterTime>
+  <Processor>SoundEffectProcessor</Processor>
+  <ProcessorTime>2018-08-05T14:17:44+09:00</ProcessorTime>
+  <Parameters>
+    <Key>Quality</Key>
+    <Value>Best</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

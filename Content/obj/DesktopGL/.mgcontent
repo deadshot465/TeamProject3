@@ -10,10 +10,16 @@
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/4cloud.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/5stage.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/boss1.png</File>
+    <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/Explosion Blast Large 01.wav</File>
+    <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/Fire Blaze Roar Crackle 01.wav</File>
+    <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/Fire Fireball Large 02.wav</File>
+    <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/Fire Heavy Crackle Blaze Sizzle 01.wav</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/gameclear.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/gameover.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/player.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/press_space_key.png</File>
+    <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/red (1).PNG</File>
+    <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/reverse_clock.mp3</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/splash_screen.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/title.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/UI_boss1.png</File>
@@ -21,8 +27,16 @@
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/UI_player1.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/UI_player2.png</File>
     <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/UI_rolling.png</File>
+    <File>C:/Users/sonic/OneDrive/文件/repos/TeamProject3/Content/Weapon Sword Whips 02.wav</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

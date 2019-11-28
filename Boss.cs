@@ -2,6 +2,7 @@
 using FarseerPhysics.Common;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Nez;
 using Nez.Farseer;
@@ -102,6 +103,8 @@ namespace TeamProject3
         private List<Entity> _judgeEntities = new List<Entity>();
         private Action<string> _attackFinishAction;
 
+        private List<SoundEffect> _sfx = new List<SoundEffect>();
+
         public Vector2 Speed { get; private set; }
         public Fixture GroundFixture { get; set; }
         public Fixture LeftWallFixture { get; set; }
@@ -146,11 +149,14 @@ namespace TeamProject3
                 () => MoveToNextPhase(true, (int)BossAttacks.FullscreenAttack)
             };
 
-            _movePhaseHandlers.Add(actions[0]);
-            _movePhaseHandlers.Add(actions[0]);
             _movePhaseHandlers.Add(actions[1]);
             _movePhaseHandlers.Add(actions[0]);
+            _movePhaseHandlers.Add(actions[2]);
             _movePhaseHandlers.Add(actions[0]);
+            _movePhaseHandlers.Add(actions[3]);
+            _movePhaseHandlers.Add(actions[0]);
+            _movePhaseHandlers.Add(actions[1]);
+            _movePhaseHandlers.Add(actions[3]);
             _movePhaseHandlers.Add(actions[2]);
 
             _attackFinishAction = animationName => MoveToNextPhase();
@@ -248,6 +254,12 @@ namespace TeamProject3
 
             _spriteAnimator.Play("Idle", SpriteAnimator.LoopMode.Loop);
 
+            _sfx.Add(Entity.Scene.Content.Load<SoundEffect>("Weapon Sword Whips 02"));
+            _sfx.Add(Entity.Scene.Content.Load<SoundEffect>("Fire Fireball Large 02"));
+            _sfx.Add(Entity.Scene.Content.Load<SoundEffect>("Fire Heavy Crackle Blaze Sizzle 01"));
+            _sfx.Add(Entity.Scene.Content.Load<SoundEffect>("Fire Blaze Roar Crackle 01"));
+            _sfx.Add(Entity.Scene.Content.Load<SoundEffect>("Explosion Blast Large 01"));
+
             //MoveToNextStage(BossStage.End);
         }
 
@@ -263,6 +275,7 @@ namespace TeamProject3
 
             Core.Schedule(0.25f, timer =>
             {
+                _sfx[0].Play();
                 _spriteAnimator.Play("PutdownSword", SpriteAnimator.LoopMode.ClampForever);
                 _spriteAnimator.OnAnimationCompletedEvent += _attackFinishAction;
                 HandleAttack();
@@ -307,6 +320,8 @@ namespace TeamProject3
                     new Vector2(_projectileVelocity * _bossDirection, 0),
                     bulletRigidBody, bulletFixture, true));
 
+                _sfx[1].Play();
+
                 if (FadeFlag && FadeFinished) FadeFlag = false;
             });
         }
@@ -322,19 +337,27 @@ namespace TeamProject3
                 .CreateEmitter(ParticleSystem.ParticleType.DashReady));
             emitter.SetRenderLayer(-5);
 
+            var chargeSfx = _sfx[2].CreateInstance();
+            chargeSfx.Play();
+
             if (!FadeFlag && !FadeFinished) FadeFlag = true;
 
             Core.Schedule(2.0f, timer =>
             {
                 _spriteAnimator.Play("Move", SpriteAnimator.LoopMode.Loop);
 
-                var tween = Entity.TweenPositionTo(new Vector2(350 * _bossDirection, 0), _bossSettings.DashDuration)
+                chargeSfx.Stop();
+                var dashSfx = _sfx[3].CreateInstance();
+                dashSfx.Play();
+
+                var tween = Entity.TweenPositionTo(new Vector2(650 * _bossDirection, 0), _bossSettings.DashDuration)
                 .SetFrom(Entity.Position)
                 .SetIsRelative()
                 .SetEaseType(_bossSettings.DashEaseType)
                 .SetCompletionHandler(_tween =>
                 {
                     entity.Destroy();
+                    dashSfx.Stop();
                     HandleAttack();
                     MoveToNextPhase();
                 });
@@ -354,6 +377,8 @@ namespace TeamProject3
             secondOffset.X *= _bossDirection;
             var thirdOffset = _bossSettings.ThirdStepJumpOffset;
             thirdOffset.X *= _bossDirection;
+
+            if (!FadeFlag && !FadeFinished) FadeFlag = true;
 
             var tween = Entity
                 .TweenPositionTo(firstOffset, _bossSettings.FirstStepJumpDuration)
@@ -400,6 +425,8 @@ namespace TeamProject3
                             new Vector2(_projectileVelocity * _bossDirection, 0),
                             bulletRigidBody2, bulletFixture2, true));
 
+                        _sfx[4].Play();
+
                         var thirdTween = Entity
                         .TweenPositionTo(thirdOffset, _bossSettings.ThirdStepJumpDuration)
                         .SetFrom(Entity.Position)
@@ -410,6 +437,8 @@ namespace TeamProject3
                             HandleAttack();
                             Core.Schedule(0.5f, timer => MoveToNextPhase());
                         });
+
+                        if (FadeFlag && FadeFinished) FadeFlag = false;
 
                         thirdTween.Start();
                     });
@@ -500,6 +529,8 @@ namespace TeamProject3
                                     }
                                 });
 
+                                _sfx[1].Play();
+
                                 Core.Schedule(1.0f, ___timer =>
                                 {
                                     _spriteAnimator.Play("Idle", SpriteAnimator.LoopMode.Loop);
@@ -579,66 +610,39 @@ namespace TeamProject3
                     break;
                 case BossStage.Two:
                     {
-                        _movePhaseHandlers.Add(actions[0]);
                         _movePhaseHandlers.Add(actions[1]);
                         _movePhaseHandlers.Add(actions[2]);
+                        _movePhaseHandlers.Add(actions[2]);
+                        _movePhaseHandlers.Add(actions[3]);
+                        _movePhaseHandlers.Add(actions[3]);
+                        _movePhaseHandlers.Add(actions[0]);
+                        _movePhaseHandlers.Add(actions[0]);
+                        _movePhaseHandlers.Add(actions[5]);
+                        _movePhaseHandlers.Add(actions[1]);
+                        _movePhaseHandlers.Add(actions[1]);
                         _movePhaseHandlers.Add(actions[3]);
                         _movePhaseHandlers.Add(actions[0]);
                         _movePhaseHandlers.Add(actions[2]);
+                        _movePhaseHandlers.Add(actions[1]);
                         _movePhaseHandlers.Add(actions[0]);
-                        _movePhaseHandlers.Add(actions[4]);
-                        _movePhaseHandlers.Add(actions[1]);
-                        _movePhaseHandlers.Add(actions[2]);
-                        _movePhaseHandlers.Add(actions[1]);
-                        _movePhaseHandlers.Add(actions[4]);
-                        _movePhaseHandlers.Add(actions[3]);
-                        _movePhaseHandlers.Add(actions[2]);
-                        _movePhaseHandlers.Add(actions[3]);
-                        _movePhaseHandlers.Add(actions[4]);
+                        _movePhaseHandlers.Add(actions[5]);
 
                         Hp = _stageTwoHp;
                         break;
                     }
                 case BossStage.Three:
                     {
-                        _movePhaseHandlers.Add(actions[0]);
-                        _movePhaseHandlers.Add(actions[4]);
-                        _movePhaseHandlers.Add(actions[1]);
-                        _movePhaseHandlers.Add(actions[4]);
-                        _movePhaseHandlers.Add(actions[3]);
-                        _movePhaseHandlers.Add(actions[4]);
-                        _movePhaseHandlers.Add(actions[0]);
-                        _movePhaseHandlers.Add(actions[2]);
-                        _movePhaseHandlers.Add(actions[1]);
-                        _movePhaseHandlers.Add(actions[2]);
-                        _movePhaseHandlers.Add(actions[3]);
+                        _movePhaseHandlers.Add(actions[5]);
                         _movePhaseHandlers.Add(actions[2]);
                         _movePhaseHandlers.Add(actions[5]);
-
-                        _movePhaseHandlers.Add(actions[0]);
-                        _movePhaseHandlers.Add(actions[1]);
-                        _movePhaseHandlers.Add(actions[2]);
                         _movePhaseHandlers.Add(actions[3]);
-                        _movePhaseHandlers.Add(actions[0]);
-                        _movePhaseHandlers.Add(actions[2]);
                         _movePhaseHandlers.Add(actions[1]);
-                        _movePhaseHandlers.Add(actions[2]);
-                        _movePhaseHandlers.Add(actions[3]);
-                        _movePhaseHandlers.Add(actions[2]);
                         _movePhaseHandlers.Add(actions[5]);
-
                         _movePhaseHandlers.Add(actions[0]);
-                        _movePhaseHandlers.Add(actions[4]);
-                        _movePhaseHandlers.Add(actions[1]);
-                        _movePhaseHandlers.Add(actions[2]);
-                        _movePhaseHandlers.Add(actions[3]);
-                        _movePhaseHandlers.Add(actions[4]);
                         _movePhaseHandlers.Add(actions[0]);
                         _movePhaseHandlers.Add(actions[2]);
                         _movePhaseHandlers.Add(actions[1]);
-                        _movePhaseHandlers.Add(actions[4]);
                         _movePhaseHandlers.Add(actions[3]);
-                        _movePhaseHandlers.Add(actions[2]);
                         _movePhaseHandlers.Add(actions[5]);
 
                         Hp = _stageThreeHp;
@@ -681,7 +685,7 @@ namespace TeamProject3
             {
                 if (!playerEntity.GetComponent<Player>().IsInvincible)
                 {
-                    playerEntity.GetComponent<Player>().Hp -= 10;
+                    playerEntity.GetComponent<Player>().HandleDamage();
                     System.Console.WriteLine($"Player Hp: {playerEntity.GetComponent<Player>().Hp}");
                 }
             }
